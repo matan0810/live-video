@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import VideoPlayer from "./VideoPlayer/VideoPlayer";
+import SelectLink from "./SelectLink/SelectLink";
 import "./App.css";
 
 export default function App() {
@@ -20,6 +21,11 @@ export default function App() {
 function Form({ link, setLink }) {
   const [field, setField] = useState(link);
 
+  const onChangeLink = (e) => {
+    e.preventDefault();
+    setField(e.target.value);
+  };
+
   return (
     <div className="form">
       <form onSubmit={(e) => e.preventDefault()}>
@@ -30,8 +36,11 @@ function Form({ link, setLink }) {
           required
           disabled={!!link}
           value={field}
-          onChange={({ target }) => setField(target.value)}
+          onChange={onChangeLink}
         />
+        {!link && (
+          <SelectLink field={field} link={link} setLink={onChangeLink} />
+        )}
         {link ? (
           <button
             className="button"
