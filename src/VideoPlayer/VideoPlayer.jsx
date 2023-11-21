@@ -4,6 +4,8 @@ import "video.js/dist/video-js.css";
 import { usePrevious } from "./usePrevious";
 import VideoJSHebrew from "./videoJSHeDictionary.json";
 
+const isMobile = window.innerWidth < 700;
+
 videojs.log.level("off");
 videojs.addLanguage("he", VideoJSHebrew);
 
@@ -15,16 +17,14 @@ export default function VideoPlayer({ streamLink }) {
   useEffect(() => {
     if (!videoNode || !streamLink) return;
 
-    const options = {
-      height: 200,
-      width: 300,
-      autoplay: true,
-      controls: true,
-      language: "he",
-    };
-
     if (!player.current || prevNode !== videoNode) {
-      player.current = videojs(videoNode, options);
+      player.current = videojs(videoNode, {
+        width: isMobile ? 300 : 600,
+        height: isMobile ? 200 : 400,
+        autoplay: true,
+        controls: true,
+        language: "he",
+      });
     }
 
     player.current.src([{ src: streamLink, type: "application/x-mpegURL" }]);
