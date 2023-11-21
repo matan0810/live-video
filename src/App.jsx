@@ -12,7 +12,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <VideoPlayer cameraLink={link} />
+      <VideoPlayer streamLink={link} />
       <Form link={link} setLink={setLink} />
     </div>
   );

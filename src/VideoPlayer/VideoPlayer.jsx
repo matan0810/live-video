@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 import { usePrevious } from "./usePrevious";
@@ -7,13 +7,13 @@ import VideoJSHebrew from "./videoJSHeDictionary.json";
 videojs.log.level("off");
 videojs.addLanguage("he", VideoJSHebrew);
 
-export default function VideoPlayer({ cameraLink }) {
+export default function VideoPlayer({ streamLink }) {
   const [videoNode, setVideoNode] = useState(null);
   const prevNode = usePrevious(videoNode);
   const player = useRef();
 
   useEffect(() => {
-    if (!videoNode || !cameraLink) return;
+    if (!videoNode || !streamLink) return;
 
     const options = {
       height: 200,
@@ -27,10 +27,10 @@ export default function VideoPlayer({ cameraLink }) {
       player.current = videojs(videoNode, options);
     }
 
-    player.current.src([{ src: cameraLink, type: "application/x-mpegURL" }]);
-  }, [cameraLink, videoNode, prevNode]);
+    player.current.src([{ src: streamLink, type: "application/x-mpegURL" }]);
+  }, [streamLink, videoNode, prevNode]);
 
-  if (!cameraLink) return null;
+  if (!streamLink) return null;
 
   return (
     <div
