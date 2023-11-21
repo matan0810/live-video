@@ -2,7 +2,7 @@ import React from "react";
 import { Select, MenuItem } from "@mui/material";
 import { links } from "./links";
 
-function SelectLink({ link, setLink, field }) {
+function SelectLink({ setLink, field }) {
   return (
     <div
       style={{
