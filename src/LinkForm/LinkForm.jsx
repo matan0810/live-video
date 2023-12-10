@@ -45,7 +45,7 @@ function LinkForm({ link, setLink, isRaw, setIsRaw }) {
           </button>
         ) : (
           <button className="button" onClick={() => setLink(field)}>
-            בחר
+            בחר שידור
           </button>
         )}
 
