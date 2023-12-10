@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Switch } from "@mui/material";
+import CustomSwitch from "./CustomSwitch";
 import SelectLink from "./SelectLink";
 import "./LinkForm.css";
 
@@ -13,7 +13,7 @@ function LinkForm({ link, setLink, isRaw, setIsRaw }) {
 
   return (
     <div className="form">
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={(e) => e.preventDefault()} style={{ width: "100%" }}>
         {isRaw ? (
           <>
             <label>הכנס קישור:</label>
@@ -49,7 +49,7 @@ function LinkForm({ link, setLink, isRaw, setIsRaw }) {
           </button>
         )}
 
-        <Switch
+        <CustomSwitch
           checked={isRaw}
           onChange={({ target }) => setIsRaw(target.checked)}
         />
