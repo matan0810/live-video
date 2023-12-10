@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { Switch } from "@mui/material";
 import SelectLink from "./SelectLink";
 import "./LinkForm.css";
 
-function LinkForm({ link, setLink }) {
+function LinkForm({ link, setLink, isRaw, setIsRaw }) {
   const [field, setField] = useState(link);
 
   const onChangeLink = (e) => {
@@ -13,7 +14,26 @@ function LinkForm({ link, setLink }) {
   return (
     <div className="form">
       <form onSubmit={(e) => e.preventDefault()}>
-        <SelectLink field={field} link={link} setLink={onChangeLink} disabled={!!link} />
+        {isRaw ? (
+          <>
+            <label>הכנס קישור:</label>
+            <input
+              className="input"
+              type="text"
+              required
+              disabled={!!link}
+              value={field}
+              onChange={onChangeLink}
+            />
+          </>
+        ) : (
+          <SelectLink
+            field={field}
+            link={link}
+            setLink={onChangeLink}
+            disabled={!!link}
+          />
+        )}
 
         {link ? (
           <button
@@ -28,6 +48,11 @@ function LinkForm({ link, setLink }) {
             בחר
           </button>
         )}
+
+        <Switch
+          checked={isRaw}
+          onChange={({ target }) => setIsRaw(target.checked)}
+        />
       </form>
     </div>
   );

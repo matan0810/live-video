@@ -32,7 +32,7 @@ export default function VideoPlayer({ streamLink }) {
     player.current.src([{ src: streamLink, type: "application/x-mpegURL" }]);
   }, [streamLink, videoNode, prevNode]);
 
-  // if (!streamLink) return null;
+  if (!streamLink) return null;
   return (
     <div
       style={{

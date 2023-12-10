@@ -3,33 +3,29 @@ import VideoPlayer from "./VideoPlayer/VideoPlayer";
 import LinkForm from "./LinkForm/LinkForm";
 import { links } from "./constants/links";
 import "./App.css";
-// import RawLinkForm from "./RawLinkForm/RawLinkForm";
 
 export default function App() {
   const [link, setLink] = useState(localStorage.getItem("link"));
-  // const [isRawLink, setIsRawLink] = useState(localStorage.getItem("isRawLink"));
+  const [isRaw, setIsRaw] = useState(localStorage.getItem("isRaw") === "true");
 
   useEffect(() => {
     if (link) localStorage.setItem("link", link);
   }, [link]);
 
-  // useEffect(() => {
-  //   if (isRawLink) localStorage.setItem("isRawLink", isRawLink);
-  // }, [isRawLink]);
+  useEffect(() => {
+    localStorage.setItem("isRaw", isRaw);
+    setLink("");
+  }, [isRaw]);
 
   return (
     <div className="App">
-      <VideoPlayer streamLink={links[link]} />
+      <VideoPlayer streamLink={isRaw ? link : links[link]} />
       <LinkForm
         link={link}
         setLink={setLink}
-        // changed={() => setIsRawLink(false)}
+        isRaw={isRaw}
+        setIsRaw={setIsRaw}
       />
-      {/* <RawLinkForm
-        link={link}
-        setLink={setLink}
-        changed={() => setIsRawLink(true)}
-      /> */}
     </div>
   );
 }
