@@ -4,7 +4,9 @@ import "video.js/dist/video-js.css";
 import { usePrevious } from "./usePrevious";
 import VideoJSHebrew from "./videoJSHeDictionary.json";
 
-const isMobile = window.innerWidth < 700;
+const IS_MOBILE = window.innerWidth < 700;
+const WIDTH = IS_MOBILE ? 300 : 600;
+const HEIGHT = IS_MOBILE ? 200 : 400;
 
 videojs.log.level("off");
 videojs.addLanguage("he", VideoJSHebrew);
@@ -19,8 +21,8 @@ export default function VideoPlayer({ streamLink }) {
 
     if (!player.current || prevNode !== videoNode) {
       player.current = videojs(videoNode, {
-        width: isMobile ? 300 : 600,
-        height: isMobile ? 200 : 400,
+        width: WIDTH,
+        height: HEIGHT,
         autoplay: true,
         controls: true,
         language: "he",
@@ -30,8 +32,7 @@ export default function VideoPlayer({ streamLink }) {
     player.current.src([{ src: streamLink, type: "application/x-mpegURL" }]);
   }, [streamLink, videoNode, prevNode]);
 
-  if (!streamLink) return null;
-
+  // if (!streamLink) return null;
   return (
     <div
       style={{
@@ -40,7 +41,11 @@ export default function VideoPlayer({ streamLink }) {
       }}
       data-vjs-player
     >
-      <video ref={setVideoNode} className="video-js" />
+      {streamLink?.isIFrame ? (
+        <iframe height={HEIGHT} width={WIDTH} src={streamLink.link} />
+      ) : (
+        <video ref={setVideoNode} className="video-js" />
+      )}
     </div>
   );
 }

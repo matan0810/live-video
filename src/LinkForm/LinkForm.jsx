@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SelectLink from "../SelectLink/SelectLink";
+import SelectLink from "./SelectLink";
 import "./LinkForm.css";
 
 function LinkForm({ link, setLink }) {
@@ -13,18 +13,8 @@ function LinkForm({ link, setLink }) {
   return (
     <div className="form">
       <form onSubmit={(e) => e.preventDefault()}>
-        <label>הכנס קישור:</label>
-        <input
-          className="input"
-          type="text"
-          required
-          disabled={!!link}
-          value={field}
-          onChange={onChangeLink}
-        />
-        {!link && (
-          <SelectLink field={field} link={link} setLink={onChangeLink} />
-        )}
+        <SelectLink field={field} link={link} setLink={onChangeLink} disabled={!!link} />
+
         {link ? (
           <button
             className="button"
