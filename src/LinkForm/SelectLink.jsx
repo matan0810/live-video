@@ -20,8 +20,8 @@ function SelectLink({ setLink, field, disabled }) {
         sx={{ backgroundColor: disabled ? "grey" : "white" }}
         disabled={disabled}
       >
-        <MenuItem value="">
-          <em>בחר לינק</em>
+        <MenuItem value="" sx={{ fontStyle: "italic" }}>
+          בחר לינק
         </MenuItem>
         {Object.keys(links).map((key) => (
           <MenuItem key={key} value={key}>
