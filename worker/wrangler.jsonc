@@ -1,0 +1,19 @@
+// Cloudflare Worker behind the site: remote channel list, viewer reports, admin API
+// and fresh addresses for token-protected streams. See README.md for setup.
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "live-video-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      // Replace with the id printed by: npx wrangler kv namespace create KV
+      "id": "REPLACE_WITH_KV_NAMESPACE_ID",
+    },
+  ],
+  "vars": {
+    "ALLOWED_ORIGINS": "https://matan0810.github.io,http://localhost:5173",
+  },
+  // ADMIN_PASSWORD is a secret: npx wrangler secret put ADMIN_PASSWORD
+}

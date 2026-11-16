@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import rawChannels from './channels.json';
+import rawChannels from '../../src/channels/channels.json';
 import { parseChannels } from './parseChannels';
 
 const valid = {

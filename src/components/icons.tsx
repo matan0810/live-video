@@ -87,3 +87,11 @@ export function TheaterIcon() {
     </Icon>
   );
 }
+
+export function FlagIcon() {
+  return (
+    <Icon>
+      <path d="M5 21V4m0 0h11l-2 4 2 4H5" />
+    </Icon>
+  );
+}

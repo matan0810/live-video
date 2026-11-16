@@ -1,5 +1,5 @@
-import type { Channel } from './types';
-import { isHttpsUrl } from './url';
+import type { Channel } from '../../shared/channels/types';
+import { isHttpsUrl } from '../../shared/channels/url';
 
 export const CUSTOM_ID_PREFIX = 'custom-';
 const SHORT_LABEL_LENGTH = 3;

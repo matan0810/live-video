@@ -1,14 +1,17 @@
 import { useCallback, useMemo, useState } from 'react';
-import { catalogChannels, CHANNEL_GROUPS, GROUP_LABELS, type Channel } from './channels';
+import { API_URL } from './api/client';
+import { CHANNEL_GROUPS, GROUP_LABELS, type CatalogChannel, type Channel } from './channels';
 import { withChannelParam } from './channels/channelLink';
 import { isCustomChannelId } from './channels/customChannels';
 import { AddChannelForm } from './components/AddChannelForm';
 import { ChannelList, type ChannelSection } from './components/ChannelList';
 import { EmptyStage } from './components/EmptyStage';
+import { ReportButton } from './components/ReportButton';
 import { IconButton } from './components/IconButton';
 import { TheaterIcon } from './components/icons';
 import { ShareButton } from './components/ShareButton';
 import { useActiveChannel } from './hooks/useActiveChannel';
+import { useCatalog } from './hooks/useCatalog';
 import { useCustomChannels } from './hooks/useCustomChannels';
 import { useFavorites } from './hooks/useFavorites';
 import { useKeyboardShortcuts, type KeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -20,6 +23,7 @@ const DIGIT_SHORTCUT_COUNT = 9;
 
 /** Groups channels for display: favourites first, then the user's own, then the catalog. */
 function buildSections(
+  catalogChannels: readonly CatalogChannel[],
   customChannels: readonly Channel[],
   favoriteIds: readonly string[],
 ): ChannelSection[] {
@@ -48,6 +52,7 @@ function buildSections(
 }
 
 export function App() {
+  const catalogChannels = useCatalog();
   const [activeChannelId, selectChannel] = useActiveChannel();
   const { favoriteIds, toggleFavorite } = useFavorites();
   const { customChannels, addCustomChannel, removeCustomChannel } = useCustomChannels();
@@ -57,8 +62,8 @@ export function App() {
   );
 
   const sections = useMemo(
-    () => buildSections(customChannels, favoriteIds),
-    [customChannels, favoriteIds],
+    () => buildSections(catalogChannels, customChannels, favoriteIds),
+    [catalogChannels, customChannels, favoriteIds],
   );
   /** Every channel once, in the order it appears on screen. */
   const orderedChannels = useMemo(
@@ -131,10 +136,13 @@ export function App() {
               actions={
                 <>
                   {!isCustomChannelId(activeChannel.id) && (
-                    <ShareButton
-                      title={activeChannel.name}
-                      url={withChannelParam(window.location.href, activeChannel.id)}
-                    />
+                    <>
+                      {API_URL && <ReportButton channel={activeChannel} />}
+                      <ShareButton
+                        title={activeChannel.name}
+                        url={withChannelParam(window.location.href, activeChannel.id)}
+                      />
+                    </>
                   )}
                   <IconButton
                     className={styles.theaterToggle}
