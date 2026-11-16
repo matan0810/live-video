@@ -1,0 +1,39 @@
+# Every check a commit must pass. Used by ci.yml (branches and pull requests) and
+# deploy.yml (master), so a deploy runs exactly what day-to-day work runs.
+name: Checks
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  code:
+    name: Types, lint, format, audit, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Known vulnerabilities in dependencies
+        run: npm audit --audit-level=high
+      - run: npm run check
+
+  browser:
+    name: Browser smoke test (desktop and phone)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Install the browser
+        run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run e2e

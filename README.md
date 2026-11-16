@@ -1,51 +1,57 @@
-# שידור חי
+# Live Video
 
-אתר אישי לצפייה בערוצי חדשות בשידור חי – ישראליים ובינלאומיים – בדף אחד, בלי פרסומות ובלי הרשמה.
+A personal site for watching live news channels, Israeli and international, on one page:
+no ads, no sign-up. The interface is in Hebrew.
 
-האתר: https://matan0810.github.io/live-video
+Live at https://matan0810.github.io/live-video
 
-## מה יש בו
+## Features
 
-- בחירת ערוץ בלחיצה אחת, והערוץ האחרון נטען אוטומטית בפתיחה הבאה.
-- חזרה לאחור בשידורים שמאפשרים זאת, וכפתור חזרה לשידור החי.
-- מעבר אוטומטי ללינק גיבוי כשהלינק הראשי נופל, וניסיון חוזר כשהערוץ לא זמין.
-- מועדפים, והוספת ערוצים משלך מקישור m3u8 (נשמרים בדפדפן בלבד).
-- קישור שיתוף לערוץ (`?ch=kan11`), תמונה-בתוך-תמונה והתקנה כאפליקציה.
-- מותאם לדסקטופ ולמובייל, כולל מצב קולנוע.
+- One click to switch channel; the last channel is restored on the next visit.
+- Rewind on streams that keep past segments, with a button back to live.
+- Automatic fallback to a backup link, and automatic retry when a channel is down.
+- Favourites, and your own channels from an m3u8 link (kept in the browser only).
+- A share link per channel (`?ch=kan11`), picture-in-picture, installable as an app.
+- Viewers can report a broken channel or suggest a new link.
+- An admin area (`#/admin`, password protected) to edit channels and handle reports
+  without a deploy.
 
-## קיצורי מקלדת
+## Keyboard
 
-| מקש     | פעולה                                   |
-| ------- | --------------------------------------- |
-| `1`–`9` | מעבר לערוץ לפי מיקומו ברשימה            |
-| `↑` `↓` | הערוץ הקודם / הבא                       |
-| `←` `→` | 10 שניות אחורה / קדימה (כשהשידור מאפשר) |
-| רווח    | השהיה / המשך                            |
-| `F`     | מסך מלא                                 |
-| `M`     | השתקה                                   |
-| `P`     | תמונה בתוך תמונה                        |
-| `T`     | מצב קולנוע                              |
+| Key     | Action                                             |
+| ------- | -------------------------------------------------- |
+| `1`–`9` | Channel by its position in the list                |
+| `↑` `↓` | Previous / next channel                            |
+| `←` `→` | 10 seconds back / forward (when the stream allows) |
+| Space   | Pause / resume                                     |
+| `F`     | Full screen                                        |
+| `M`     | Mute                                               |
+| `P`     | Picture-in-picture                                 |
+| `T`     | Theatre mode                                       |
 
-## הרצה מקומית
+## Running locally
 
-דרוש Node 22 ומעלה.
+Needs Node 22.18 or newer.
 
 ```bash
 npm install
 npm run dev
 ```
 
-| פקודה            | מה היא עושה                                        |
-| ---------------- | -------------------------------------------------- |
-| `npm run dev`    | שרת פיתוח                                          |
-| `npm run build`  | בדיקת טיפוסים ובנייה ל-`dist`                      |
-| `npm run check`  | טיפוסים, ESLint, Prettier ובדיקות – מה שרץ גם ב-CI |
-| `npm run format` | עיצוב הקוד עם Prettier                             |
+| Command                 | What it does                                                    |
+| ----------------------- | --------------------------------------------------------------- |
+| `npm run dev`           | Dev server on http://localhost:5173                             |
+| `npm run build`         | Type check, then build into `dist/`                             |
+| `npm run check`         | Types, ESLint, Prettier and unit tests; must pass before a push |
+| `npm run e2e`           | Browser smoke test (needs a prior `npm run build`)              |
+| `npm run format`        | Rewrite files with Prettier                                     |
+| `npm run check:links`   | Check that every stream in `channels.json` answers              |
+| `npm run worker:dev`    | Run the Worker locally on http://localhost:8787                 |
+| `npm run worker:deploy` | Deploy the Worker to Cloudflare                                 |
 
-## הוספה ועדכון של ערוצים
+## Channels
 
-כל הערוצים נמצאים בקובץ אחד: [`src/channels/channels.json`](src/channels/channels.json).
-אפשר לערוך אותו ישירות באתר של GitHub; אחרי השמירה ל-`master` האתר מתעדכן לבד.
+A channel looks like this:
 
 ```json
 {
@@ -57,37 +63,87 @@ npm run dev
 }
 ```
 
-| שדה       | הסבר                                                                 |
-| --------- | -------------------------------------------------------------------- |
-| `id`      | מזהה ייחודי וקבוע: אותיות קטנות באנגלית, ספרות ומקפים                |
-| `name`    | השם שמוצג                                                            |
-| `short`   | תווית קצרה לאריח הערוץ (למשל `11` או `CNN`)                          |
-| `group`   | `israel` או `world`                                                  |
-| `sources` | לינקי HLS ‏(`.m3u8`) ב-https לפי סדר עדיפות: הראשון ראשי, השאר גיבוי |
+| Field     | Meaning                                                                  |
+| --------- | ------------------------------------------------------------------------ |
+| `id`      | Unique and permanent: lowercase letters, digits and dashes               |
+| `name`    | The name shown                                                           |
+| `short`   | Short label for the channel tile (`11`, `CNN`)                           |
+| `group`   | `israel` or `world`                                                      |
+| `sources` | https HLS (`.m3u8`) links in priority order: primary first, then backups |
 
-קובץ לא תקין (מזהה כפול, שדה חסר, לינק שאינו https) מכשיל את הבדיקות ולא עולה לאתר.
+There are two ways to change the list:
 
-## בדיקת לינקים
+1. **Admin area** (once the Worker is set up): open `#/admin`, edit, save. The site picks
+   the change up within a minute, with no deploy. Each link can be tested before saving.
+2. **The file** [`src/channels/channels.json`](src/channels/channels.json): the list the
+   site is built with, used until the admin saves a list and whenever the Worker cannot be
+   reached. An invalid file fails the checks and is not deployed.
 
-`npm run check:links` בודק שכל לינק ב-`channels.json` מחזיר פלייליסט HLS תקין.
-הבדיקה רצה גם פעם ביום ב-GitHub Actions (`.github/workflows/check-links.yml`): כשערוץ נופל
-נפתח issue עם הפירוט, והוא נסגר לבד כשהכול חוזר לעבוד.
+Once a list is saved in the admin area it takes precedence over the file.
 
-הבדיקה רצה משרתים בחו"ל, כך שערוץ שחסום מחוץ לישראל ידווח כלא עובד גם אם הוא תקין.
+## Setting up the Worker
 
-## מבנה הקוד
+The Worker (`worker/`) is optional. Without it the site is fully static and the report
+button and admin area are hidden. It runs on Cloudflare's free plan.
+
+1. Create a free account at https://dash.cloudflare.com and sign in from a terminal:
+   `npx wrangler login`.
+2. Create the storage: `npx wrangler kv namespace create KV --config worker/wrangler.jsonc`.
+   Put the printed id in `worker/wrangler.jsonc` in place of `REPLACE_WITH_KV_NAMESPACE_ID`
+   and commit it (the id is not a secret).
+3. Set the admin password (long and unique; it is the only credential):
+   `npx wrangler secret put ADMIN_PASSWORD --config worker/wrangler.jsonc`.
+4. Deploy: `npm run worker:deploy`. Note the printed address,
+   `https://live-video-api.<your-subdomain>.workers.dev`.
+5. In the GitHub repository: Settings → Secrets and variables → Actions → Variables →
+   New repository variable, name `API_URL`, value the address from step 4.
+6. Re-run the Deploy workflow (or push to `master`). The report button and `#/admin` are
+   now active.
+
+To change the password, repeat step 3; every existing admin session is signed out.
+
+### Token-protected channels
+
+Some broadcasters only serve a stream with a short-lived token. `worker/src/streams.ts`
+holds a resolver per such channel; a channel uses one by listing
+`https://<worker address>/stream/<id>` as its source (for example `/stream/n12`). Whether
+this works depends on the broadcaster: a token bound to the viewer's address or country
+will not play.
+
+## Link checks
+
+`.github/workflows/check-links.yml` runs `npm run check:links` daily against
+`channels.json`. When a channel is down it opens an issue with the details, and closes it
+once everything works again. It runs from servers outside Israel, so a channel that is
+blocked abroad is reported as down even when it is fine. The admin area's link check runs
+from your own browser and does not have that problem.
+
+## Layout
 
 ```
-src/
-  channels/    רשימת הערוצים, הטיפוסים והאימות שלה
-  player/      הנגן: טעינת HLS עם גיבוי, חזרה לאחור, פקדים
-  components/  רשימת הערוצים ומסך הפתיחה
-  hooks/       מועדפים, ערוצים אישיים, ערוץ פעיל, קיצורי מקלדת
-  styles/      משתני עיצוב וסגנונות גלובליים
-scripts/       בדיקת הלינקים
+index.html, vite.config.ts   Vite entry page and build settings
+public/                      favicon, icons, manifest.webmanifest
+shared/                      code used by both the site and the Worker: channel and
+                             report validation
+src/channels/                channels.json, custom channels, share links
+src/player/                  the player: HLS loading with fallback, rewind, controls
+src/components/              channel list, dialogs, buttons, icons
+src/hooks/                   catalog, favourites, custom channels, active channel, shortcuts
+src/admin/                   the admin area (a separate chunk, loaded only at #/admin)
+src/api/                     client for the Worker API
+src/styles/                  design tokens and global styles
+worker/                      Cloudflare Worker: channel list, reports, admin API, streams
+scripts/                     link checker
+tests/e2e/                   browser smoke test
+.github/workflows/           checks.yml (shared), ci.yml, deploy.yml, check-links.yml
 ```
 
-## דיפלוי
+## Deploying
 
-כל push ל-`master` מריץ את הבדיקות ומעלה את האתר ל-GitHub Pages
-(`.github/workflows/deploy.yml`). בהגדרות הריפו, תחת Pages, המקור צריך להיות **GitHub Actions**.
+Every push to `master` runs all checks and publishes the site to GitHub Pages
+(`.github/workflows/deploy.yml`). In the repository settings, under Pages, the source must
+be **GitHub Actions**. The Worker is deployed separately, by hand, with
+`npm run worker:deploy`.
+
+See [CLAUDE.md](CLAUDE.md) for the working procedure, [SECURITY.md](SECURITY.md) for what
+is stored and protected, and [CHANGELOG.md](CHANGELOG.md) for what changed.
