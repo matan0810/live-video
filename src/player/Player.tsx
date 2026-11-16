@@ -1,11 +1,21 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useMemo, type ReactNode } from 'react';
 import type { Channel } from '../channels';
+import { IconButton } from '../components/IconButton';
+import { FullscreenIcon, PictureInPictureIcon } from '../components/icons';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { DvrControls } from './DvrControls';
 import { useDvr } from './useDvr';
 import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
 import styles from './Player.module.css';
 
 const AUTO_RETRY_DELAY_MS = 15_000;
+const KEYBOARD_SEEK_SECONDS = 10;
+const CAN_PICTURE_IN_PICTURE = document.pictureInPictureEnabled;
+
+/** Settles a browser media request that may be refused (e.g. without a user gesture). */
+function ignoreRejection(request: Promise<unknown>) {
+  request.catch(() => undefined);
+}
 
 interface PlayerProps {
   channel: Channel;
@@ -19,6 +29,51 @@ export function Player({ channel, onStatusChange, actions }: PlayerProps) {
     channel.sources,
   );
   const dvr = useDvr(videoRef, getLiveWindow);
+
+  const { seekBy } = dvr;
+
+  const controls = useMemo(() => {
+    const toggleFullscreen = () => {
+      const video = videoRef.current;
+      if (!video) return;
+      ignoreRejection(
+        document.fullscreenElement ? document.exitFullscreen() : video.requestFullscreen(),
+      );
+    };
+    const togglePictureInPicture = () => {
+      const video = videoRef.current;
+      if (!video) return;
+      ignoreRejection(
+        document.pictureInPictureElement
+          ? document.exitPictureInPicture()
+          : video.requestPictureInPicture(),
+      );
+    };
+    const toggleMute = () => {
+      if (videoRef.current) videoRef.current.muted = !videoRef.current.muted;
+    };
+    const togglePlay = () => {
+      const video = videoRef.current;
+      if (!video) return;
+      if (video.paused) ignoreRejection(video.play());
+      else video.pause();
+    };
+    return { toggleFullscreen, togglePictureInPicture, toggleMute, togglePlay };
+  }, [videoRef]);
+
+  useKeyboardShortcuts(
+    useMemo(
+      () => ({
+        KeyF: controls.toggleFullscreen,
+        KeyM: controls.toggleMute,
+        KeyP: controls.togglePictureInPicture,
+        Space: controls.togglePlay,
+        ArrowLeft: () => seekBy(-KEYBOARD_SEEK_SECONDS),
+        ArrowRight: () => seekBy(KEYBOARD_SEEK_SECONDS),
+      }),
+      [controls, seekBy],
+    ),
+  );
 
   useEffect(() => {
     onStatusChange?.(channel.id, status);
@@ -71,6 +126,14 @@ export function Player({ channel, onStatusChange, actions }: PlayerProps) {
               onGoLive={dvr.goLive}
             />
           )}
+          {CAN_PICTURE_IN_PICTURE && (
+            <IconButton label="תמונה בתוך תמונה (P)" onClick={controls.togglePictureInPicture}>
+              <PictureInPictureIcon />
+            </IconButton>
+          )}
+          <IconButton label="מסך מלא (F)" onClick={controls.toggleFullscreen}>
+            <FullscreenIcon />
+          </IconButton>
           {actions}
         </div>
       </div>

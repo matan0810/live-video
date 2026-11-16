@@ -1,0 +1,51 @@
+name: Check links
+
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  ISSUE_TITLE: 'ערוצים שלא עובדים'
+  GH_TOKEN: ${{ github.token }}
+  GH_REPO: ${{ github.repository }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check every stream
+        id: check
+        run: |
+          set +e
+          node scripts/check-links.ts > report.md
+          echo "failed=$?" >> "$GITHUB_OUTPUT"
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Find the open report issue
+        id: issue
+        run: |
+          number=$(gh issue list --state open --search "in:title \"$ISSUE_TITLE\"" --json number --jq '.[0].number // empty')
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the report issue
+        if: steps.check.outputs.failed != '0'
+        run: |
+          if [ -n "${{ steps.issue.outputs.number }}" ]; then
+            gh issue edit "${{ steps.issue.outputs.number }}" --body-file report.md
+          else
+            gh issue create --title "$ISSUE_TITLE" --body-file report.md
+          fi
+
+      - name: Close the report issue when everything works again
+        if: steps.check.outputs.failed == '0' && steps.issue.outputs.number != ''
+        run: gh issue close "${{ steps.issue.outputs.number }}" --comment "כל הערוצים חזרו לעבוד."

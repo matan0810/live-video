@@ -1,4 +1,5 @@
-import { CHANNEL_GROUPS, type Channel, type ChannelGroup } from './types';
+import { CHANNEL_GROUPS, type CatalogChannel, type ChannelGroup } from './types';
+import { isHttpsUrl } from './url';
 
 const ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -14,16 +15,7 @@ function isChannelGroup(value: unknown): value is ChannelGroup {
   return CHANNEL_GROUPS.some((group) => group === value);
 }
 
-function isHttpsUrl(value: unknown): value is string {
-  if (typeof value !== 'string') return false;
-  try {
-    return new URL(value).protocol === 'https:';
-  } catch {
-    return false;
-  }
-}
-
-function parseChannel(value: unknown, position: number): Channel {
+function parseChannel(value: unknown, position: number): CatalogChannel {
   const fail = (reason: string): never => {
     throw new Error(`Channel #${position + 1}: ${reason}`);
   };
@@ -51,7 +43,7 @@ function parseChannel(value: unknown, position: number): Channel {
  * Validates raw channel data (from the bundled JSON today, from a remote API later)
  * and returns it as typed channels. Throws a descriptive error on the first problem.
  */
-export function parseChannels(data: unknown): Channel[] {
+export function parseChannels(data: unknown): CatalogChannel[] {
   if (!Array.isArray(data)) throw new Error('Channel list must be an array');
 
   const channels = data.map(parseChannel);

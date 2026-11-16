@@ -1,15 +1,10 @@
 .card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 100%;
   min-height: 60px;
-  padding: 8px;
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   background: var(--color-surface);
-  color: var(--color-text);
-  text-align: start;
   transition:
     background-color var(--transition),
     border-color var(--transition);
@@ -22,6 +17,21 @@
 .card[data-active='true'] {
   border-color: var(--color-accent);
   background: var(--color-accent-soft);
+}
+
+.select {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  align-self: stretch;
+  padding: 8px;
+  border: none;
+  border-radius: inherit;
+  background: none;
+  color: var(--color-text);
+  text-align: start;
 }
 
 .card[data-unavailable='true'] .tile,
@@ -66,4 +76,14 @@
 
 .card[data-active='true'] .state {
   color: var(--color-accent);
+}
+
+.actions {
+  flex: none;
+  display: flex;
+  padding-inline-end: 4px;
+}
+
+.favorite {
+  color: #f5b83d;
 }

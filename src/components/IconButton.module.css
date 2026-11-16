@@ -1,0 +1,36 @@
+.button {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition);
+}
+
+.button:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
+}
+
+.button[data-variant='ghost'] {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.button[data-variant='ghost']:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.button[aria-pressed='true'] {
+  color: var(--color-accent);
+}
