@@ -1,0 +1,69 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-align: start;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition);
+}
+
+.card:hover {
+  background: var(--color-surface-hover);
+}
+
+.card[data-active='true'] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.card[data-unavailable='true'] .tile,
+.card[data-unavailable='true'] .name {
+  opacity: 0.45;
+}
+
+.tile {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: hsl(var(--tile-hue) 42% 30%);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  display: -webkit-box;
+  overflow: hidden;
+  font-weight: 500;
+  line-height: 1.25;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.state {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.card[data-active='true'] .state {
+  color: var(--color-accent);
+}

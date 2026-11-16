@@ -1,0 +1,32 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  aspect-ratio: 16 / 9;
+  max-height: calc(100dvh - 190px);
+  width: 100%;
+  padding: 16px;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.hint {
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 959px) {
+  .empty {
+    max-height: 40dvh;
+    border-inline: none;
+    border-radius: 0;
+  }
+}

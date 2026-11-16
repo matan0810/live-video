@@ -1,0 +1,105 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--header-height);
+  padding: 0 24px;
+}
+
+.brandDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px var(--color-accent-soft);
+}
+
+.brand {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+  gap: 24px;
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 8px 24px 24px;
+}
+
+.stage {
+  position: sticky;
+  top: 8px;
+  min-width: 0;
+}
+
+.sidebar {
+  min-width: 0;
+}
+
+.main[data-theater='true'] {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 1400px;
+}
+
+.main[data-theater='true'] .sidebar {
+  display: none;
+}
+
+.theaterToggle {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition);
+}
+
+.theaterToggle:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
+}
+
+@media (max-width: 959px) {
+  .header {
+    height: 48px;
+    padding: 0 16px;
+  }
+
+  .main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    padding: 0 0 24px;
+  }
+
+  /* The video stays visible while the channel list scrolls underneath it. */
+  .stage {
+    top: 0;
+    z-index: 1;
+    padding-bottom: 12px;
+    background: var(--color-bg);
+  }
+
+  .sidebar {
+    padding: 0 16px;
+  }
+
+  .theaterToggle {
+    display: none;
+  }
+}

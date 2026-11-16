@@ -1,0 +1,59 @@
+:root {
+  --color-bg: #0b0d10;
+  --color-surface: #14171c;
+  --color-surface-raised: #1a1e25;
+  --color-surface-hover: #20252d;
+  --color-border: #2a303a;
+  --color-border-strong: #3a424f;
+  --color-text: #f2f4f7;
+  --color-text-muted: #9aa3b2;
+  --color-accent: #ff4654;
+  --color-accent-soft: rgb(255 70 84 / 14%);
+
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --shadow-stage: 0 20px 50px rgb(0 0 0 / 45%);
+  --transition: 150ms ease;
+  --header-height: 56px;
+
+  color-scheme: dark;
+  font-family: 'Heebo Variable', system-ui, sans-serif;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,135 @@
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-height: calc(100dvh - 190px);
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: #000;
+  box-shadow: var(--shadow-stage);
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgb(0 0 0 / 72%);
+  text-align: center;
+  color: var(--color-text);
+}
+
+.overlay[data-passive='true'] {
+  pointer-events: none;
+  color: var(--color-text-muted);
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgb(255 255 255 / 18%);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.errorHint {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.primaryButton {
+  margin-top: 4px;
+  height: 40px;
+  padding: 0 20px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 600;
+  transition: filter var(--transition);
+}
+
+.primaryButton:hover {
+  filter: brightness(1.1);
+}
+
+.unmute {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: var(--radius-pill);
+  background: rgb(0 0 0 / 70%);
+  color: #fff;
+  font-size: 0.875rem;
+  backdrop-filter: blur(6px);
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  min-height: 40px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.barEnd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 959px) {
+  .frame {
+    border-radius: 0;
+    max-height: 56dvh;
+  }
+
+  .bar {
+    padding: 0 16px;
+  }
+
+  .title {
+    font-size: 1.0625rem;
+  }
+}
