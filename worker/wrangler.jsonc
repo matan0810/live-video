@@ -8,12 +8,12 @@
   "kv_namespaces": [
     {
       "binding": "KV",
-      // Replace with the id printed by: npx wrangler kv namespace create KV
+      // Filled in at deploy time by scripts/ensure-kv.mjs; leave the placeholder here.
       "id": "REPLACE_WITH_KV_NAMESPACE_ID",
     },
   ],
   "vars": {
     "ALLOWED_ORIGINS": "https://matan0810.github.io,http://localhost:5173",
   },
-  // ADMIN_PASSWORD is a secret: npx wrangler secret put ADMIN_PASSWORD
+  // ADMIN_PASSWORD is a secret, set by the Deploy Worker workflow from a GitHub secret.
 }

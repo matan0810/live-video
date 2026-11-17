@@ -92,9 +92,11 @@ soon as a fixed version exists, and never downgrade a tool to an old major to si
 ## 6. Deploying
 
 - **Site:** merging to `master` deploys it (`deploy.yml`). Only on the owner's order.
-- **Worker:** deployed by the owner from their machine with `npm run worker:deploy`. Cloud
-  sessions have no Cloudflare access; when the Worker changes, tell the owner to deploy it,
-  and whether the site or the Worker must go first.
+- **Worker:** `deploy-worker.yml` deploys it when `worker/` or `shared/` changes on
+  `master`, or when run by hand. It needs the Cloudflare secrets described in README.md.
+  When a change needs the Worker and the site in a particular order, say which goes first.
+- The owner often works from a phone. Instructions for them must work in a browser: GitHub
+  and Cloudflare settings pages, workflow runs. No terminal steps.
 - **Something is wrong in production:** revert the offending commits on a branch and ask
   the owner to merge. For the channel list, the previous version is kept in KV under
   `channels:previous`. Never reset or force-push `master`.

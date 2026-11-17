@@ -84,23 +84,31 @@ Once a list is saved in the admin area it takes precedence over the file.
 ## Setting up the Worker
 
 The Worker (`worker/`) is optional. Without it the site is fully static and the report
-button and admin area are hidden. It runs on Cloudflare's free plan.
+button and admin area are hidden. It runs on Cloudflare's free plan and is deployed by the
+**Deploy Worker** workflow, so everything below can be done from a phone browser.
 
-1. Create a free account at https://dash.cloudflare.com and sign in from a terminal:
-   `npx wrangler login`.
-2. Create the storage: `npx wrangler kv namespace create KV --config worker/wrangler.jsonc`.
-   Put the printed id in `worker/wrangler.jsonc` in place of `REPLACE_WITH_KV_NAMESPACE_ID`
-   and commit it (the id is not a secret).
-3. Set the admin password (long and unique; it is the only credential):
-   `npx wrangler secret put ADMIN_PASSWORD --config worker/wrangler.jsonc`.
-4. Deploy: `npm run worker:deploy`. Note the printed address,
-   `https://live-video-api.<your-subdomain>.workers.dev`.
-5. In the GitHub repository: Settings → Secrets and variables → Actions → Variables →
-   New repository variable, name `API_URL`, value the address from step 4.
-6. Re-run the Deploy workflow (or push to `master`). The report button and `#/admin` are
-   now active.
+1. Create a free account at https://dash.cloudflare.com. Open **Workers & Pages** once and
+   pick a `workers.dev` subdomain when asked.
+2. Copy the **Account ID** (on the account home page, or in the Workers & Pages sidebar).
+3. Create an API token: profile icon → **My Profile** → **API Tokens** → **Create Token** →
+   the **Edit Cloudflare Workers** template → choose your account → **Continue to summary**
+   → **Create Token**. Copy it; it is shown once.
+4. In the GitHub repository: **Settings** → **Secrets and variables** → **Actions** →
+   **Secrets** → **New repository secret**, three times:
+   `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, and `ADMIN_PASSWORD` (long and unique;
+   it is the only credential for the admin area).
+5. **Actions** → **Deploy Worker** → **Run workflow**. The run creates the storage, deploys
+   the Worker, sets the password, and shows the Worker's address in its summary.
+6. **Settings** → **Secrets and variables** → **Actions** → **Variables** → **New repository
+   variable**: name `API_URL`, value the address from step 5.
+7. **Actions** → **Deploy** → **Run workflow**. The report button and `#/admin` are now active.
 
-To change the password, repeat step 3; every existing admin session is signed out.
+To change the password, update the `ADMIN_PASSWORD` secret and run Deploy Worker again;
+every existing admin session is signed out. Later changes to `worker/` or `shared/` deploy
+the Worker by themselves when they reach `master`.
+
+From a computer, `npm run worker:dev` runs the Worker locally (put
+`ADMIN_PASSWORD=...` in `worker/.dev.vars`, which git ignores).
 
 ### Token-protected channels
 
@@ -133,17 +141,18 @@ src/admin/                   the admin area (a separate chunk, loaded only at #/
 src/api/                     client for the Worker API
 src/styles/                  design tokens and global styles
 worker/                      Cloudflare Worker: channel list, reports, admin API, streams
-scripts/                     link checker
+scripts/                     link checker, KV setup for the Worker deploy
 tests/e2e/                   browser smoke test
-.github/workflows/           checks.yml (shared), ci.yml, deploy.yml, check-links.yml
+.github/workflows/           checks.yml (shared), ci.yml, deploy.yml, deploy-worker.yml,
+                             check-links.yml
 ```
 
 ## Deploying
 
 Every push to `master` runs all checks and publishes the site to GitHub Pages
 (`.github/workflows/deploy.yml`). In the repository settings, under Pages, the source must
-be **GitHub Actions**. The Worker is deployed separately, by hand, with
-`npm run worker:deploy`.
+be **GitHub Actions**. The Worker is deployed by its own workflow
+(`.github/workflows/deploy-worker.yml`), described above.
 
 See [CLAUDE.md](CLAUDE.md) for the working procedure, [SECURITY.md](SECURITY.md) for what
 is stored and protected, and [CHANGELOG.md](CHANGELOG.md) for what changed.
