@@ -20,6 +20,7 @@ Version 2.0.0: a full rebuild of the site.
 - Report button: tell the admin a channel is broken or suggest a new link.
 - Admin area at `#/admin`: edit, add, remove and reorder channels, test links from the browser, handle reports, and search the iptv-org directory for replacement links. Changes go live without a deploy.
 - Daily link check that opens an issue listing channels that are down.
+- Dependabot groups all updates into one monthly pull request for npm and one for GitHub Actions.
 - The Worker is deployed by a GitHub workflow, so it can be set up and updated from a phone.
 
 ### Changed

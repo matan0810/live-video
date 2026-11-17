@@ -103,7 +103,8 @@ soon as a fixed version exists, and never downgrade a tool to an old major to si
 
 ## 7. Dependency updates
 
-Dependabot opens monthly pull requests. When the owner asks to handle them: read the
+Dependabot opens at most two pull requests a month: one with every npm update, one with
+every GitHub Actions update (`.github/dependabot.yml`). When the owner asks to handle them: read the
 changelog of the update, run `npm run check` and `npm run e2e`, and note it in the
 CHANGELOG if it matters to viewers. `playwright` is pinned to the version preinstalled in
-cloud sessions; do not upgrade it alone.
+cloud sessions, so Dependabot ignores it; do not upgrade it alone.
