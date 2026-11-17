@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-11-17
+
 ### Added
 - N12, which gets a fresh playback ticket from mako each time it starts.
 - France 24.
