@@ -78,12 +78,16 @@ owner told.
 `.github/workflows/checks.yml`, on every push to a working branch, every pull request, and
 again on `master` before a deploy:
 
-| Job                                    | What it proves                               |
-| -------------------------------------- | -------------------------------------------- |
-| Types, lint, format, audit, unit tests | `npm audit` (high and up), `npm run check`   |
-| Browser smoke test                     | `npm run e2e` in Chromium: desktop and phone |
+| Job                                    | What it proves                                        |
+| -------------------------------------- | ----------------------------------------------------- |
+| Types, lint, format, audit, unit tests | `npm audit --omit=dev` (high and up), `npm run check` |
+| Browser smoke test                     | `npm run e2e` in Chromium: desktop and phone          |
 
 A new check belongs in `checks.yml`, so branches and `master` can never drift apart.
+
+The audit blocks only on runtime dependencies, which ship to viewers. Advisories in build
+and test tools are printed as a warning on every run: when one appears, update the tool as
+soon as a fixed version exists, and never downgrade a tool to an old major to silence it.
 
 ## 6. Deploying
 

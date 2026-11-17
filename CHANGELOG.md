@@ -30,4 +30,5 @@ Version 2.0.0: a full rebuild of the site.
 - The raw-link toggle; adding your own channel replaces it.
 
 ### Security
+- CI blocks a deploy on high-severity advisories in the site's own dependencies, and reports advisories in build tools without blocking.
 - The admin API requires a signed session, limits login attempts and validates every value it is sent. See SECURITY.md.
