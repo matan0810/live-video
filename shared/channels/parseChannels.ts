@@ -1,5 +1,5 @@
 import { CHANNEL_GROUPS, type CatalogChannel, type ChannelGroup } from './types';
-import { isHttpsUrl } from './url';
+import { isStreamSource } from './sources';
 
 const ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -34,7 +34,9 @@ function parseChannel(value: unknown, position: number): CatalogChannel {
   if (!Array.isArray(sources) || sources.length === 0) {
     return fail(`"sources" must be a non-empty list (id: ${id})`);
   }
-  if (!sources.every(isHttpsUrl)) return fail(`every source must be an https URL (id: ${id})`);
+  if (!sources.every(isStreamSource)) {
+    return fail(`every source must be an https URL or a mako: path (id: ${id})`);
+  }
 
   return { id, name, short, group, sources };
 }

@@ -64,13 +64,13 @@ A channel looks like this:
 }
 ```
 
-| Field     | Meaning                                                                  |
-| --------- | ------------------------------------------------------------------------ |
-| `id`      | Unique and permanent: lowercase letters, digits and dashes               |
-| `name`    | The name shown                                                           |
-| `short`   | Short label for the channel tile (`11`, `CNN`)                           |
-| `group`   | `israel` or `world`                                                      |
-| `sources` | https HLS (`.m3u8`) links in priority order: primary first, then backups |
+| Field     | Meaning                                                                                     |
+| --------- | ------------------------------------------------------------------------------------------- |
+| `id`      | Unique and permanent: lowercase letters, digits and dashes                                  |
+| `name`    | The name shown                                                                              |
+| `short`   | Short label for the channel tile (`11`, `CNN`)                                              |
+| `group`   | `israel` or `world`                                                                         |
+| `sources` | https HLS (`.m3u8`) links in priority order: primary first, then backups; or a `mako:` path |
 
 There are two ways to change the list:
 
@@ -113,11 +113,10 @@ From a computer, `npm run worker:dev` runs the Worker locally (put
 
 ### Token-protected channels
 
-Some broadcasters only serve a stream with a short-lived token. `worker/src/streams.ts`
-holds a resolver per such channel; a channel uses one by listing
-`https://<worker address>/stream/<id>` as its source (for example `/stream/n12`). Whether
-this works depends on the broadcaster: a token bound to the viewer's address or country
-will not play.
+Keshet 12 (N12) only serves its stream with a short-lived ticket. A source written as
+`mako:<path>` (see the `n12` channel) makes the player ask mako's ticket service for a
+fresh ticket just before it plays (`shared/channels/sources.ts`). This runs in the
+viewer's browser, so no Worker is involved. N12 only plays from Israel.
 
 ## Link checks
 

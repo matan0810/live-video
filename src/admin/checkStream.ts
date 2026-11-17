@@ -1,3 +1,5 @@
+import { resolveStreamUrl } from '../../shared/channels/sources';
+
 export interface StreamCheck {
   isWorking: boolean;
   detail: string;
@@ -12,7 +14,8 @@ const HLS_SIGNATURE = '#EXTM3U';
  */
 export async function checkStream(url: string): Promise<StreamCheck> {
   try {
-    const response = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+    const resolved = await resolveStreamUrl(url);
+    const response = await fetch(resolved, { signal: AbortSignal.timeout(TIMEOUT_MS) });
     if (!response.ok) return { isWorking: false, detail: `HTTP ${response.status}` };
     const body = await response.text();
     return body.trimStart().startsWith(HLS_SIGNATURE)

@@ -5,6 +5,7 @@
  * Prints a Markdown report and exits with code 1 when any channel has no working source.
  */
 import { readFile } from 'node:fs/promises';
+import { resolveStreamUrl } from '../shared/channels/sources.ts';
 
 interface ChannelEntry {
   id: string;
@@ -27,7 +28,7 @@ const USER_AGENT =
 
 async function checkSource(url: string): Promise<SourceResult> {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(await resolveStreamUrl(url), {
       headers: { 'User-Agent': USER_AGENT },
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });

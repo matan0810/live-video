@@ -4,7 +4,6 @@ import { createSessionToken, isCorrectPassword, requireAdmin } from './auth';
 import { KV_KEYS, type Env } from './env';
 import { corsHeaders, HttpError, json, readJson } from './http';
 import { enforceRateLimit } from './rateLimit';
-import { STREAM_RESOLVERS } from './streams';
 
 const MAX_REPORTS = 200;
 const MAX_REPORT_BYTES = 4 * 1024;
@@ -71,19 +70,6 @@ async function deleteReport(request: Request, env: Env, reportId: string) {
   return json({ reports });
 }
 
-async function redirectToStream(streamId: string) {
-  const resolve = STREAM_RESOLVERS[streamId];
-  if (!resolve) throw new HttpError(404, 'Unknown stream');
-  try {
-    return new Response(null, {
-      status: 302,
-      headers: { Location: await resolve(), 'Cache-Control': 'no-store' },
-    });
-  } catch (error) {
-    throw new HttpError(502, error instanceof Error ? error.message : 'Could not resolve stream');
-  }
-}
-
 function route(request: Request, env: Env): Promise<Response> {
   const { pathname } = new URL(request.url);
   const [, first = '', second = '', third = ''] = pathname.split('/');
@@ -102,7 +88,6 @@ function route(request: Request, env: Env): Promise<Response> {
       case 'GET /admin/reports':
         return listReports(request, env);
     }
-    if (request.method === 'GET' && first === 'stream' && second) return redirectToStream(second);
   }
   if (endpoint === 'DELETE /admin/reports' && third) return deleteReport(request, env, third);
 

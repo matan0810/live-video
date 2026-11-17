@@ -5,8 +5,15 @@
     "short": "11",
     "group": "israel",
     "sources": [
-      "https://kan11w.media.kan.org.il/hls/live/2105694/2105694/source1_600/chunklist.m3u8"
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/kan11/live.livx/playlist.m3u8"
     ]
+  },
+  {
+    "id": "n12",
+    "name": "N12",
+    "short": "12",
+    "group": "israel",
+    "sources": ["mako:/stream/hls/live/2033791/k12n12wad/index.m3u8"]
   },
   {
     "id": "reshet13",
@@ -14,7 +21,7 @@
     "short": "13",
     "group": "israel",
     "sources": [
-      "https://reshet.g-mana.live/media/87f59c77-03f6-4bad-a648-897e095e7360/profile/2/profileManifest.m3u8?_uid=6beb1aa8-7748-4dc3-9747-7d28536688bd&rK=a2&_did=16404bd7b2927f9d2b4d9f582376c8724a33f112"
+      "https://d2xg1g9o5vns8m.cloudfront.net/out/v1/0855d703f7d5436fae6a9c7ce8ca5075/index.m3u8"
     ]
   },
   {
@@ -22,9 +29,7 @@
     "name": "עכשיו 14",
     "short": "14",
     "group": "israel",
-    "sources": [
-      "https://ch14-channel14-content.akamaized.net/hls/live/2104807/CH14_CHANNEL14/2/streamPlaylist.m3u8"
-    ]
+    "sources": ["https://r.il.cdn-redge.media/livehls/oil/ch14/live/ch14/live.livx/playlist.m3u8"]
   },
   {
     "id": "i24news",
@@ -32,24 +37,9 @@
     "short": "i24",
     "group": "israel",
     "sources": [
-      "https://bcovlive-a.akamaihd.net/d89ede8094c741b7924120b27764153c/eu-central-1/5377161796001/profile_0/chunklist.m3u8"
+      "https://i24newshebrew-cdn.encoders.immergo.tv/master.m3u8",
+      "https://i24newsenglish-cdn.encoders.immergo.tv/master.m3u8"
     ]
-  },
-  {
-    "id": "walla",
-    "name": "וואלה חדשות",
-    "short": "וואלה",
-    "group": "israel",
-    "sources": [
-      "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01742-walla-wallanews-ono/playlist.m3u8"
-    ]
-  },
-  {
-    "id": "kan-educational",
-    "name": "כאן חינוכית",
-    "short": "23",
-    "group": "israel",
-    "sources": ["https://kan23.media.kan.org.il/hls/live/2024691/2024691/master.m3u8"]
   },
   {
     "id": "knesset",
@@ -63,7 +53,9 @@
     "name": "מכאן 33",
     "short": "33",
     "group": "israel",
-    "sources": ["https://makan.media.kan.org.il/hls/live/2024680/2024680/source1_4k/chunklist.m3u8"]
+    "sources": [
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/makan/live.livx/playlist.m3u8"
+    ]
   },
   {
     "id": "comedy",
@@ -71,6 +63,7 @@
     "short": "קומדי",
     "group": "israel",
     "sources": [
+      "https://d15ds134q59udk.cloudfront.net/out/v1/fbba879221d045598540ee783b140fe2/index.m3u8",
       "https://d15ds134q59udk.cloudfront.net/media/3b45de9e-c944-4fdc-a344-7c3042b5b104/profile/1/profileManifest.m3u8?_uid=942a06d5-6c6d-42d3-a980-cd7e46ebb2e7&rK=a2&_did=d08df654dedf5609e7d0943be084337edb50cdd7"
     ]
   },
@@ -80,7 +73,8 @@
     "short": "CNN",
     "group": "world",
     "sources": [
-      "https://live-media-fly.warnermediacdn.com/cmaf/live/2028716/cnnfast-international/VIDEO_5_564000.m3u8"
+      "https://d3bp6dwmpbdajl.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-ury0meh5m4nzm/index.m3u8",
+      "https://d2sybdl23b9psq.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-bocx3i7bjz0dg/CNNFAST_GB.m3u8"
     ]
   },
   {
@@ -88,9 +82,7 @@
     "name": "NBC News",
     "short": "NBC",
     "group": "world",
-    "sources": [
-      "https://d2gjhy8g9ziabr.cloudfront.net/v1/master/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod-samsungtvplus-stitched/samsungtvplus_us_nbcnewsnow_001.m3u8"
-    ]
+    "sources": ["https://xumo-drct-nbcnn-ir8ze.fast.nbcuni.com/live/master.m3u8"]
   },
   {
     "id": "fox-news",
@@ -104,7 +96,10 @@
     "name": "ABC News",
     "short": "ABC",
     "group": "world",
-    "sources": ["https://content.uplynk.com/channel/3324f2467c414329b3b0cc5cd987b6be.m3u8"]
+    "sources": [
+      "https://aegis-cloudfront-1.tubi.video/d6cbb0de-68e4-4f3b-82f9-bf5d526e0bde/index.m3u8",
+      "https://pb-0n3n2ej0w8pl9.akamaized.net/ABCNewsLive_Disney.m3u8"
+    ]
   },
   {
     "id": "cbs-news",
@@ -116,13 +111,6 @@
     ]
   },
   {
-    "id": "bbc-news",
-    "name": "BBC News",
-    "short": "BBC",
-    "group": "world",
-    "sources": ["https://d2vnbkvjbims7j.cloudfront.net/containerA/LTN/playlist_4300k.m3u8"]
-  },
-  {
     "id": "sky-news",
     "name": "Sky News",
     "short": "SKY",
@@ -132,11 +120,22 @@
     ]
   },
   {
+    "id": "france-24",
+    "name": "France 24",
+    "short": "F24",
+    "group": "world",
+    "sources": [
+      "https://live.france24.com/hls/live/2037218/F24_EN_HI_HLS/master_5000.m3u8",
+      "https://live.france24.com/hls/live/2037218-b/F24_EN_HI_HLS/master_5000.m3u8"
+    ]
+  },
+  {
     "id": "dw",
     "name": "DW",
     "short": "DW",
     "group": "world",
     "sources": [
+      "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/master.m3u8",
       "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/stream05/streamPlaylist.m3u8"
     ]
   },
@@ -145,13 +144,19 @@
     "name": "RT",
     "short": "RT",
     "group": "world",
-    "sources": ["https://rt-glb.rttv.com/live/rtnews/playlist_4500Kb.m3u8"]
+    "sources": [
+      "https://rt-glb.rttv.com/dvr/rtnews/playlist.m3u8",
+      "https://rt-glb.rttv.com/live/rtnews/playlist_4500Kb.m3u8"
+    ]
   },
   {
     "id": "al-jazeera",
     "name": "Al Jazeera",
     "short": "AJ",
     "group": "world",
-    "sources": ["https://live-hls-web-aje.getaj.net/AJE/01.m3u8"]
+    "sources": [
+      "https://live-hls-web-aje-fa.thehlive.com/AJE/index.m3u8",
+      "https://live-hls-apps-aje-fa.getaj.net/AJE/index.m3u8"
+    ]
   }
 ]

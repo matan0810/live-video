@@ -1,5 +1,4 @@
-// Cloudflare Worker behind the site: remote channel list, viewer reports, admin API
-// and fresh addresses for token-protected streams. See README.md for setup.
+// Cloudflare Worker behind the site: remote channel list, viewer reports and admin API. See README.md for setup.
 {
   "$schema": "../node_modules/wrangler/config-schema.json",
   "name": "live-video-api",

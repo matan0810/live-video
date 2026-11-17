@@ -67,6 +67,13 @@
   font-size: 0.875rem;
 }
 
+.errorDetail {
+  color: var(--color-text-muted);
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
 .primaryButton {
   margin-top: 4px;
   height: 40px;

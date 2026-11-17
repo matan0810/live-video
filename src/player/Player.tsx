@@ -25,7 +25,7 @@ interface PlayerProps {
 }
 
 export function Player({ channel, onStatusChange, actions }: PlayerProps) {
-  const { videoRef, status, retry, isAutoMuted, unmute, getLiveWindow } = useHlsPlayer(
+  const { videoRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow } = useHlsPlayer(
     channel.sources,
   );
   const dvr = useDvr(videoRef, getLiveWindow);
@@ -101,6 +101,11 @@ export function Player({ channel, onStatusChange, actions }: PlayerProps) {
           <div className={styles.overlay} role="alert">
             <strong className={styles.errorTitle}>{channel.name} לא זמין כרגע</strong>
             <span className={styles.errorHint}>מנסה שוב אוטומטית בעוד כמה שניות</span>
+            {errorDetail && (
+              <span className={styles.errorDetail} dir="ltr">
+                {errorDetail}
+              </span>
+            )}
             <button type="button" className={styles.primaryButton} onClick={retry}>
               נסה שוב עכשיו
             </button>

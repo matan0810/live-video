@@ -7,6 +7,18 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- N12, which gets a fresh playback ticket from mako each time it starts.
+- France 24.
+- When a channel fails, its error message says why (for example "HTTP 403"), to make broken links easy to report.
+
+### Changed
+- New links for Kan 11, Makan 33, channel 13, channel 14, i24NEWS (Hebrew, with English as a backup), the comedy channel, CNN International, NBC News, ABC News, DW, RT and Al Jazeera: most of the old ones had stopped working. RT and channel 13 can now be rewound by hours.
+- A stream that has not started after 20 seconds (for example in a format the browser cannot play) gives way to the channel's next link instead of loading forever.
+
+### Removed
+- Walla News, Kan Educational and BBC News: no working link could be found for them.
+
 ## [2.0.0] - 2026-11-17
 
 A full rebuild of the site.

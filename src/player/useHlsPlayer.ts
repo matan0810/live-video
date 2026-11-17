@@ -1,5 +1,6 @@
 import Hls from 'hls.js/light';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { resolveStreamUrl } from '../../shared/channels/sources';
 
 export type PlayerStatus = 'loading' | 'playing' | 'error';
 
@@ -10,6 +11,8 @@ export interface LiveWindow {
 }
 
 const NATIVE_HLS_TYPE = 'application/vnd.apple.mpegurl';
+/** A source that has not started playing by then is treated as failed, e.g. an unsupported codec. */
+const START_TIMEOUT_MS = 20_000;
 
 /**
  * Plays the first working HLS source on a <video> element.
@@ -24,6 +27,8 @@ export function useHlsPlayer(sources: readonly string[]) {
   const [status, setStatus] = useState<PlayerStatus>('loading');
   const [attempt, setAttempt] = useState(0);
   const [isAutoMuted, setIsAutoMuted] = useState(false);
+  /** Why the last source failed, shown under the error message to help diagnose a channel. */
+  const [errorDetail, setErrorDetail] = useState<string | null>(null);
 
   // Reset the status during render when the channel changes, so the previous
   // channel's status is never shown for the new one.
@@ -31,6 +36,7 @@ export function useHlsPlayer(sources: readonly string[]) {
   if (activeSources !== sources) {
     setActiveSources(sources);
     setStatus('loading');
+    setErrorDetail(null);
   }
 
   useEffect(() => {
@@ -39,6 +45,7 @@ export function useHlsPlayer(sources: readonly string[]) {
 
     let sourceIndex = 0;
     let isDisposed = false;
+    let startTimeout: ReturnType<typeof setTimeout> | undefined;
 
     const play = () => {
       video.play().catch((error: unknown) => {
@@ -52,25 +59,38 @@ export function useHlsPlayer(sources: readonly string[]) {
     };
 
     const unload = () => {
+      clearTimeout(startTimeout);
       hlsRef.current?.destroy();
       hlsRef.current = null;
       video.removeAttribute('src');
       video.load();
     };
 
-    const loadNextSource = () => {
+    const loadNextSource = (detail: string) => {
+      if (isDisposed) return;
+      setErrorDetail(detail);
       unload();
       sourceIndex += 1;
       setStatus('loading');
-      load();
+      void load();
     };
 
-    const load = () => {
-      const url = sources[sourceIndex];
-      if (url === undefined) {
+    const load = async () => {
+      const source = sources[sourceIndex];
+      if (source === undefined) {
         setStatus('error');
         return;
       }
+
+      let url: string;
+      try {
+        url = await resolveStreamUrl(source);
+      } catch (error) {
+        loadNextSource(error instanceof Error ? error.message : 'Could not resolve the stream');
+        return;
+      }
+      if (isDisposed) return;
+      startTimeout = setTimeout(() => loadNextSource('did not start in time'), START_TIMEOUT_MS);
 
       if (Hls.isSupported()) {
         const hls = new Hls();
@@ -82,7 +102,8 @@ export function useHlsPlayer(sources: readonly string[]) {
             hls.recoverMediaError();
             return;
           }
-          loadNextSource();
+          const code = data.response?.code;
+          loadNextSource(code ? `${data.details} (HTTP ${code})` : data.details);
         });
         hls.loadSource(url);
         hls.attachMedia(video);
@@ -96,19 +117,22 @@ export function useHlsPlayer(sources: readonly string[]) {
       play();
     };
 
-    const handlePlaying = () => setStatus('playing');
+    const handlePlaying = () => {
+      clearTimeout(startTimeout);
+      setStatus('playing');
+    };
     const handleVolumeChange = () => {
       if (!video.muted) setIsAutoMuted(false);
     };
     const handleNativeError = () => {
       // With hls.js, failures are reported through its own ERROR event instead.
-      if (!hlsRef.current && video.error) loadNextSource();
+      if (!hlsRef.current && video.error) loadNextSource(`media error ${video.error.code}`);
     };
 
     video.addEventListener('playing', handlePlaying);
     video.addEventListener('volumechange', handleVolumeChange);
     video.addEventListener('error', handleNativeError);
-    load();
+    void load();
 
     return () => {
       isDisposed = true;
@@ -145,5 +169,5 @@ export function useHlsPlayer(sources: readonly string[]) {
     return { start: seekable.start(0), end: seekable.end(seekable.length - 1) };
   }, []);
 
-  return { videoRef, status, retry, isAutoMuted, unmute, getLiveWindow };
+  return { videoRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow };
 }

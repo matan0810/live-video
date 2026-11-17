@@ -152,8 +152,7 @@ describe('reports', () => {
 });
 
 describe('routing', () => {
-  it('answers 404 for unknown paths and streams', async () => {
+  it('answers 404 for unknown paths', async () => {
     expect((await call('GET', '/nope')).status).toBe(404);
-    expect((await call('GET', '/stream/unknown')).status).toBe(404);
   });
 });
