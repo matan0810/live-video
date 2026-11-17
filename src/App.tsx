@@ -125,6 +125,7 @@ export function App() {
       <header className={styles.header}>
         <span className={styles.brandDot} aria-hidden="true" />
         <h1 className={styles.brand}>שידור חי</h1>
+        <span className={styles.version}>v{__APP_VERSION__}</span>
       </header>
 
       <main className={styles.main} data-theater={isTheaterMode}>

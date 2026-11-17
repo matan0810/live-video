@@ -26,6 +26,13 @@
   font-weight: 700;
 }
 
+.version {
+  margin-inline-start: auto;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
 .main {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;

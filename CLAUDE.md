@@ -89,7 +89,42 @@ The audit blocks only on runtime dependencies, which ship to viewers. Advisories
 and test tools are printed as a warning on every run: when one appears, update the tool as
 soon as a fixed version exists, and never downgrade a tool to an old major to silence it.
 
-## 6. Deploying
+## 6. Versions
+
+Semantic versioning, `MAJOR.MINOR.PATCH`:
+
+| Bump    | When                                        | Example                              |
+| ------- | ------------------------------------------- | ------------------------------------ |
+| `patch` | Fixes only, nothing new for viewers         | a broken link replaced, a layout bug |
+| `minor` | Anything new or changed that viewers notice | a channel added, a new button        |
+| `major` | A break with the past                       | saved favourites or channels reset   |
+
+The version lives in `package.json` and `package-lock.json` (kept in step by
+`npm run bump` and checked by a test) and is shown in the site's header. Past releases,
+from before tags were used, are listed with their commits in `scripts/release-history.json`.
+
+## 7. Releasing (only on the owner's order)
+
+A release is a push to `master` whose `package.json` version has no tag yet. Once the site
+is deployed, `deploy.yml` tags that commit `vX.Y.Z` and publishes a GitHub release with
+the version's CHANGELOG section. It also creates any missing tag from
+`scripts/release-history.json`. Tags are created only by that workflow: cloud sessions
+cannot push tags, so never try.
+
+1. `## [Unreleased]` in `CHANGELOG.md` describes everything since the last release. If it
+   is empty there is nothing to release: tell the owner.
+2. Pick the bump by section 6 and tell the owner which one and why.
+3. `npm run bump -- patch|minor|major`, then `npm run check`.
+4. Commit exactly `Release vX.Y.Z`, push the working branch, wait for CI.
+5. Fast-forward `master` to it. If it cannot fast-forward, stop and report.
+6. Check that the Deploy run passed and that
+   https://github.com/matan0810/live-video/releases shows `vX.Y.Z`. Tell the owner the
+   version, the release link and what is in it.
+
+Changes with nothing for viewers (docs, workflows) can reach `master` without a bump,
+still only on the owner's order. The site redeploys and no tag is created.
+
+## 8. Deploying
 
 - **Site:** merging to `master` deploys it (`deploy.yml`). Only on the owner's order.
 - **Worker:** `deploy-worker.yml` deploys it when `worker/` or `shared/` changes on
@@ -101,7 +136,7 @@ soon as a fixed version exists, and never downgrade a tool to an old major to si
   the owner to merge. For the channel list, the previous version is kept in KV under
   `channels:previous`. Never reset or force-push `master`.
 
-## 7. Dependency updates
+## 9. Dependency updates
 
 Dependabot opens at most two pull requests a month: one with every npm update, one with
 every GitHub Actions update (`.github/dependabot.yml`). When the owner asks to handle them: read the

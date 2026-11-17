@@ -1,5 +1,7 @@
 # Every push to master is a deploy: all checks run first, and only if they pass is the
-# site built and published to GitHub Pages.
+# site built and published to GitHub Pages. Once it is live, any release that has no
+# tag yet is tagged and published on GitHub with its CHANGELOG.md section: the current
+# version from package.json, and the past ones in scripts/release-history.json.
 name: Deploy
 
 on:
@@ -49,3 +51,29 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  release:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Tag and publish missing releases
+        run: |
+          node scripts/release-plan.ts "$GITHUB_SHA" "$RUNNER_TEMP/notes" > plan.tsv
+          while IFS=$'\t' read -r tag commit title notes latest; do
+            if gh release view "$tag" > /dev/null 2>&1; then
+              echo "$tag already released"
+              continue
+            fi
+            gh release create "$tag" --target "$commit" --title "$title" \
+              --notes-file "$notes" --latest="$latest"
+            echo "Released $tag at ${commit:0:7}" | tee -a "$GITHUB_STEP_SUMMARY"
+          done < plan.tsv

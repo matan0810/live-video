@@ -7,7 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
-Version 2.0.0: a full rebuild of the site.
+## [2.0.0] - 2026-11-17
+
+A full rebuild of the site.
 
 ### Added
 - Channel list with one-click switching, grouped into Israel and World, in a new dark design that works on desktop and phones.
@@ -20,6 +22,7 @@ Version 2.0.0: a full rebuild of the site.
 - Report button: tell the admin a channel is broken or suggest a new link.
 - Admin area at `#/admin`: edit, add, remove and reorder channels, test links from the browser, handle reports, and search the iptv-org directory for replacement links. Changes go live without a deploy.
 - Daily link check that opens an issue listing channels that are down.
+- Each release is tagged and published on GitHub with its notes, and the version is shown in the site's header. Earlier versions, back to 2022, were reconstructed from the history and tagged too.
 - Dependabot groups all updates into one monthly pull request for npm and one for GitHub Actions.
 - The Worker is deployed by a GitHub workflow, so it can be set up and updated from a phone.
 
@@ -34,3 +37,66 @@ Version 2.0.0: a full rebuild of the site.
 ### Security
 - CI blocks a deploy on high-severity advisories in the site's own dependencies, and reports advisories in build tools without blocking.
 - The admin API requires a signed session, limits login attempts and validates every value it is sent. See SECURITY.md.
+
+## [1.3.0] - 2025-02-13
+
+### Added
+- i24NEWS and BBC News.
+- CNN International is back, on a new link.
+
+### Changed
+- The Knesset channel plays from a new link.
+
+### Removed
+- CNN (US) and France 24, whose links stopped working.
+
+## [1.2.1] - 2024-12-16
+
+### Changed
+- Dependencies updated.
+- The empty choice in the channel menu reads "בחר לינק" in plain italics.
+
+## [1.2.0] - 2024-11-05
+
+### Added
+- The comedy channel (ערוץ הקומדיות).
+
+### Changed
+- Channel 13 is listed as Reshet 13; channel 14 and Sky News play from new links.
+
+### Removed
+- N12, Ynet, channel 9, the shopping channel and CNN International, whose links stopped working.
+
+## [1.1.1] - 2024-07-16
+
+### Security
+- Dependencies updated to fix known vulnerabilities.
+
+## [1.1.0] - 2023-12-11
+
+### Added
+- Many more channels: Ynet, Walla, channel 9, Kan Educational, the Knesset, Makan 33, the shopping channel, CNN International, NBC, Fox News, ABC, Sky News, France 24, DW, RT and Al Jazeera.
+- A switch between the channel list and pasting your own link; the choice is remembered.
+- Channels that only exist as a web page can be shown in an embedded frame.
+
+### Changed
+- The main button reads "בחר שידור".
+
+## [1.0.0] - 2023-11-22
+
+### Changed
+- Rebuilt on Vite instead of Create React App, and published at https://matan0810.github.io/live-video.
+- The player is larger on desktops and smaller on phones.
+- CBS replaces N12 and Sky News, whose links stopped working.
+
+## [0.2.0] - 2023-10-31
+
+### Added
+- A channel menu: Kan 11, N12, channel 13, channel 14, CNN and Sky News, without pasting links.
+- The site is published on GitHub Pages.
+
+## [0.1.0] - 2022-09-24
+
+### Added
+- First working version: paste an HLS (m3u8) link and watch it in a player with Hebrew controls.
+- The link is remembered between visits, and a button clears it to choose another.

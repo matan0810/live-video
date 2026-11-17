@@ -8,6 +8,7 @@
 // admin area (which needs the Worker) are checked by hand, as CLAUDE.md describes.
 
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { chromium, devices } from 'playwright';
 import { preview } from 'vite';
 
@@ -35,8 +36,10 @@ async function main() {
   await desktop.goto(url);
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'rtl');
   assert.deepEqual(await sectionTitles(desktop), ['ישראל', 'עולם']);
+  const { version } = JSON.parse(await readFile(new URL('../../package.json', import.meta.url)));
+  await desktop.getByText(`v${version}`, { exact: true }).waitFor();
   await desktop.getByText('בחרו ערוץ מהרשימה').waitFor();
-  step('desktop: channel list and empty state');
+  step('desktop: channel list, empty state and version');
 
   await desktop.getByRole('button', { name: 'כאן 11', exact: true }).click();
   await desktop.getByRole('alert').getByText('כאן 11 לא זמין כרגע').waitFor();

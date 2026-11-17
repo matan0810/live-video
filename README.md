@@ -46,6 +46,7 @@ npm run dev
 | `npm run e2e`           | Browser smoke test (needs a prior `npm run build`)              |
 | `npm run format`        | Rewrite files with Prettier                                     |
 | `npm run check:links`   | Check that every stream in `channels.json` answers              |
+| `npm run bump -- minor` | Prepare a release: version and CHANGELOG (see CLAUDE.md)        |
 | `npm run worker:dev`    | Run the Worker locally on http://localhost:8787                 |
 | `npm run worker:deploy` | Deploy the Worker to Cloudflare                                 |
 
@@ -141,16 +142,20 @@ src/admin/                   the admin area (a separate chunk, loaded only at #/
 src/api/                     client for the Worker API
 src/styles/                  design tokens and global styles
 worker/                      Cloudflare Worker: channel list, reports, admin API, streams
-scripts/                     link checker, KV setup for the Worker deploy
+scripts/                     link checker, KV setup for the Worker deploy, version
+                             bump and release plan, past releases
 tests/e2e/                   browser smoke test
 .github/workflows/           checks.yml (shared), ci.yml, deploy.yml, deploy-worker.yml,
                              check-links.yml
 ```
 
-## Deploying
+## Deploying and versions
 
 Every push to `master` runs all checks and publishes the site to GitHub Pages
-(`.github/workflows/deploy.yml`). In the repository settings, under Pages, the source must
+(`.github/workflows/deploy.yml`). When the version in `package.json` is new, the same run
+tags the commit and publishes a GitHub release with its CHANGELOG notes; see
+[the releases](https://github.com/matan0810/live-video/releases). The version is shown in
+the site's header. In the repository settings, under Pages, the source must
 be **GitHub Actions**. The Worker is deployed by its own workflow
 (`.github/workflows/deploy-worker.yml`), described above.
 
