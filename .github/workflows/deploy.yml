@@ -33,7 +33,7 @@ jobs:
           # Repository variable with the Worker's address. Without it the site is fully
           # static: no remote channel list, reports or admin area.
           VITE_API_URL: ${{ vars.API_URL }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
