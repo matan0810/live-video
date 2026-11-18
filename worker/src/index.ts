@@ -1,5 +1,7 @@
 import { parseChannels } from '../../shared/channels/parseChannels';
+import { isHttpsUrl } from '../../shared/channels/url';
 import { parseReportInput, type Report } from '../../shared/reports';
+import { findIframes, findStreamLinks } from '../../shared/streamLinks';
 import { createSessionToken, isCorrectPassword, requireAdmin } from './auth';
 import { KV_KEYS, type Env } from './env';
 import { corsHeaders, HttpError, json, readJson } from './http';
@@ -12,6 +14,12 @@ const MAX_LOGIN_BYTES = 1024;
 
 const LOGIN_LIMIT = { scope: 'login', maxRequests: 5, windowSeconds: 15 * 60 };
 const REPORT_LIMIT = { scope: 'report', maxRequests: 10, windowSeconds: 60 * 60 };
+const EXTRACT_LIMIT = { scope: 'extract', maxRequests: 30, windowSeconds: 60 * 60 };
+const MAX_EXTRACT_BYTES = 1024;
+const MAX_PAGE_CHARS = 2 * 1024 * 1024;
+const MAX_IFRAMES = 3;
+const PAGE_TIMEOUT_MS = 10_000;
+const PAGE_HEADERS = { 'User-Agent': 'Mozilla/5.0 (compatible; OnAir link finder)' };
 
 async function readReports(env: Env): Promise<Report[]> {
   return (await env.KV.get<Report[]>(KV_KEYS.reports, 'json')) ?? [];
@@ -70,6 +78,45 @@ async function deleteReport(request: Request, env: Env, reportId: string) {
   return json({ reports });
 }
 
+/** Downloads a page as text, giving up on slow pages and cutting oversized ones. */
+async function fetchPage(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(url, {
+      headers: PAGE_HEADERS,
+      redirect: 'follow',
+      signal: AbortSignal.timeout(PAGE_TIMEOUT_MS),
+    });
+    if (!response.ok) return null;
+    return (await response.text()).slice(0, MAX_PAGE_CHARS);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Finds stream links on a web page and in the players it embeds (one level of iframes).
+ * Only links present in the page source are found: a player that builds the address at
+ * run time from a separate request will not show one.
+ */
+async function extractStreams(request: Request, env: Env) {
+  await requireAdmin(request, env);
+  await enforceRateLimit(request, env, EXTRACT_LIMIT);
+  const body = await readJson(request, MAX_EXTRACT_BYTES);
+  const url = typeof body === 'object' && body !== null && 'url' in body ? body.url : null;
+  if (!isHttpsUrl(url)) throw new HttpError(400, 'The page address must be an https URL');
+
+  const page = await fetchPage(url);
+  if (page === null) throw new HttpError(502, 'Could not load the page');
+
+  const links = findStreamLinks(page, url);
+  const iframes = findIframes(page, url).slice(0, MAX_IFRAMES);
+  for (const frame of iframes) {
+    const framePage = await fetchPage(frame);
+    if (framePage !== null) links.push(...findStreamLinks(framePage, frame));
+  }
+  return json({ links: [...new Set(links)], pagesScanned: 1 + iframes.length });
+}
+
 function route(request: Request, env: Env): Promise<Response> {
   const { pathname } = new URL(request.url);
   const [, first = '', second = '', third = ''] = pathname.split('/');
@@ -87,6 +134,8 @@ function route(request: Request, env: Env): Promise<Response> {
         return saveChannels(request, env);
       case 'GET /admin/reports':
         return listReports(request, env);
+      case 'POST /admin/extract':
+        return extractStreams(request, env);
     }
   }
   if (endpoint === 'DELETE /admin/reports' && third) return deleteReport(request, env, third);

@@ -19,7 +19,7 @@ export function toDraft(channel: CatalogChannel): DraftChannel {
   return { ...rest, nameEn, key: crypto.randomUUID(), sourcesText: sources.join('\n') };
 }
 
-export function createEmptyDraft(): DraftChannel {
+export function createEmptyDraft(sourcesText = ''): DraftChannel {
   return {
     key: crypto.randomUUID(),
     id: '',
@@ -27,7 +27,7 @@ export function createEmptyDraft(): DraftChannel {
     nameEn: '',
     short: '',
     group: 'israel',
-    sourcesText: '',
+    sourcesText,
   };
 }
 

@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- Link finder in the admin area: paste a channel's web page and it lists the stream links found there and in the player it embeds, each checked, with a button to start a new channel from one.
 - The site is now called OnAir, in both languages.
 - An English version of the site. It opens in Hebrew for Hebrew browsers and in English otherwise, and a button in the header switches language; the choice is remembered.
 - Official logos for the channels.

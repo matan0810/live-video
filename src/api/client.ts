@@ -68,3 +68,13 @@ export async function deleteReport(token: string, reportId: string) {
   const path = `/admin/reports/${encodeURIComponent(reportId)}`;
   return (await request<{ reports: Report[] }>(path, { method: 'DELETE', token })).reports;
 }
+
+export interface ExtractedLinks {
+  links: string[];
+  pagesScanned: number;
+}
+
+/** Asks the Worker to find stream links on a web page (and the players it embeds). */
+export async function extractStreamLinks(token: string, url: string) {
+  return request<ExtractedLinks>('/admin/extract', { method: 'POST', body: { url }, token });
+}

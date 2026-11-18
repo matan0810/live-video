@@ -10,7 +10,14 @@ import {
 } from '../api/client';
 import { bundledChannels } from '../channels';
 import { ChannelEditor, type SaveState } from './ChannelEditor';
-import { draftsToChannels, toDraft, withPrimarySource, type DraftChannel } from './drafts';
+import {
+  createEmptyDraft,
+  draftsToChannels,
+  toDraft,
+  withPrimarySource,
+  type DraftChannel,
+} from './drafts';
+import { LinkFinder } from './LinkFinder';
 import { ReportsPanel } from './ReportsPanel';
 import { StreamSearch } from './StreamSearch';
 import styles from './Admin.module.css';
@@ -117,6 +124,13 @@ export function AdminDashboard({ token, onSignOut }: AdminDashboardProps) {
             error={error}
             onChange={handleChange}
             onSave={() => void handleSave()}
+          />
+          <LinkFinder
+            token={token}
+            onCreateChannel={(url) => {
+              handleChange([createEmptyDraft(url), ...drafts]);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
           <StreamSearch />
         </>

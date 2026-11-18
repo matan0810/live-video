@@ -24,6 +24,9 @@
   stripped of control and text-reordering characters, and is rendered as plain text.
   Request bodies are size-capped.
 - **Reports:** ten per address per hour.
+- **Link finder:** only a signed-in admin can make the Worker fetch a web page. It accepts
+  https addresses only, gives up after 10 seconds, reads at most 2 MB per page, follows at
+  most three embedded players, and allows 30 searches an hour.
 - **Browsers:** the API answers cross-origin requests only for the origins listed in
   `ALLOWED_ORIGINS` (`worker/wrangler.jsonc`).
 

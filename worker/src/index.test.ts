@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Env } from './env';
 import worker from './index';
 
@@ -83,6 +83,7 @@ describe('admin endpoints', () => {
   it.each([
     ['PUT', '/admin/channels'],
     ['GET', '/admin/reports'],
+    ['POST', '/admin/extract'],
     ['DELETE', '/admin/reports/some-id'],
   ])('%s %s requires a session', async (method, path) => {
     expect((await call(method, path, { body: [] })).status).toBe(401);
@@ -154,5 +155,45 @@ describe('reports', () => {
 describe('routing', () => {
   it('answers 404 for unknown paths', async () => {
     expect((await call('GET', '/nope')).status).toBe(404);
+  });
+});
+
+describe('stream link extraction', () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it('finds links on the page and in its embedded player', async () => {
+    const pages: Record<string, string> = {
+      'https://tv.example/live':
+        '<script>src: "https://cdn.example/a.m3u8"</script><iframe src="/player"></iframe>',
+      'https://tv.example/player': '<video src="https://cdn.example/b.m3u8"></video>',
+    };
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
+      const page = pages[String(input)];
+      return page === undefined ? new Response('', { status: 404 }) : new Response(page);
+    });
+    const token = await signIn();
+    const response = await call('POST', '/admin/extract', {
+      body: { url: 'https://tv.example/live' },
+      token,
+    });
+    expect(await response.json()).toEqual({
+      links: ['https://cdn.example/a.m3u8', 'https://cdn.example/b.m3u8'],
+      pagesScanned: 2,
+    });
+  });
+
+  it('rejects addresses that are not https, and pages that fail to load', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('', { status: 500 }));
+    const token = await signIn();
+    const insecure = await call('POST', '/admin/extract', {
+      body: { url: 'http://a.example' },
+      token,
+    });
+    expect(insecure.status).toBe(400);
+    const failing = await call('POST', '/admin/extract', {
+      body: { url: 'https://a.example' },
+      token,
+    });
+    expect(failing.status).toBe(502);
   });
 });

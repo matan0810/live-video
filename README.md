@@ -16,7 +16,7 @@ Live at https://matan0810.github.io/live-video
 - A share link per channel (`?ch=kan11`), picture-in-picture, installable as an app.
 - Viewers can report a broken channel or suggest a new link.
 - An admin area (`#/admin`, password protected) to edit channels and handle reports
-  without a deploy.
+  without a deploy, and to find a channel's stream link from its own web page.
 
 ## Keyboard
 
