@@ -32,7 +32,10 @@ async function main() {
   const sectionTitles = (page) => page.locator('nav h2').allInnerTexts();
 
   // ---------- Desktop ----------
-  const desktop = await open({ viewport: { width: 1280, height: 800 }, locale: 'he-IL' }, 'desktop');
+  const desktop = await open(
+    { viewport: { width: 1280, height: 800 }, locale: 'he-IL' },
+    'desktop',
+  );
   await desktop.goto(url);
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'rtl');
   assert.deepEqual(await sectionTitles(desktop), ['ישראל', 'עולם']);
@@ -128,6 +131,16 @@ async function main() {
   );
   assert.deepEqual(smallTargets, [], 'every button is a comfortable tap target');
   step('phone: fits the width, comfortable buttons');
+
+  await phone.evaluate(() => document.querySelector('video').parentElement.requestFullscreen());
+  await phone.waitForFunction(() => document.fullscreenElement !== null);
+  await phone.locator('video').tap({ force: true });
+  assert.equal(
+    await phone.getByRole('navigation', { name: 'החלפת ערוץ' }).count(),
+    0,
+    'no channel bar in full screen on a touch screen',
+  );
+  step('phone: no channel bar in full screen');
 
   await browser.close();
   await new Promise((resolve) => server.httpServer.close(resolve));

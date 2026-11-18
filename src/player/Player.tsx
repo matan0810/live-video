@@ -4,6 +4,7 @@ import { IconButton } from '../components/IconButton';
 import { FullscreenIcon, PictureInPictureIcon } from '../components/icons';
 import { useAutoHide } from '../hooks/useAutoHide';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { displayName } from '../channels/displayName';
 import { useI18n } from '../i18n/context';
 import { DvrControls } from './DvrControls';
@@ -17,6 +18,8 @@ const AUTO_RETRY_DELAY_MS = 15_000;
 const KEYBOARD_SEEK_SECONDS = 10;
 const CAN_PICTURE_IN_PICTURE = document.pictureInPictureEnabled;
 const OVERLAY_HIDE_DELAY_MS = 3000;
+/** The channel bar is for mouse users; on touch screens it is too easy to tap by accident. */
+const MOUSE_QUERY = '(hover: hover) and (pointer: fine)';
 
 interface PlayerProps {
   channel: Channel;
@@ -48,7 +51,9 @@ export function Player({
   const fullscreen = useFullscreen(frameRef, videoRef);
   const overlayVisibility = useAutoHide(OVERLAY_HIDE_DELAY_MS);
   const { reveal } = overlayVisibility;
-  const isOverlayShown = Boolean(overlay) && (fullscreen.isFullscreen || isOverlayEnabled);
+  const hasMouse = useMediaQuery(MOUSE_QUERY);
+  const isOverlayShown =
+    hasMouse && Boolean(overlay) && (fullscreen.isFullscreen || isOverlayEnabled);
   const lastPointer = useRef({ x: -1, y: -1 });
 
   // Browsers also fire pointer moves when the page changes under a resting cursor, which

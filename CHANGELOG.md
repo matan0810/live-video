@@ -13,6 +13,7 @@ breaking changes are major.
 - Nine channels: Channel 9, Euronews, TRT World, NHK World, CNA, LiveNOW from FOX, GB News, Newsmax and Al Arabiya (English).
 
 ### Changed
+- The channel row over the video in full screen is shown only with a mouse: on phones and tablets it was too easy to tap by accident.
 - Updated GitHub Actions used by the build and deploy workflows to their latest versions.
 
 ### Removed
