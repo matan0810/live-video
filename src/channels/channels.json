@@ -2,6 +2,7 @@
   {
     "id": "kan11",
     "name": "כאן 11",
+    "nameEn": "Kan 11",
     "short": "11",
     "group": "israel",
     "sources": [
@@ -18,6 +19,7 @@
   {
     "id": "reshet13",
     "name": "רשת 13",
+    "nameEn": "Channel 13",
     "short": "13",
     "group": "israel",
     "sources": [
@@ -27,6 +29,7 @@
   {
     "id": "now14",
     "name": "עכשיו 14",
+    "nameEn": "Now 14",
     "short": "14",
     "group": "israel",
     "sources": ["https://r.il.cdn-redge.media/livehls/oil/ch14/live/ch14/live.livx/playlist.m3u8"]
@@ -44,6 +47,7 @@
   {
     "id": "knesset",
     "name": "ערוץ הכנסת",
+    "nameEn": "Knesset Channel",
     "short": "כנסת",
     "group": "israel",
     "sources": ["https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"]
@@ -51,6 +55,7 @@
   {
     "id": "makan33",
     "name": "מכאן 33",
+    "nameEn": "Makan 33",
     "short": "33",
     "group": "israel",
     "sources": [
@@ -60,12 +65,21 @@
   {
     "id": "comedy",
     "name": "ערוץ הקומדיות",
+    "nameEn": "Comedy Channel",
     "short": "קומדי",
     "group": "israel",
     "sources": [
       "https://d15ds134q59udk.cloudfront.net/out/v1/fbba879221d045598540ee783b140fe2/index.m3u8",
       "https://d15ds134q59udk.cloudfront.net/media/3b45de9e-c944-4fdc-a344-7c3042b5b104/profile/1/profileManifest.m3u8?_uid=942a06d5-6c6d-42d3-a980-cd7e46ebb2e7&rK=a2&_did=d08df654dedf5609e7d0943be084337edb50cdd7"
     ]
+  },
+  {
+    "id": "channel9",
+    "name": "ערוץ 9",
+    "nameEn": "Channel 9",
+    "short": "9",
+    "group": "israel",
+    "sources": ["https://contact.gostreaming.tv/Con-11/index.m3u8"]
   },
   {
     "id": "cnn-international",
@@ -111,15 +125,6 @@
     ]
   },
   {
-    "id": "sky-news",
-    "name": "Sky News",
-    "short": "SKY",
-    "group": "world",
-    "sources": [
-      "https://linear417-gb-hls1-prd-ak.cdn.skycdp.com/100e/Content/HLS_001_1080_30/Live/channel(skynews)/03_1080-30.m3u8"
-    ]
-  },
-  {
     "id": "france-24",
     "name": "France 24",
     "short": "F24",
@@ -158,5 +163,64 @@
       "https://live-hls-web-aje-fa.thehlive.com/AJE/index.m3u8",
       "https://live-hls-apps-aje-fa.getaj.net/AJE/index.m3u8"
     ]
+  },
+  {
+    "id": "euronews",
+    "name": "Euronews",
+    "short": "EN",
+    "group": "world",
+    "sources": ["https://cdn-euronews.akamaized.net/live/eds/euronews-en/25002/index.m3u8"]
+  },
+  {
+    "id": "trt-world",
+    "name": "TRT World",
+    "short": "TRT",
+    "group": "world",
+    "sources": ["https://tv-trtworld.medya.trt.com.tr/master.m3u8"]
+  },
+  {
+    "id": "nhk-world",
+    "name": "NHK World",
+    "short": "NHK",
+    "group": "world",
+    "sources": [
+      "https://media-tyo.hls.nhkworld.jp/hls/w/live/master.m3u8",
+      "https://masterpl.hls.nhkworld.jp/hls/w/live/smarttv.m3u8"
+    ]
+  },
+  {
+    "id": "cna",
+    "name": "CNA",
+    "short": "CNA",
+    "group": "world",
+    "sources": ["https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index.m3u8"]
+  },
+  {
+    "id": "livenow-fox",
+    "name": "LiveNOW from FOX",
+    "short": "LIVE",
+    "group": "world",
+    "sources": ["https://pb-k5p02dtnr2162.akamaized.net/LiveNOW_from_FOX.m3u8"]
+  },
+  {
+    "id": "gb-news",
+    "name": "GB News",
+    "short": "GB",
+    "group": "world",
+    "sources": ["https://hlspackager.akamaized.net/live/DB/GB_NEWS/HLS/GB_NEWS.m3u8"]
+  },
+  {
+    "id": "newsmax",
+    "name": "Newsmax",
+    "short": "NMX",
+    "group": "world",
+    "sources": ["https://nmx1ota.akamaized.net/hls/live/2107010/Live_1/index.m3u8"]
+  },
+  {
+    "id": "al-arabiya",
+    "name": "Al Arabiya",
+    "short": "AA",
+    "group": "world",
+    "sources": ["https://live.alarabiya.net/alarabiapublish/english/playlist_dvr.m3u8"]
   }
 ]

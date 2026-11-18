@@ -7,6 +7,17 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- An English version of the site. It opens in Hebrew for Hebrew browsers and in English otherwise, and a button in the header switches language; the choice is remembered.
+- Official logos for the channels.
+- Nine channels: Channel 9, Euronews, TRT World, NHK World, CNA, LiveNOW from FOX, GB News, Newsmax and Al Arabiya (English).
+
+### Changed
+- Updated GitHub Actions used by the build and deploy workflows to their latest versions.
+
+### Removed
+- Sky News: its stream refuses to play outside the UK.
+
 ## [2.1.0] - 2026-11-18
 
 ### Added

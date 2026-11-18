@@ -7,6 +7,7 @@ Live at https://matan0810.github.io/live-video
 
 ## Features
 
+- Hebrew and English, with the page direction following the language.
 - One click to switch channel; the last channel is restored on the next visit.
 - Rewind on streams that keep past segments, with a button back to live.
 - Automatic fallback to a backup link, and automatic retry when a channel is down.
@@ -69,7 +70,9 @@ A channel looks like this:
 | --------- | ------------------------------------------------------------------------------------------- |
 | `id`      | Unique and permanent: lowercase letters, digits and dashes                                  |
 | `name`    | The name shown                                                                              |
+| `nameEn`  | Optional English name, when it differs from `name`                                          |
 | `short`   | Short label for the channel tile (`11`, `CNN`)                                              |
+| `logo`    | Optional logo: `logos/<file>` from `public/logos`, or an https address                      |
 | `group`   | `israel` or `world`                                                                         |
 | `sources` | https HLS (`.m3u8`) links in priority order: primary first, then backups; or a `mako:` path |
 
