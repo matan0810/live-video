@@ -152,6 +152,11 @@ tests/e2e/                   browser smoke test
                              check-links.yml
 ```
 
+## Branches
+
+- `dev`: all work lands here, and CI checks every push.
+- `master`: the live site. It moves only on a release, by fast-forwarding to `dev`.
+
 ## Deploying and versions
 
 Every push to `master` runs all checks and publishes the site to GitHub Pages

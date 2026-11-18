@@ -14,6 +14,7 @@ breaking changes are major.
 
 ### Changed
 - The channel row over the video in full screen is shown only with a mouse: on phones and tablets it was too easy to tap by accident.
+- Work now lands on a `dev` branch and reaches the live site only on a release, as in KAVOOM.
 - Updated GitHub Actions used by the build and deploy workflows to their latest versions.
 
 ### Removed
