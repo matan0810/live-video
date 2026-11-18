@@ -36,6 +36,8 @@
   stop direct requests, so reports can still be sent by scripts, within the rate limit.
 - The admin token lives in browser storage: anyone with access to the admin's unlocked
   browser profile can use it until it expires.
+- Channel logos load from Wikimedia (`upload.wikimedia.org`) and, for two Israeli channels,
+  Imgur (`i.imgur.com`). Those sites see the viewer's address, as with any image on the web.
 - To play N12 the browser asks `mass.mako.co.il` for a playback ticket. The request
   carries only the stream path, nothing about the viewer.
 - Streams come from third parties. The site plays them as they are and has no control over

@@ -4,6 +4,7 @@
     "name": "כאן 11",
     "nameEn": "Kan 11",
     "short": "11",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Kan11Logo.svg",
     "group": "israel",
     "sources": [
       "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/kan11/live.livx/playlist.m3u8"
@@ -13,6 +14,7 @@
     "id": "n12",
     "name": "N12",
     "short": "12",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Keshet12_2018.svg",
     "group": "israel",
     "sources": ["mako:/stream/hls/live/2033791/k12n12wad/index.m3u8"]
   },
@@ -21,6 +23,7 @@
     "name": "רשת 13",
     "nameEn": "Channel 13",
     "short": "13",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Channel_13_%28Israel%29_logo.svg",
     "group": "israel",
     "sources": [
       "https://d2xg1g9o5vns8m.cloudfront.net/out/v1/0855d703f7d5436fae6a9c7ce8ca5075/index.m3u8"
@@ -31,6 +34,7 @@
     "name": "עכשיו 14",
     "nameEn": "Now 14",
     "short": "14",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Noamperetz-now14logo.png",
     "group": "israel",
     "sources": ["https://r.il.cdn-redge.media/livehls/oil/ch14/live/ch14/live.livx/playlist.m3u8"]
   },
@@ -38,6 +42,7 @@
     "id": "i24news",
     "name": "i24NEWS",
     "short": "i24",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6f/I24NEWS_logo.svg",
     "group": "israel",
     "sources": [
       "https://i24newshebrew-cdn.encoders.immergo.tv/master.m3u8",
@@ -49,6 +54,7 @@
     "name": "ערוץ הכנסת",
     "nameEn": "Knesset Channel",
     "short": "כנסת",
+    "logo": "https://i.imgur.com/QXB1jv8.png",
     "group": "israel",
     "sources": ["https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"]
   },
@@ -57,6 +63,7 @@
     "name": "מכאן 33",
     "nameEn": "Makan 33",
     "short": "33",
+    "logo": "https://i.imgur.com/RVtQTed.png",
     "group": "israel",
     "sources": [
       "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/makan/live.livx/playlist.m3u8"
@@ -78,6 +85,7 @@
     "name": "ערוץ 9",
     "nameEn": "Channel 9",
     "short": "9",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/73/Arutz_9_logo.png",
     "group": "israel",
     "sources": ["https://contact.gostreaming.tv/Con-11/index.m3u8"]
   },
@@ -85,6 +93,7 @@
     "id": "cnn-international",
     "name": "CNN International",
     "short": "CNN",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9d/CNN_Logo_%282014%29.svg",
     "group": "world",
     "sources": [
       "https://d3bp6dwmpbdajl.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-ury0meh5m4nzm/index.m3u8",
@@ -95,6 +104,7 @@
     "id": "nbc-news",
     "name": "NBC News",
     "short": "NBC",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/77/NBC_News_Now_2023_%28Alt%29.svg",
     "group": "world",
     "sources": ["https://xumo-drct-nbcnn-ir8ze.fast.nbcuni.com/live/master.m3u8"]
   },
@@ -102,6 +112,7 @@
     "id": "fox-news",
     "name": "Fox News",
     "short": "FOX",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/Fox_News_Channel_logo.svg",
     "group": "world",
     "sources": ["https://247preview.foxnews.com/hls/live/2020027/fncv3preview/index.m3u8"]
   },
@@ -109,6 +120,7 @@
     "id": "abc-news",
     "name": "ABC News",
     "short": "ABC",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/63/ABC_News_Live_logo_2021.svg",
     "group": "world",
     "sources": [
       "https://aegis-cloudfront-1.tubi.video/d6cbb0de-68e4-4f3b-82f9-bf5d526e0bde/index.m3u8",
@@ -119,6 +131,7 @@
     "id": "cbs-news",
     "name": "CBS News",
     "short": "CBS",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b0/CBS_News_247_logo.svg",
     "group": "world",
     "sources": [
       "https://cbsn-us.cbsnstream.cbsnews.com/out/v1/55a8648e8f134e82a470f83d562deeca/master.m3u8"
@@ -128,6 +141,7 @@
     "id": "france-24",
     "name": "France 24",
     "short": "F24",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg",
     "group": "world",
     "sources": [
       "https://live.france24.com/hls/live/2037218/F24_EN_HI_HLS/master_5000.m3u8",
@@ -138,6 +152,7 @@
     "id": "dw",
     "name": "DW",
     "short": "DW",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
     "group": "world",
     "sources": [
       "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/master.m3u8",
@@ -148,6 +163,7 @@
     "id": "rt",
     "name": "RT",
     "short": "RT",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Russia-today-logo.svg",
     "group": "world",
     "sources": [
       "https://rt-glb.rttv.com/dvr/rtnews/playlist.m3u8",
@@ -158,6 +174,7 @@
     "id": "al-jazeera",
     "name": "Al Jazeera",
     "short": "AJ",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/71/Aljazeera.svg",
     "group": "world",
     "sources": [
       "https://live-hls-web-aje-fa.thehlive.com/AJE/index.m3u8",
@@ -168,6 +185,7 @@
     "id": "euronews",
     "name": "Euronews",
     "short": "EN",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Euronews_Logo_2025.svg",
     "group": "world",
     "sources": ["https://cdn-euronews.akamaized.net/live/eds/euronews-en/25002/index.m3u8"]
   },
@@ -175,6 +193,7 @@
     "id": "trt-world",
     "name": "TRT World",
     "short": "TRT",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/27/TRT_World.svg",
     "group": "world",
     "sources": ["https://tv-trtworld.medya.trt.com.tr/master.m3u8"]
   },
@@ -182,6 +201,7 @@
     "id": "nhk-world",
     "name": "NHK World",
     "short": "NHK",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7b/NHK_World.svg",
     "group": "world",
     "sources": [
       "https://media-tyo.hls.nhkworld.jp/hls/w/live/master.m3u8",
@@ -192,6 +212,7 @@
     "id": "cna",
     "name": "CNA",
     "short": "CNA",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/83/CNA_new_logo.svg",
     "group": "world",
     "sources": ["https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index.m3u8"]
   },
@@ -199,6 +220,7 @@
     "id": "livenow-fox",
     "name": "LiveNOW from FOX",
     "short": "LIVE",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d9/LiveNow_from_Fox_logo_%28vertical%29.svg",
     "group": "world",
     "sources": ["https://pb-k5p02dtnr2162.akamaized.net/LiveNOW_from_FOX.m3u8"]
   },
@@ -206,6 +228,7 @@
     "id": "gb-news",
     "name": "GB News",
     "short": "GB",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/35/GB_News_Logo.svg",
     "group": "world",
     "sources": ["https://hlspackager.akamaized.net/live/DB/GB_NEWS/HLS/GB_NEWS.m3u8"]
   },
@@ -213,6 +236,7 @@
     "id": "newsmax",
     "name": "Newsmax",
     "short": "NMX",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/85/Newsmax_logo.svg",
     "group": "world",
     "sources": ["https://nmx1ota.akamaized.net/hls/live/2107010/Live_1/index.m3u8"]
   },
@@ -220,6 +244,7 @@
     "id": "al-arabiya",
     "name": "Al Arabiya",
     "short": "AA",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Al-Arabiya_new_logo.svg",
     "group": "world",
     "sources": ["https://live.alarabiya.net/alarabiapublish/english/playlist_dvr.m3u8"]
   }
