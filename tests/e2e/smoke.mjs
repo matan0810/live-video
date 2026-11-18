@@ -51,7 +51,7 @@ async function main() {
   step('desktop: unreachable channel shows the error state and is marked in the list');
 
   await desktop.keyboard.press('ArrowDown');
-  await desktop.getByRole('heading', { name: 'N12' }).waitFor();
+  await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
   await desktop.keyboard.press('Digit1');
   await desktop.getByRole('heading', { name: 'כאן 11' }).waitFor();
   step('desktop: keyboard switches channels');

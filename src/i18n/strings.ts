@@ -8,7 +8,7 @@ export type Language = (typeof LANGUAGES)[number];
 /** Every piece of interface text, in Hebrew. English must provide the same keys. */
 const he = {
   dir: 'rtl',
-  brand: 'שידור חי',
+  brand: 'OnAir',
   switchLanguage: 'English',
   switchLanguageLabel: 'Switch to English',
   groups: { israel: 'ישראל', world: 'עולם' } satisfies Record<ChannelGroup, string>,
@@ -74,7 +74,7 @@ export type Strings = typeof he;
 
 const en: Strings = {
   dir: 'ltr',
-  brand: 'Live TV',
+  brand: 'OnAir',
   switchLanguage: 'עברית',
   switchLanguageLabel: 'החלפה לעברית',
   groups: { israel: 'Israel', world: 'World' },

@@ -11,14 +11,6 @@
     ]
   },
   {
-    "id": "n12",
-    "name": "N12",
-    "short": "12",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Keshet12_2018.svg",
-    "group": "israel",
-    "sources": ["mako:/stream/hls/live/2033791/k12n12wad/index.m3u8"]
-  },
-  {
     "id": "reshet13",
     "name": "רשת 13",
     "nameEn": "Channel 13",
@@ -188,14 +180,6 @@
     "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Euronews_Logo_2025.svg",
     "group": "world",
     "sources": ["https://cdn-euronews.akamaized.net/live/eds/euronews-en/25002/index.m3u8"]
-  },
-  {
-    "id": "trt-world",
-    "name": "TRT World",
-    "short": "TRT",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/27/TRT_World.svg",
-    "group": "world",
-    "sources": ["https://tv-trtworld.medya.trt.com.tr/master.m3u8"]
   },
   {
     "id": "nhk-world",

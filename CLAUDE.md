@@ -1,6 +1,7 @@
-# Live Video: working procedure
+# OnAir: working procedure
 
-A personal site for watching live news channels on one page: a static React site on GitHub
+OnAir (repository `live-video`) is a personal site for watching live news channels on one
+page: a static React site on GitHub
 Pages, with an optional Cloudflare Worker for the remote channel list, viewer reports and
 the admin area. Live at https://matan0810.github.io/live-video.
 

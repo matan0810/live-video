@@ -8,17 +8,21 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- The site is now called OnAir, in both languages.
 - An English version of the site. It opens in Hebrew for Hebrew browsers and in English otherwise, and a button in the header switches language; the choice is remembered.
 - Official logos for the channels.
-- Nine channels: Channel 9, Euronews, TRT World, NHK World, CNA, LiveNOW from FOX, GB News, Newsmax and Al Arabiya (English).
+- Eight channels: Channel 9, Euronews, NHK World, CNA, LiveNOW from FOX, GB News, Newsmax and Al Arabiya (English).
 
 ### Changed
 - The channel row over the video in full screen is shown only with a mouse: on phones and tablets it was too easy to tap by accident.
 - Work now lands on a `dev` branch and reaches the live site only on a release, as in KAVOOM.
 - Updated GitHub Actions used by the build and deploy workflows to their latest versions.
 
+- Search engines are asked not to index the site, which is for personal use.
+
 ### Removed
 - Sky News: its stream refuses to play outside the UK.
+- N12: mako now refuses its stream to any site but its own (HTTP 403, from Israel too).
 
 ## [2.1.0] - 2026-11-18
 
