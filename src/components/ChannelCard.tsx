@@ -38,7 +38,9 @@ export function ChannelCard({
       >
         <ChannelTile channel={channel} className={styles.tile} />
         <span className={styles.text}>
-          <span className={styles.name}>{name}</span>
+          <span className={styles.name}>
+            <bdi>{name}</bdi>
+          </span>
           {isActive && !isUnavailable && <span className={styles.state}>{t.playingNow}</span>}
           {isUnavailable && <span className={styles.state}>{t.unavailable}</span>}
         </span>

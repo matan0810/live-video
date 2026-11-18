@@ -11,7 +11,10 @@ const he = {
   brand: 'OnAir',
   switchLanguage: 'English',
   switchLanguageLabel: 'Switch to English',
-  groups: { israel: 'ישראל', world: 'עולם' } satisfies Record<ChannelGroup, string>,
+  groups: { israel: 'ישראל', world: 'עולם', languages: 'שפות נוספות' } satisfies Record<
+    ChannelGroup,
+    string
+  >,
   favorites: 'מועדפים',
   myChannels: 'הערוצים שלי',
   channels: 'ערוצים',
@@ -77,7 +80,7 @@ const en: Strings = {
   brand: 'OnAir',
   switchLanguage: 'עברית',
   switchLanguageLabel: 'החלפה לעברית',
-  groups: { israel: 'Israel', world: 'World' },
+  groups: { israel: 'Israel', world: 'World', languages: 'Other languages' },
   favorites: 'Favourites',
   myChannels: 'My channels',
   channels: 'Channels',

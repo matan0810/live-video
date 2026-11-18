@@ -38,7 +38,7 @@ async function main() {
   );
   await desktop.goto(url);
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'rtl');
-  assert.deepEqual(await sectionTitles(desktop), ['ישראל', 'עולם']);
+  assert.deepEqual(await sectionTitles(desktop), ['ישראל', 'עולם', 'שפות נוספות']);
   const { version } = JSON.parse(await readFile(new URL('../../package.json', import.meta.url)));
   await desktop.getByText(`v${version}`, { exact: true }).waitFor();
   await desktop.getByText('בחרו ערוץ מהרשימה').waitFor();
@@ -94,9 +94,15 @@ async function main() {
 
   await desktop.reload();
   await desktop.getByRole('heading', { name: 'בדיקה' }).waitFor();
-  assert.deepEqual(await sectionTitles(desktop), ['מועדפים', 'הערוצים שלי', 'ישראל', 'עולם']);
+  assert.deepEqual(await sectionTitles(desktop), [
+    'מועדפים',
+    'הערוצים שלי',
+    'ישראל',
+    'עולם',
+    'שפות נוספות',
+  ]);
   await desktop.getByRole('button', { name: 'מחיקת בדיקה' }).click();
-  assert.deepEqual(await sectionTitles(desktop), ['מועדפים', 'ישראל', 'עולם']);
+  assert.deepEqual(await sectionTitles(desktop), ['מועדפים', 'ישראל', 'עולם', 'שפות נוספות']);
   step('desktop: choices survive a reload; a custom channel can be deleted');
 
   await desktop.goto(`${url}#/admin`);

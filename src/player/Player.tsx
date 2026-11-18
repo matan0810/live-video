@@ -155,7 +155,9 @@ export function Player({
       </div>
 
       <div className={styles.bar}>
-        <h2 className={styles.title}>{name}</h2>
+        <h2 className={styles.title}>
+          <bdi>{name}</bdi>
+        </h2>
         <div className={styles.barEnd}>
           {status === 'playing' && dvr.canRewind && (
             <DvrControls

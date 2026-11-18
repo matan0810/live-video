@@ -11,7 +11,8 @@ breaking changes are major.
 - The site is now called OnAir, in both languages.
 - An English version of the site. It opens in Hebrew for Hebrew browsers and in English otherwise, and a button in the header switches language; the choice is remembered.
 - Official logos for the channels.
-- Eight channels: Channel 9, Euronews, NHK World, CNA, LiveNOW from FOX, GB News, Newsmax and Al Arabiya (English).
+- Eleven channels: Channel 9, Euronews, NHK World, CNA, LiveNOW from FOX, GB News, Newsmax, Al Arabiya English, and BBC News, Bloomberg and Reuters on new links.
+- An "Other languages" section with leading news channels in Arabic (Al Jazeera, Al Arabiya, Sky News Arabia), French (France 24), Spanish (24 Horas, CNN en Español), German (tagesschau24), Italian (Rai News 24) and Russian (DW).
 
 ### Changed
 - The channel row over the video in full screen is shown only with a mouse: on phones and tablets it was too easy to tap by accident.

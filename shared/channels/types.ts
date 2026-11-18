@@ -1,4 +1,4 @@
-export const CHANNEL_GROUPS = ['israel', 'world'] as const;
+export const CHANNEL_GROUPS = ['israel', 'world', 'languages'] as const;
 
 export type ChannelGroup = (typeof CHANNEL_GROUPS)[number];
 

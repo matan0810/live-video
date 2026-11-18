@@ -43,7 +43,9 @@ export function ChannelStrip({
                 onClick={() => onSelect(channel.id)}
               >
                 <ChannelTile channel={channel} className={styles.tile} />
-                <span className={styles.name}>{displayName(channel, language)}</span>
+                <span className={styles.name}>
+                  <bdi>{displayName(channel, language)}</bdi>
+                </span>
               </button>
             </li>
           );

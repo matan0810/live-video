@@ -226,10 +226,132 @@
   },
   {
     "id": "al-arabiya",
-    "name": "Al Arabiya",
+    "name": "Al Arabiya English",
     "short": "AA",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Al-Arabiya_new_logo.svg",
     "group": "world",
     "sources": ["https://live.alarabiya.net/alarabiapublish/english/playlist_dvr.m3u8"]
+  },
+  {
+    "id": "bbc-news",
+    "name": "BBC News",
+    "short": "BBC",
+    "logo": "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/BBC-logo_2000_X_1125_Transparent.png",
+    "group": "world",
+    "sources": [
+      "https://vs-hls-push-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_news_channel_hd/mobile_wifi_main_hd_abr_v2.m3u8",
+      "https://pb-iiczlgfysam0q.akamaized.net/v1/amcnetworks_bbcnews_1/samsungheadend_us/latest/main/hls/playlist.m3u8"
+    ]
+  },
+  {
+    "id": "bloomberg",
+    "name": "Bloomberg",
+    "short": "BBG",
+    "logo": "https://i.imgur.com/OuogLHx.png",
+    "group": "world",
+    "sources": [
+      "https://d2d98ykcmmhgd4.cloudfront.net/v1/bloomberg_bloombergtv_2/samsungheadend_us/latest/main/hls/playlist.m3u8",
+      "https://d8975dc3.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/U2Ftc3VuZy1nYl9CbG9vbWJlcmdUVlBsdXNfSExT/playlist.m3u8"
+    ]
+  },
+  {
+    "id": "reuters",
+    "name": "Reuters",
+    "short": "RTRS",
+    "logo": "https://i.imgur.com/6eQ2nCJ.png",
+    "group": "world",
+    "sources": [
+      "https://amg00453-reuters-amg00453c1-xumo-us-2073.playouts.now.amagi.tv/reuters-reuters-hls/playlist.m3u8",
+      "https://d5bxknkoxytmb.cloudfront.net/playlist/amg00453-reuters-reuters-samsunggb/playlist.m3u8"
+    ]
+  },
+  {
+    "id": "al-jazeera-arabic",
+    "name": "الجزيرة",
+    "nameEn": "Al Jazeera Arabic",
+    "short": "AJ",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/71/Aljazeera.svg",
+    "group": "languages",
+    "sources": [
+      "https://live-hls-web-aja.getaj.net/AJA/index.m3u8",
+      "https://live-hls-web-aja-fa.thehlive.com/AJA/index.m3u8"
+    ]
+  },
+  {
+    "id": "al-arabiya-arabic",
+    "name": "العربية",
+    "nameEn": "Al Arabiya",
+    "short": "AA",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Al-Arabiya_new_logo.svg",
+    "group": "languages",
+    "sources": ["https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8"]
+  },
+  {
+    "id": "sky-news-arabia",
+    "name": "سكاي نيوز عربية",
+    "nameEn": "Sky News Arabia",
+    "short": "SNA",
+    "logo": "https://i.imgur.com/SvjU4h6.png",
+    "group": "languages",
+    "sources": ["https://stream.skynewsarabia.com/hls/sna.m3u8"]
+  },
+  {
+    "id": "france-24-fr",
+    "name": "France 24 Français",
+    "short": "F24",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg",
+    "group": "languages",
+    "sources": [
+      "https://live.france24.com/hls/live/2037179/F24_FR_HI_HLS/master_5000.m3u8",
+      "https://live.france24.com/hls/live/2037179-b/F24_FR_HI_HLS/master_5000.m3u8"
+    ]
+  },
+  {
+    "id": "rtve-24h",
+    "name": "24 Horas",
+    "short": "24H",
+    "logo": "https://i.ibb.co/21sXZ3GT/24h.png",
+    "group": "languages",
+    "sources": [
+      "https://rtvelivestream.rtve.es/rtvesec/24h/24h_main_dvr.m3u8",
+      "https://ztnr.rtve.es/ztnr/1694255.m3u8"
+    ]
+  },
+  {
+    "id": "cnn-espanol",
+    "name": "CNN en Español",
+    "short": "CNN",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9d/CNN_Logo_%282014%29.svg",
+    "group": "languages",
+    "sources": [
+      "https://amg00803-cnnfast-amg00803c3-lg-es-5477.playouts.now.amagi.tv/playlist.m3u8"
+    ]
+  },
+  {
+    "id": "tagesschau24",
+    "name": "tagesschau24",
+    "short": "TS24",
+    "logo": "https://i.imgur.com/LH0Gctv.png",
+    "group": "languages",
+    "sources": [
+      "https://tagesschau.akamaized.net/hls/live/2020115/tagesschau/tagesschau_1/master.m3u8"
+    ]
+  },
+  {
+    "id": "rai-news-24",
+    "name": "Rai News 24",
+    "short": "RAI",
+    "logo": "https://i.imgur.com/n2u57y3.png",
+    "group": "languages",
+    "sources": ["https://d3k8wzt41aflvx.cloudfront.net/RAINEWS24/Live.m3u8"]
+  },
+  {
+    "id": "dw-russian",
+    "name": "DW Русский",
+    "nameEn": "DW Russian",
+    "short": "DW",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
+    "group": "languages",
+    "sources": ["https://dwamdstream110.akamaized.net/hls/live/2017971/dwstream110/master.m3u8"]
   }
 ]
