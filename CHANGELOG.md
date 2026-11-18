@@ -7,9 +7,10 @@ breaking changes are major.
 
 ## [Unreleased]
 
-## [2.1.0] - 2026-11-17
+## [2.1.0] - 2026-11-18
 
 ### Added
+- In full screen and theatre mode, a row of channels slides in over the top of the video when the mouse moves or the screen is tapped, and fades out after three seconds. Switching channel with the keyboard shows it briefly too. Full screen now keeps the site's controls, and a double click on the video enters or leaves it.
 - N12, which gets a fresh playback ticket from mako each time it starts.
 - France 24.
 - When a channel fails, its error message says why (for example "HTTP 403"), to make broken links easy to report.

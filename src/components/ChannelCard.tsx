@@ -1,5 +1,5 @@
-import type { CSSProperties } from 'react';
 import type { Channel } from '../channels';
+import { ChannelTile } from './ChannelTile';
 import { IconButton } from './IconButton';
 import { CloseIcon, StarIcon } from './icons';
 import styles from './ChannelCard.module.css';
@@ -13,13 +13,6 @@ interface ChannelCardProps {
   onToggleFavorite: (channelId: string) => void;
   /** Provided only for channels the user may delete. */
   onRemove?: (channelId: string) => void;
-}
-
-/** Gives every channel its own stable tile colour without storing one per channel. */
-function hueFromId(id: string) {
-  let hash = 0;
-  for (const char of id) hash = (hash * 31 + char.charCodeAt(0)) % 360;
-  return hash;
 }
 
 export function ChannelCard({
@@ -39,13 +32,7 @@ export function ChannelCard({
         aria-pressed={isActive}
         onClick={() => onSelect(channel.id)}
       >
-        <span
-          className={styles.tile}
-          style={{ '--tile-hue': hueFromId(channel.id) } as CSSProperties}
-          aria-hidden="true"
-        >
-          {channel.short}
-        </span>
+        <ChannelTile channel={channel} className={styles.tile} />
         <span className={styles.text}>
           <span className={styles.name}>{channel.name}</span>
           {isActive && !isUnavailable && <span className={styles.state}>מנגן עכשיו</span>}

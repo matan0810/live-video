@@ -53,6 +53,28 @@ async function main() {
   await desktop.getByRole('heading', { name: 'כאן 11' }).waitFor();
   step('desktop: keyboard switches channels');
 
+  const strip = desktop.getByRole('navigation', { name: 'החלפת ערוץ' });
+  assert.equal(await strip.count(), 0, 'no channel bar over the video in the normal layout');
+  await desktop.keyboard.press('KeyT');
+  await desktop.locator('video').hover({ force: true });
+  await strip.waitFor();
+  await strip.getByRole('button', { name: 'רשת 13' }).click();
+  await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
+  await desktop.keyboard.press('KeyT');
+  step('desktop: theatre mode shows a channel bar over the video that switches channels');
+
+  await desktop.keyboard.press('KeyF');
+  await desktop.waitForFunction(() => document.fullscreenElement !== null);
+  assert.ok(
+    await desktop.evaluate(() =>
+      Boolean(document.fullscreenElement?.querySelector('nav[aria-label="החלפת ערוץ"]')),
+    ),
+    'the channel bar is inside the full-screen element',
+  );
+  await desktop.keyboard.press('KeyF');
+  await desktop.waitForFunction(() => document.fullscreenElement === null);
+  step('desktop: full screen keeps the channel bar');
+
   await desktop.getByRole('button', { name: 'הוספת CNN International למועדפים' }).click();
   assert.equal((await sectionTitles(desktop))[0], 'מועדפים');
   step('desktop: favourites come first');

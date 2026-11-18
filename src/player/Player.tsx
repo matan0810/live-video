@@ -1,79 +1,79 @@
-import { useEffect, useMemo, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, type PointerEvent, type ReactNode } from 'react';
 import type { Channel } from '../channels';
 import { IconButton } from '../components/IconButton';
 import { FullscreenIcon, PictureInPictureIcon } from '../components/icons';
+import { useAutoHide } from '../hooks/useAutoHide';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { DvrControls } from './DvrControls';
 import { useDvr } from './useDvr';
+import { useFullscreen } from './useFullscreen';
 import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
+import { usePlayerControls } from './usePlayerControls';
 import styles from './Player.module.css';
 
 const AUTO_RETRY_DELAY_MS = 15_000;
 const KEYBOARD_SEEK_SECONDS = 10;
 const CAN_PICTURE_IN_PICTURE = document.pictureInPictureEnabled;
-
-/** Settles a browser media request that may be refused (e.g. without a user gesture). */
-function ignoreRejection(request: Promise<unknown>) {
-  request.catch(() => undefined);
-}
+const OVERLAY_HIDE_DELAY_MS = 3000;
 
 interface PlayerProps {
   channel: Channel;
   onStatusChange?: (channelId: string, status: PlayerStatus) => void;
   /** Extra buttons rendered at the end of the bar under the video. */
   actions?: ReactNode;
+  /** Shown over the top of the video in full screen, and when `isOverlayEnabled`. */
+  overlay?: ReactNode;
+  isOverlayEnabled?: boolean;
 }
 
-export function Player({ channel, onStatusChange, actions }: PlayerProps) {
+export function Player({
+  channel,
+  onStatusChange,
+  actions,
+  overlay,
+  isOverlayEnabled = false,
+}: PlayerProps) {
   const { videoRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow } = useHlsPlayer(
     channel.sources,
   );
   const dvr = useDvr(videoRef, getLiveWindow);
 
   const { seekBy } = dvr;
+  const frameRef = useRef<HTMLDivElement>(null);
+  const controls = usePlayerControls(videoRef);
+  const fullscreen = useFullscreen(frameRef, videoRef);
+  const overlayVisibility = useAutoHide(OVERLAY_HIDE_DELAY_MS);
+  const { reveal } = overlayVisibility;
+  const isOverlayShown = Boolean(overlay) && (fullscreen.isFullscreen || isOverlayEnabled);
+  const lastPointer = useRef({ x: -1, y: -1 });
 
-  const controls = useMemo(() => {
-    const toggleFullscreen = () => {
-      const video = videoRef.current;
-      if (!video) return;
-      ignoreRejection(
-        document.fullscreenElement ? document.exitFullscreen() : video.requestFullscreen(),
-      );
-    };
-    const togglePictureInPicture = () => {
-      const video = videoRef.current;
-      if (!video) return;
-      ignoreRejection(
-        document.pictureInPictureElement
-          ? document.exitPictureInPicture()
-          : video.requestPictureInPicture(),
-      );
-    };
-    const toggleMute = () => {
-      if (videoRef.current) videoRef.current.muted = !videoRef.current.muted;
-    };
-    const togglePlay = () => {
-      const video = videoRef.current;
-      if (!video) return;
-      if (video.paused) ignoreRejection(video.play());
-      else video.pause();
-    };
-    return { toggleFullscreen, togglePictureInPicture, toggleMute, togglePlay };
-  }, [videoRef]);
+  // Browsers also fire pointer moves when the page changes under a resting cursor, which
+  // would keep the channel bar up forever. Only a real movement reveals it.
+  const handlePointerMove = (event: PointerEvent) => {
+    const { clientX: x, clientY: y } = event;
+    if (x === lastPointer.current.x && y === lastPointer.current.y) return;
+    lastPointer.current = { x, y };
+    reveal();
+  };
 
   useKeyboardShortcuts(
     useMemo(
       () => ({
-        KeyF: controls.toggleFullscreen,
+        KeyF: fullscreen.toggle,
         KeyM: controls.toggleMute,
         KeyP: controls.togglePictureInPicture,
         Space: controls.togglePlay,
         ArrowLeft: () => seekBy(-KEYBOARD_SEEK_SECONDS),
         ArrowRight: () => seekBy(KEYBOARD_SEEK_SECONDS),
       }),
-      [controls, seekBy],
+      [controls, fullscreen.toggle, seekBy],
     ),
   );
+
+  // Switching channel briefly shows the channel bar, like a TV does.
+  useEffect(() => {
+    reveal();
+  }, [channel.id, reveal]);
 
   useEffect(() => {
     onStatusChange?.(channel.id, status);
@@ -87,8 +87,22 @@ export function Player({ channel, onStatusChange, actions }: PlayerProps) {
 
   return (
     <div className={styles.player}>
-      <div className={styles.frame}>
-        <video ref={videoRef} className={styles.video} controls playsInline />
+      <div
+        ref={frameRef}
+        className={styles.frame}
+        data-idle={isOverlayShown && !overlayVisibility.isVisible}
+        onPointerMove={handlePointerMove}
+        onPointerDown={reveal}
+        onDoubleClick={fullscreen.toggle}
+      >
+        {/* The browser's own full-screen button would hide the channel bar; ours keeps it. */}
+        <video
+          ref={videoRef}
+          className={styles.video}
+          controls
+          controlsList="nofullscreen"
+          playsInline
+        />
 
         {status === 'loading' && (
           <div className={styles.overlay} data-passive="true" role="status">
@@ -109,6 +123,18 @@ export function Player({ channel, onStatusChange, actions }: PlayerProps) {
             <button type="button" className={styles.primaryButton} onClick={retry}>
               נסה שוב עכשיו
             </button>
+          </div>
+        )}
+
+        {isOverlayShown && (
+          <div
+            className={styles.channelOverlay}
+            data-visible={overlayVisibility.isVisible}
+            onPointerEnter={() => overlayVisibility.hold(true)}
+            onPointerLeave={() => overlayVisibility.hold(false)}
+            onDoubleClick={(event) => event.stopPropagation()}
+          >
+            {overlay}
           </div>
         )}
 
@@ -136,7 +162,7 @@ export function Player({ channel, onStatusChange, actions }: PlayerProps) {
               <PictureInPictureIcon />
             </IconButton>
           )}
-          <IconButton label="מסך מלא (F)" onClick={controls.toggleFullscreen}>
+          <IconButton label="מסך מלא (F)" onClick={fullscreen.toggle}>
             <FullscreenIcon />
           </IconButton>
           {actions}

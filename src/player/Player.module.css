@@ -15,6 +15,38 @@
   box-shadow: var(--shadow-stage);
 }
 
+.frame:fullscreen {
+  max-height: none;
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+
+.frame[data-idle='true'] {
+  cursor: none;
+}
+
+.channelOverlay {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(-12px);
+  visibility: hidden;
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease,
+    visibility 0s linear 200ms;
+}
+
+.channelOverlay[data-visible='true'] {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
 .video {
   display: block;
   width: 100%;

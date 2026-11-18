@@ -11,6 +11,7 @@ Live at https://matan0810.github.io/live-video
 - Rewind on streams that keep past segments, with a button back to live.
 - Automatic fallback to a backup link, and automatic retry when a channel is down.
 - Favourites, and your own channels from an m3u8 link (kept in the browser only).
+- In full screen and theatre mode, a channel row slides in over the video on mouse movement.
 - A share link per channel (`?ch=kan11`), picture-in-picture, installable as an app.
 - Viewers can report a broken channel or suggest a new link.
 - An admin area (`#/admin`, password protected) to edit channels and handle reports

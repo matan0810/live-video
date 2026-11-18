@@ -15,6 +15,7 @@ import { useCatalog } from './hooks/useCatalog';
 import { useCustomChannels } from './hooks/useCustomChannels';
 import { useFavorites } from './hooks/useFavorites';
 import { useKeyboardShortcuts, type KeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { ChannelStrip } from './player/ChannelStrip';
 import { Player } from './player/Player';
 import type { PlayerStatus } from './player/useHlsPlayer';
 import styles from './App.module.css';
@@ -134,6 +135,15 @@ export function App() {
             <Player
               channel={activeChannel}
               onStatusChange={handleStatusChange}
+              isOverlayEnabled={isTheaterMode}
+              overlay={
+                <ChannelStrip
+                  channels={orderedChannels}
+                  activeChannelId={activeChannel.id}
+                  unavailableChannelIds={unavailableChannelIds}
+                  onSelect={selectChannel}
+                />
+              }
               actions={
                 <>
                   {!isCustomChannelId(activeChannel.id) && (
