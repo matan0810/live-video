@@ -67,6 +67,12 @@ If `master` has commits that `dev` lacks, stop and tell the owner; that should n
 6. **Report** to the owner in Hebrew: what changed, what was tested and how, what was not
    tested, and anything they need to do by hand. Say plainly that it is on `dev` and not live.
 
+### Deferred work and ideas
+
+Work that is postponed, and ideas to consider later, are GitHub issues, not TODO comments
+or files: one issue per topic, with what was found and the options, so the next session
+can pick it up. Close the issue when the work ships, with the version it shipped in.
+
 ### Definition of done
 
 Checks green, browser checked when the UI changed, CHANGELOG updated, pushed to `dev`,
