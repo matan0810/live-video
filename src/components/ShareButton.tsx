@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useI18n } from '../i18n/context';
 import { IconButton } from './IconButton';
 import { CheckIcon, ShareIcon } from './icons';
 
@@ -11,6 +12,7 @@ interface ShareButtonProps {
 
 /** Opens the system share sheet where there is one, and copies the link otherwise. */
 export function ShareButton({ title, url }: ShareButtonProps) {
+  const { t } = useI18n();
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export function ShareButton({ title, url }: ShareButtonProps) {
   };
 
   return (
-    <IconButton label={isCopied ? 'הקישור הועתק' : 'שיתוף הערוץ'} onClick={() => void share()}>
+    <IconButton label={isCopied ? t.linkCopied : t.share} onClick={() => void share()}>
       {isCopied ? <CheckIcon /> : <ShareIcon />}
     </IconButton>
   );

@@ -17,6 +17,11 @@ describe('parseChannels', () => {
 
   it('returns typed channels for valid data', () => {
     expect(parseChannels([valid])).toEqual([valid]);
+    expect(parseChannels([{ ...valid, nameEn: 'Demo EN' }])).toEqual([
+      { ...valid, nameEn: 'Demo EN' },
+    ]);
+    const withLogo = { ...valid, logo: 'logos/demo.svg' };
+    expect(parseChannels([withLogo])).toEqual([withLogo]);
   });
 
   it.each([
@@ -25,6 +30,9 @@ describe('parseChannels', () => {
     ['a missing name', [{ ...valid, name: '' }]],
     ['a missing short label', [{ ...valid, short: undefined }]],
     ['an unknown group', [{ ...valid, group: 'mars' }]],
+    ['an empty English name', [{ ...valid, nameEn: ' ' }]],
+    ['a logo outside logos/', [{ ...valid, logo: '../secret.svg' }]],
+    ['an http logo', [{ ...valid, logo: 'http://a.example/logo.png' }]],
     ['an empty source list', [{ ...valid, sources: [] }]],
     ['a non-https source', [{ ...valid, sources: ['http://example.com/live.m3u8'] }]],
     ['a malformed source', [{ ...valid, sources: ['not a url'] }]],

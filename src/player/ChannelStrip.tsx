@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import type { Channel } from '../channels';
+import { displayName } from '../channels/displayName';
 import { ChannelTile } from '../components/ChannelTile';
+import { useI18n } from '../i18n/context';
 import styles from './ChannelStrip.module.css';
 
 interface ChannelStripProps {
@@ -17,6 +19,7 @@ export function ChannelStrip({
   unavailableChannelIds,
   onSelect,
 }: ChannelStripProps) {
+  const { t, language } = useI18n();
   const activeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -24,7 +27,7 @@ export function ChannelStrip({
   }, [activeChannelId]);
 
   return (
-    <nav className={styles.strip} aria-label="החלפת ערוץ">
+    <nav className={styles.strip} aria-label={t.channelBar}>
       <ul className={styles.list}>
         {channels.map((channel) => {
           const isActive = channel.id === activeChannelId;
@@ -40,7 +43,7 @@ export function ChannelStrip({
                 onClick={() => onSelect(channel.id)}
               >
                 <ChannelTile channel={channel} className={styles.tile} />
-                <span className={styles.name}>{channel.name}</span>
+                <span className={styles.name}>{displayName(channel, language)}</span>
               </button>
             </li>
           );

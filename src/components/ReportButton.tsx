@@ -1,8 +1,9 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { REPORT_LIMITS, REPORT_REASONS, type ReportReason } from '../../shared/reports';
-import { REASON_LABELS } from '../reports/reasonLabels';
 import { submitReport } from '../api/client';
 import type { Channel } from '../channels';
+import { displayName } from '../channels/displayName';
+import { useI18n } from '../i18n/context';
 import { IconButton } from './IconButton';
 import { FlagIcon } from './icons';
 import styles from './ReportButton.module.css';
@@ -15,6 +16,7 @@ interface ReportButtonProps {
 
 /** Lets a viewer tell the admin that something is wrong with the current channel. */
 export function ReportButton({ channel }: ReportButtonProps) {
+  const { t, language } = useI18n();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [reason, setReason] = useState<ReportReason>('not-working');
   const [suggestedUrl, setSuggestedUrl] = useState('');
@@ -48,7 +50,7 @@ export function ReportButton({ channel }: ReportButtonProps) {
 
   return (
     <>
-      <IconButton label="דיווח על בעיה בערוץ" onClick={open}>
+      <IconButton label={t.report} onClick={open}>
         <FlagIcon />
       </IconButton>
 
@@ -56,20 +58,20 @@ export function ReportButton({ channel }: ReportButtonProps) {
         {state === 'sent' ? (
           <div className={styles.body}>
             <h2 id="report-title" className={styles.title}>
-              תודה, הדיווח נשלח
+              {t.reportSent}
             </h2>
             <button type="button" className={styles.primary} onClick={close}>
-              סגירה
+              {t.close}
             </button>
           </div>
         ) : (
           <form className={styles.body} onSubmit={(event) => void handleSubmit(event)}>
             <h2 id="report-title" className={styles.title}>
-              דיווח על {channel.name}
+              {t.reportTitle(displayName(channel, language))}
             </h2>
 
             <fieldset className={styles.reasons}>
-              <legend className={styles.label}>מה הבעיה?</legend>
+              <legend className={styles.label}>{t.reportQuestion}</legend>
               {REPORT_REASONS.map((option) => (
                 <label key={option} className={styles.reason}>
                   <input
@@ -78,13 +80,13 @@ export function ReportButton({ channel }: ReportButtonProps) {
                     checked={reason === option}
                     onChange={() => setReason(option)}
                   />
-                  {REASON_LABELS[option]}
+                  {t.reportReasons[option]}
                 </label>
               ))}
             </fieldset>
 
             <label className={styles.field}>
-              <span className={styles.label}>קישור מעודכן (לא חובה)</span>
+              <span className={styles.label}>{t.reportLink}</span>
               <input
                 className={styles.input}
                 type="url"
@@ -99,7 +101,7 @@ export function ReportButton({ channel }: ReportButtonProps) {
             </label>
 
             <label className={styles.field}>
-              <span className={styles.label}>פרטים נוספים (לא חובה)</span>
+              <span className={styles.label}>{t.reportDetails}</span>
               <textarea
                 className={styles.input}
                 rows={3}
@@ -111,16 +113,16 @@ export function ReportButton({ channel }: ReportButtonProps) {
 
             {state === 'failed' && (
               <p className={styles.error} role="alert">
-                השליחה נכשלה. נסו שוב בעוד רגע.
+                {t.reportFailed}
               </p>
             )}
 
             <div className={styles.buttons}>
               <button type="submit" className={styles.primary} disabled={state === 'sending'}>
-                {state === 'sending' ? 'שולח…' : 'שליחה'}
+                {state === 'sending' ? t.sending : t.send}
               </button>
               <button type="button" className={styles.secondary} onClick={close}>
-                ביטול
+                {t.cancel}
               </button>
             </div>
           </form>

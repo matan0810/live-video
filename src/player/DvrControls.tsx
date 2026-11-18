@@ -1,3 +1,4 @@
+import { useI18n } from '../i18n/context';
 import { formatDuration } from './formatDuration';
 import styles from './DvrControls.module.css';
 
@@ -11,11 +12,6 @@ interface DvrControlsProps {
   onGoLive: () => void;
 }
 
-function stepLabel(deltaSeconds: number) {
-  const amount = Math.abs(deltaSeconds);
-  return deltaSeconds < 0 ? `${amount} שניות אחורה` : `${amount} שניות קדימה`;
-}
-
 export function DvrControls({
   isLive,
   secondsBehindLive,
@@ -23,8 +19,11 @@ export function DvrControls({
   onSeekBy,
   onGoLive,
 }: DvrControlsProps) {
+  const { t } = useI18n();
+  const stepLabel = (delta: number) =>
+    delta < 0 ? t.seekBack(Math.abs(delta)) : t.seekForward(delta);
   return (
-    <div className={styles.controls} role="group" aria-label="חזרה לאחור בשידור">
+    <div className={styles.controls} role="group" aria-label={t.rewindGroup}>
       {SEEK_STEPS_SECONDS.map((step) => (
         <button
           key={step}
@@ -44,14 +43,14 @@ export function DvrControls({
         data-live={isLive}
         onClick={onGoLive}
         disabled={isLive}
-        title={isLive ? 'צופים בשידור החי' : 'חזרה לשידור החי'}
+        title={isLive ? t.watchingLive : t.backToLiveTitle}
       >
         <span className={styles.dot} aria-hidden="true" />
         {isLive ? (
-          'חי'
+          t.live
         ) : (
           <>
-            חזרה לחי <bdi className={styles.behind}>−{formatDuration(secondsBehindLive)}</bdi>
+            {t.backToLive} <bdi className={styles.behind}>−{formatDuration(secondsBehindLive)}</bdi>
           </>
         )}
       </button>

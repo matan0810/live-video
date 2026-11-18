@@ -32,7 +32,7 @@ async function main() {
   const sectionTitles = (page) => page.locator('nav h2').allInnerTexts();
 
   // ---------- Desktop ----------
-  const desktop = await open({ viewport: { width: 1280, height: 800 } }, 'desktop');
+  const desktop = await open({ viewport: { width: 1280, height: 800 }, locale: 'he-IL' }, 'desktop');
   await desktop.goto(url);
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'rtl');
   assert.deepEqual(await sectionTitles(desktop), ['ישראל', 'עולם']);
@@ -99,6 +99,17 @@ async function main() {
   await desktop.goto(`${url}#/admin`);
   await desktop.getByRole('heading', { name: 'הניהול לא פעיל' }).waitFor();
   step('desktop: the admin area is inert without an API');
+
+  await desktop.goto(url);
+  await desktop.getByRole('button', { name: 'Switch to English' }).click();
+  assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'ltr');
+  assert.equal(await desktop.evaluate(() => document.documentElement.lang), 'en');
+  await desktop.getByRole('heading', { name: 'Israel' }).waitFor();
+  await desktop.getByRole('button', { name: 'Kan 11', exact: true }).waitFor();
+  await desktop.reload();
+  await desktop.getByRole('button', { name: 'החלפה לעברית' }).click();
+  assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'rtl');
+  step('desktop: English and Hebrew, remembered across reloads');
 
   // ---------- Phone ----------
   const phone = await open({ ...devices['iPhone 13'], locale: 'he-IL' }, 'phone');

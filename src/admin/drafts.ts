@@ -7,14 +7,16 @@ export interface DraftChannel {
   key: string;
   id: string;
   name: string;
+  /** Empty when the channel has no separate English name. */
+  nameEn: string;
   short: string;
   group: ChannelGroup;
   sourcesText: string;
 }
 
 export function toDraft(channel: CatalogChannel): DraftChannel {
-  const { sources, ...rest } = channel;
-  return { ...rest, key: crypto.randomUUID(), sourcesText: sources.join('\n') };
+  const { sources, nameEn = '', ...rest } = channel;
+  return { ...rest, nameEn, key: crypto.randomUUID(), sourcesText: sources.join('\n') };
 }
 
 export function createEmptyDraft(): DraftChannel {
@@ -22,6 +24,7 @@ export function createEmptyDraft(): DraftChannel {
     key: crypto.randomUUID(),
     id: '',
     name: '',
+    nameEn: '',
     short: '',
     group: 'israel',
     sourcesText: '',
@@ -41,6 +44,7 @@ export function draftsToChannels(drafts: readonly DraftChannel[]): CatalogChanne
     drafts.map((draft) => ({
       id: draft.id.trim(),
       name: draft.name.trim(),
+      ...(draft.nameEn.trim() ? { nameEn: draft.nameEn.trim() } : {}),
       short: draft.short.trim(),
       group: draft.group,
       sources: draftSources(draft),

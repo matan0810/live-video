@@ -1,0 +1,148 @@
+import type { ChannelGroup } from '../../shared/channels/types';
+import type { CustomChannelError } from '../channels/customChannels';
+import type { ReportReason } from '../../shared/reports';
+
+export const LANGUAGES = ['he', 'en'] as const;
+export type Language = (typeof LANGUAGES)[number];
+
+/** Every piece of interface text, in Hebrew. English must provide the same keys. */
+const he = {
+  dir: 'rtl',
+  brand: 'שידור חי',
+  switchLanguage: 'English',
+  switchLanguageLabel: 'Switch to English',
+  groups: { israel: 'ישראל', world: 'עולם' } satisfies Record<ChannelGroup, string>,
+  favorites: 'מועדפים',
+  myChannels: 'הערוצים שלי',
+  channels: 'ערוצים',
+  player: 'נגן',
+  emptyTitle: 'מה רואים עכשיו?',
+  emptyHint: 'בחרו ערוץ מהרשימה כדי להתחיל לצפות',
+  playingNow: 'מנגן עכשיו',
+  unavailable: 'לא זמין כרגע',
+  removeChannel: (name: string) => `מחיקת ${name}`,
+  addFavorite: (name: string) => `הוספת ${name} למועדפים`,
+  removeFavorite: (name: string) => `הסרת ${name} מהמועדפים`,
+  loading: (name: string) => `טוען את ${name}…`,
+  channelUnavailable: (name: string) => `${name} לא זמין כרגע`,
+  retryingSoon: 'מנסה שוב אוטומטית בעוד כמה שניות',
+  retryNow: 'נסה שוב עכשיו',
+  autoMuted: 'הקול מושתק · לחצו להפעלה',
+  pictureInPicture: 'תמונה בתוך תמונה (P)',
+  fullscreen: 'מסך מלא (F)',
+  theaterOn: 'מצב קולנוע (T)',
+  theaterOff: 'הצגת רשימת הערוצים (T)',
+  channelBar: 'החלפת ערוץ',
+  rewindGroup: 'חזרה לאחור בשידור',
+  seekBack: (seconds: number) => `${seconds} שניות אחורה`,
+  seekForward: (seconds: number) => `${seconds} שניות קדימה`,
+  live: 'חי',
+  watchingLive: 'צופים בשידור החי',
+  backToLive: 'חזרה לחי',
+  backToLiveTitle: 'חזרה לשידור החי',
+  share: 'שיתוף הערוץ',
+  linkCopied: 'הקישור הועתק',
+  report: 'דיווח על בעיה בערוץ',
+  reportTitle: (name: string) => `דיווח על ${name}`,
+  reportQuestion: 'מה הבעיה?',
+  reportReasons: {
+    'not-working': 'הערוץ לא עובד',
+    'new-link': 'יש לי קישור מעודכן',
+    'wrong-content': 'משודר משהו אחר',
+    other: 'משהו אחר',
+  } satisfies Record<ReportReason, string>,
+  reportLink: 'קישור מעודכן (לא חובה)',
+  reportDetails: 'פרטים נוספים (לא חובה)',
+  reportFailed: 'השליחה נכשלה. נסו שוב בעוד רגע.',
+  reportSent: 'תודה, הדיווח נשלח',
+  send: 'שליחה',
+  sending: 'שולח…',
+  cancel: 'ביטול',
+  close: 'סגירה',
+  addOwnChannel: 'הוספת ערוץ משלך',
+  channelName: 'שם הערוץ',
+  streamLink: 'קישור לשידור (m3u8)',
+  add: 'הוספה',
+  savedInBrowser: 'הערוץ נשמר רק בדפדפן הזה.',
+  customChannelErrors: {
+    'missing-name': 'צריך לתת לערוץ שם',
+    'invalid-url': 'הקישור צריך להיות כתובת https מלאה לקובץ m3u8',
+  } satisfies Record<CustomChannelError, string>,
+};
+
+export type Strings = typeof he;
+
+const en: Strings = {
+  dir: 'ltr',
+  brand: 'Live TV',
+  switchLanguage: 'עברית',
+  switchLanguageLabel: 'החלפה לעברית',
+  groups: { israel: 'Israel', world: 'World' },
+  favorites: 'Favourites',
+  myChannels: 'My channels',
+  channels: 'Channels',
+  player: 'Player',
+  emptyTitle: 'What’s on?',
+  emptyHint: 'Pick a channel from the list to start watching',
+  playingNow: 'Playing now',
+  unavailable: 'Unavailable right now',
+  removeChannel: (name) => `Delete ${name}`,
+  addFavorite: (name) => `Add ${name} to favourites`,
+  removeFavorite: (name) => `Remove ${name} from favourites`,
+  loading: (name) => `Loading ${name}…`,
+  channelUnavailable: (name) => `${name} is unavailable right now`,
+  retryingSoon: 'Trying again automatically in a few seconds',
+  retryNow: 'Try again now',
+  autoMuted: 'Sound is muted · tap to unmute',
+  pictureInPicture: 'Picture-in-picture (P)',
+  fullscreen: 'Full screen (F)',
+  theaterOn: 'Theatre mode (T)',
+  theaterOff: 'Show the channel list (T)',
+  channelBar: 'Switch channel',
+  rewindGroup: 'Rewind',
+  seekBack: (seconds) => `${seconds} seconds back`,
+  seekForward: (seconds) => `${seconds} seconds forward`,
+  live: 'Live',
+  watchingLive: 'Watching live',
+  backToLive: 'Back to live',
+  backToLiveTitle: 'Back to the live broadcast',
+  share: 'Share this channel',
+  linkCopied: 'Link copied',
+  report: 'Report a problem with this channel',
+  reportTitle: (name) => `Report ${name}`,
+  reportQuestion: 'What’s wrong?',
+  reportReasons: {
+    'not-working': 'It doesn’t play',
+    'new-link': 'I have a newer link',
+    'wrong-content': 'Something else is on',
+    other: 'Something else',
+  },
+  reportLink: 'Newer link (optional)',
+  reportDetails: 'More details (optional)',
+  reportFailed: 'Sending failed. Please try again in a moment.',
+  reportSent: 'Thanks, your report was sent',
+  send: 'Send',
+  sending: 'Sending…',
+  cancel: 'Cancel',
+  close: 'Close',
+  addOwnChannel: 'Add your own channel',
+  channelName: 'Channel name',
+  streamLink: 'Stream link (m3u8)',
+  add: 'Add',
+  savedInBrowser: 'The channel is saved in this browser only.',
+  customChannelErrors: {
+    'missing-name': 'Give the channel a name',
+    'invalid-url': 'The link must be a full https address of an m3u8 file',
+  },
+};
+
+export const STRINGS: Record<Language, Strings> = { he, en };
+
+export function isLanguage(value: unknown): value is Language {
+  return LANGUAGES.some((language) => language === value);
+}
+
+/** Hebrew for Hebrew browsers, English for everyone else. */
+export function defaultLanguage(browserLanguages: readonly string[]): Language {
+  return browserLanguages.some((language) => language.toLowerCase().startsWith('he')) ? 'he' : 'en';
+}

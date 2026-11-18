@@ -1,7 +1,9 @@
 import { CHANNEL_GROUPS, type CatalogChannel, type ChannelGroup } from './types';
 import { isStreamSource } from './sources';
+import { isHttpsUrl } from './url';
 
 const ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const LOCAL_LOGO_PATTERN = /^logos\/[a-z0-9-]+\.(svg|png|jpg|webp)$/;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -21,7 +23,7 @@ function parseChannel(value: unknown, position: number): CatalogChannel {
   };
 
   if (!isRecord(value)) return fail('must be an object');
-  const { id, name, short, group, sources } = value;
+  const { id, name, nameEn, short, logo, group, sources } = value;
 
   if (typeof id !== 'string' || !ID_PATTERN.test(id)) {
     return fail('"id" must contain only lowercase letters, digits and dashes');
@@ -38,7 +40,24 @@ function parseChannel(value: unknown, position: number): CatalogChannel {
     return fail(`every source must be an https URL or a mako: path (id: ${id})`);
   }
 
-  return { id, name, short, group, sources };
+  if (nameEn !== undefined && !isNonEmptyString(nameEn)) {
+    return fail(`"nameEn" must be a non-empty string when given (id: ${id})`);
+  }
+
+  const isValidLogo =
+    logo === undefined ||
+    (typeof logo === 'string' && (LOCAL_LOGO_PATTERN.test(logo) || isHttpsUrl(logo)));
+  if (!isValidLogo) return fail(`"logo" must be logos/<file> or an https URL (id: ${id})`);
+
+  return {
+    id,
+    name,
+    ...(nameEn === undefined ? {} : { nameEn }),
+    short,
+    ...(logo === undefined ? {} : { logo }),
+    group,
+    sources,
+  };
 }
 
 /**

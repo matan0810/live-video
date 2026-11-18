@@ -1,4 +1,5 @@
 import type { Channel } from '../channels';
+import { useI18n } from '../i18n/context';
 import { ChannelCard } from './ChannelCard';
 import styles from './ChannelList.module.css';
 
@@ -30,8 +31,9 @@ export function ChannelList({
   onToggleFavorite,
   onRemove,
 }: ChannelListProps) {
+  const { t } = useI18n();
   return (
-    <nav className={styles.list} aria-label="ערוצים">
+    <nav className={styles.list} aria-label={t.channels}>
       {sections.map((section) => (
         <section key={section.id} className={styles.group}>
           <h2 className={styles.heading}>{section.title}</h2>

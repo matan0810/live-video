@@ -1,6 +1,7 @@
 import '@fontsource-variable/heebo';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { LanguageProvider } from './i18n/LanguageProvider';
 import { Root } from './Root';
 import './styles/global.css';
 
@@ -12,6 +13,8 @@ window.addEventListener('hashchange', () => window.location.reload());
 
 createRoot(root).render(
   <StrictMode>
-    <Root />
+    <LanguageProvider>
+      <Root />
+    </LanguageProvider>
   </StrictMode>,
 );

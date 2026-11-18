@@ -1,4 +1,5 @@
-import { CHANNEL_GROUPS, GROUP_LABELS, type ChannelGroup } from '../channels';
+import { CHANNEL_GROUPS, type ChannelGroup } from '../channels';
+import { STRINGS } from '../i18n/strings';
 import { CheckBadge } from './CheckBadge';
 import { draftSources, type DraftChannel } from './drafts';
 import type { StreamCheckState } from './useStreamChecks';
@@ -36,6 +37,15 @@ export function ChannelEditorRow({
           />
         </label>
         <label className={styles.field}>
+          <span className={styles.label}>שם באנגלית (לא חובה)</span>
+          <input
+            className={styles.input}
+            dir="ltr"
+            value={draft.nameEn}
+            onChange={(event) => update({ nameEn: event.target.value })}
+          />
+        </label>
+        <label className={styles.field}>
           <span className={styles.label}>תווית קצרה</span>
           <input
             className={styles.input}
@@ -61,7 +71,7 @@ export function ChannelEditorRow({
           >
             {CHANNEL_GROUPS.map((group) => (
               <option key={group} value={group}>
-                {GROUP_LABELS[group]}
+                {STRINGS.he.groups[group]}
               </option>
             ))}
           </select>

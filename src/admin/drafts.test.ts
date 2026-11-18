@@ -13,7 +13,7 @@ describe('drafts', () => {
   it('round-trips channels through drafts', () => {
     const channels = [
       channel('one'),
-      channel('two', ['https://a.example/1', 'https://b.example/2']),
+      { ...channel('two', ['https://a.example/1', 'https://b.example/2']), nameEn: 'Two' },
     ];
     expect(draftsToChannels(channels.map(toDraft))).toEqual(channels);
   });

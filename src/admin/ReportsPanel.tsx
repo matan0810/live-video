@@ -1,5 +1,5 @@
 import type { Report } from '../../shared/reports';
-import { REASON_LABELS } from '../reports/reasonLabels';
+import { STRINGS } from '../i18n/strings';
 import { CheckBadge } from './CheckBadge';
 import { useStreamChecks } from './useStreamChecks';
 import styles from './Admin.module.css';
@@ -35,7 +35,8 @@ export function ReportsPanel({
               <div className={styles.reportTitle}>
                 <strong>{report.channelName}</strong>
                 <span className={styles.muted}>
-                  {REASON_LABELS[report.reason]} · {dateFormat.format(new Date(report.createdAt))}
+                  {STRINGS.he.reportReasons[report.reason]} ·{' '}
+                  {dateFormat.format(new Date(report.createdAt))}
                 </span>
               </div>
               {report.note && <p className={styles.note}>{report.note}</p>}

@@ -1,4 +1,6 @@
 import type { Channel } from '../channels';
+import { displayName } from '../channels/displayName';
+import { useI18n } from '../i18n/context';
 import { ChannelTile } from './ChannelTile';
 import { IconButton } from './IconButton';
 import { CloseIcon, StarIcon } from './icons';
@@ -24,6 +26,8 @@ export function ChannelCard({
   onToggleFavorite,
   onRemove,
 }: ChannelCardProps) {
+  const { t, language } = useI18n();
+  const name = displayName(channel, language);
   return (
     <div className={styles.card} data-active={isActive} data-unavailable={isUnavailable}>
       <button
@@ -34,9 +38,9 @@ export function ChannelCard({
       >
         <ChannelTile channel={channel} className={styles.tile} />
         <span className={styles.text}>
-          <span className={styles.name}>{channel.name}</span>
-          {isActive && !isUnavailable && <span className={styles.state}>מנגן עכשיו</span>}
-          {isUnavailable && <span className={styles.state}>לא זמין כרגע</span>}
+          <span className={styles.name}>{name}</span>
+          {isActive && !isUnavailable && <span className={styles.state}>{t.playingNow}</span>}
+          {isUnavailable && <span className={styles.state}>{t.unavailable}</span>}
         </span>
       </button>
 
@@ -44,7 +48,7 @@ export function ChannelCard({
         {onRemove && (
           <IconButton
             variant="ghost"
-            label={`מחיקת ${channel.name}`}
+            label={t.removeChannel(name)}
             onClick={() => onRemove(channel.id)}
           >
             <CloseIcon />
@@ -53,7 +57,7 @@ export function ChannelCard({
         <IconButton
           variant="ghost"
           className={isFavorite ? styles.favorite : undefined}
-          label={isFavorite ? `הסרת ${channel.name} מהמועדפים` : `הוספת ${channel.name} למועדפים`}
+          label={isFavorite ? t.removeFavorite(name) : t.addFavorite(name)}
           isPressed={isFavorite}
           onClick={() => onToggleFavorite(channel.id)}
         >

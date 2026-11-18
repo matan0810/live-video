@@ -4,6 +4,8 @@ import { IconButton } from '../components/IconButton';
 import { FullscreenIcon, PictureInPictureIcon } from '../components/icons';
 import { useAutoHide } from '../hooks/useAutoHide';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { displayName } from '../channels/displayName';
+import { useI18n } from '../i18n/context';
 import { DvrControls } from './DvrControls';
 import { useDvr } from './useDvr';
 import { useFullscreen } from './useFullscreen';
@@ -37,6 +39,8 @@ export function Player({
     channel.sources,
   );
   const dvr = useDvr(videoRef, getLiveWindow);
+  const { t, language } = useI18n();
+  const name = displayName(channel, language);
 
   const { seekBy } = dvr;
   const frameRef = useRef<HTMLDivElement>(null);
@@ -107,21 +111,21 @@ export function Player({
         {status === 'loading' && (
           <div className={styles.overlay} data-passive="true" role="status">
             <span className={styles.spinner} aria-hidden="true" />
-            <span>טוען את {channel.name}…</span>
+            <span>{t.loading(name)}</span>
           </div>
         )}
 
         {status === 'error' && (
           <div className={styles.overlay} role="alert">
-            <strong className={styles.errorTitle}>{channel.name} לא זמין כרגע</strong>
-            <span className={styles.errorHint}>מנסה שוב אוטומטית בעוד כמה שניות</span>
+            <strong className={styles.errorTitle}>{t.channelUnavailable(name)}</strong>
+            <span className={styles.errorHint}>{t.retryingSoon}</span>
             {errorDetail && (
               <span className={styles.errorDetail} dir="ltr">
                 {errorDetail}
               </span>
             )}
             <button type="button" className={styles.primaryButton} onClick={retry}>
-              נסה שוב עכשיו
+              {t.retryNow}
             </button>
           </div>
         )}
@@ -140,13 +144,13 @@ export function Player({
 
         {status === 'playing' && isAutoMuted && (
           <button type="button" className={styles.unmute} onClick={unmute}>
-            הקול מושתק · לחצו להפעלה
+            {t.autoMuted}
           </button>
         )}
       </div>
 
       <div className={styles.bar}>
-        <h2 className={styles.title}>{channel.name}</h2>
+        <h2 className={styles.title}>{name}</h2>
         <div className={styles.barEnd}>
           {status === 'playing' && dvr.canRewind && (
             <DvrControls
@@ -158,11 +162,11 @@ export function Player({
             />
           )}
           {CAN_PICTURE_IN_PICTURE && (
-            <IconButton label="תמונה בתוך תמונה (P)" onClick={controls.togglePictureInPicture}>
+            <IconButton label={t.pictureInPicture} onClick={controls.togglePictureInPicture}>
               <PictureInPictureIcon />
             </IconButton>
           )}
-          <IconButton label="מסך מלא (F)" onClick={fullscreen.toggle}>
+          <IconButton label={t.fullscreen} onClick={fullscreen.toggle}>
             <FullscreenIcon />
           </IconButton>
           {actions}

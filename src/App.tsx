@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { API_URL } from './api/client';
-import { CHANNEL_GROUPS, GROUP_LABELS, type CatalogChannel, type Channel } from './channels';
+import { CHANNEL_GROUPS, type CatalogChannel, type Channel } from './channels';
 import { withChannelParam } from './channels/channelLink';
 import { isCustomChannelId } from './channels/customChannels';
 import { AddChannelForm } from './components/AddChannelForm';
@@ -17,6 +17,8 @@ import { useFavorites } from './hooks/useFavorites';
 import { useKeyboardShortcuts, type KeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { ChannelStrip } from './player/ChannelStrip';
 import { Player } from './player/Player';
+import { useI18n } from './i18n/context';
+import type { Strings } from './i18n/strings';
 import type { PlayerStatus } from './player/useHlsPlayer';
 import styles from './App.module.css';
 
@@ -27,6 +29,7 @@ function buildSections(
   catalogChannels: readonly CatalogChannel[],
   customChannels: readonly Channel[],
   favoriteIds: readonly string[],
+  t: Strings,
 ): ChannelSection[] {
   const allChannels = [...customChannels, ...catalogChannels];
   const isFavorite = (channel: Channel) => favoriteIds.includes(channel.id);
@@ -35,15 +38,15 @@ function buildSections(
   );
 
   const sections: ChannelSection[] = [
-    { id: 'favorites', title: 'מועדפים', channels: favorites },
+    { id: 'favorites', title: t.favorites, channels: favorites },
     {
       id: 'custom',
-      title: 'הערוצים שלי',
+      title: t.myChannels,
       channels: customChannels.filter((channel) => !isFavorite(channel)),
     },
     ...CHANNEL_GROUPS.map((group) => ({
       id: group,
-      title: GROUP_LABELS[group],
+      title: t.groups[group],
       channels: catalogChannels.filter(
         (channel) => channel.group === group && !isFavorite(channel),
       ),
@@ -53,6 +56,7 @@ function buildSections(
 }
 
 export function App() {
+  const { t, language, setLanguage } = useI18n();
   const catalogChannels = useCatalog();
   const [activeChannelId, selectChannel] = useActiveChannel();
   const { favoriteIds, toggleFavorite } = useFavorites();
@@ -63,8 +67,8 @@ export function App() {
   );
 
   const sections = useMemo(
-    () => buildSections(catalogChannels, customChannels, favoriteIds),
-    [catalogChannels, customChannels, favoriteIds],
+    () => buildSections(catalogChannels, customChannels, favoriteIds, t),
+    [catalogChannels, customChannels, favoriteIds, t],
   );
   /** Every channel once, in the order it appears on screen. */
   const orderedChannels = useMemo(
@@ -125,12 +129,21 @@ export function App() {
     <div className={styles.app}>
       <header className={styles.header}>
         <span className={styles.brandDot} aria-hidden="true" />
-        <h1 className={styles.brand}>שידור חי</h1>
+        <h1 className={styles.brand}>{t.brand}</h1>
         <span className={styles.version}>v{__APP_VERSION__}</span>
+        <button
+          type="button"
+          className={styles.language}
+          lang={language === 'he' ? 'en' : 'he'}
+          aria-label={t.switchLanguageLabel}
+          onClick={() => setLanguage(language === 'he' ? 'en' : 'he')}
+        >
+          {t.switchLanguage}
+        </button>
       </header>
 
       <main className={styles.main} data-theater={isTheaterMode}>
-        <section className={styles.stage} aria-label="נגן">
+        <section className={styles.stage} aria-label={t.player}>
           {activeChannel ? (
             <Player
               channel={activeChannel}
@@ -157,7 +170,7 @@ export function App() {
                   )}
                   <IconButton
                     className={styles.theaterToggle}
-                    label={isTheaterMode ? 'הצגת רשימת הערוצים (T)' : 'מצב קולנוע (T)'}
+                    label={isTheaterMode ? t.theaterOff : t.theaterOn}
                     isPressed={isTheaterMode}
                     onClick={() => setIsTheaterMode((current) => !current)}
                   >

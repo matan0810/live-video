@@ -1,19 +1,16 @@
 import { useId, useState, type FormEvent } from 'react';
 import type { Channel } from '../channels';
 import { createCustomChannel, type CustomChannelError } from '../channels/customChannels';
+import { useI18n } from '../i18n/context';
 import { PlusIcon } from './icons';
 import styles from './AddChannelForm.module.css';
-
-const ERROR_MESSAGES: Record<CustomChannelError, string> = {
-  'missing-name': 'צריך לתת לערוץ שם',
-  'invalid-url': 'הקישור צריך להיות כתובת https מלאה לקובץ m3u8',
-};
 
 interface AddChannelFormProps {
   onAdd: (channel: Channel) => void;
 }
 
 export function AddChannelForm({ onAdd }: AddChannelFormProps) {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
   const [url, setUrl] = useState('');
@@ -44,7 +41,7 @@ export function AddChannelForm({ onAdd }: AddChannelFormProps) {
     return (
       <button type="button" className={styles.open} onClick={() => setIsOpen(true)}>
         <PlusIcon />
-        הוספת ערוץ משלך
+        {t.addOwnChannel}
       </button>
     );
   }
@@ -52,7 +49,7 @@ export function AddChannelForm({ onAdd }: AddChannelFormProps) {
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
       <label className={styles.label} htmlFor={nameId}>
-        שם הערוץ
+        {t.channelName}
       </label>
       <input
         id={nameId}
@@ -63,7 +60,7 @@ export function AddChannelForm({ onAdd }: AddChannelFormProps) {
       />
 
       <label className={styles.label} htmlFor={urlId}>
-        קישור לשידור (m3u8)
+        {t.streamLink}
       </label>
       <input
         id={urlId}
@@ -79,19 +76,19 @@ export function AddChannelForm({ onAdd }: AddChannelFormProps) {
 
       {error && (
         <p id={errorId} className={styles.error} role="alert">
-          {ERROR_MESSAGES[error]}
+          {t.customChannelErrors[error]}
         </p>
       )}
 
       <div className={styles.buttons}>
         <button type="submit" className={styles.submit}>
-          הוספה
+          {t.add}
         </button>
         <button type="button" className={styles.cancel} onClick={close}>
-          ביטול
+          {t.cancel}
         </button>
       </div>
-      <p className={styles.note}>הערוץ נשמר רק בדפדפן הזה.</p>
+      <p className={styles.note}>{t.savedInBrowser}</p>
     </form>
   );
 }
