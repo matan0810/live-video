@@ -13,6 +13,10 @@ updates:
     ignore:
       # Pinned to the browser preinstalled in cloud sessions; see CLAUDE.md.
       - dependency-name: playwright
+      # typescript-eslint does not support TypeScript 7 yet (its peer range ends below 6.1).
+      # Remove this once it does.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
     directory: /
