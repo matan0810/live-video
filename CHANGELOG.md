@@ -10,6 +10,10 @@ breaking changes are major.
 ### Added
 - The admin link finder works in stages: the page source, then the players it embeds, then a real browser in the cloud that opens the page, starts the player and records the playlist it requests, and finally the iptv-org directory for the same website. Each link shows where it was found, its best quality, whether it is a recording, and a warning when it carries a short-lived token.
 
+- A bookmark for the admin area: on any channel's website, while its video plays, tapping the bookmark sends the stream links the page loaded to the admin area, where they are checked and can become a channel in one tap. It works for sites that hide their links from the cloud.
+- The admin area shows channels added or changed in the site's code with a release, to add to the live list or ignore.
+- A weekly _Sync channels_ workflow copies the list saved in the admin area into the site's code on `dev`, so the code keeps a versioned record of it and each release ships it as the fallback.
+
 ### Changed
 - The admin link finder explains when a page hides its stream address (many players fetch it only once they start), and then offers the streams the iptv-org directory lists for the same website, with short steps for finding the link in the browser's developer tools.
 

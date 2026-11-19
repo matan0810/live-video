@@ -73,7 +73,7 @@ A channel looks like this:
 | `nameEn`  | Optional English name, when it differs from `name`                                          |
 | `short`   | Short label for the channel tile (`11`, `CNN`)                                              |
 | `logo`    | Optional logo: `logos/<file>` from `public/logos`, or an https address                      |
-| `group`   | `israel` or `world`                                                                         |
+| `group`   | `israel`, `world`, `arabic` or `languages`                                                  |
 | `sources` | https HLS (`.m3u8`) links in priority order: primary first, then backups; or a `mako:` path |
 
 There are two ways to change the list:
@@ -84,7 +84,15 @@ There are two ways to change the list:
    site is built with, used until the admin saves a list and whenever the Worker cannot be
    reached. An invalid file fails the checks and is not deployed.
 
-Once a list is saved in the admin area it takes precedence over the file.
+Once a list is saved in the admin area it takes precedence over the file. The two are
+kept in step both ways:
+
+- **Admin → code:** the _Sync channels_ workflow (`.github/workflows/sync-channels.yml`,
+  weekly and by hand from the Actions tab) copies the saved list into `channels.json` on
+  `dev`, after every check passes. The next release then ships it as the fallback, and git
+  keeps its history. It needs the `API_URL` variable, as the deploy does.
+- **Code → admin:** when a release adds or changes a channel in `channels.json`, the admin
+  area shows it under "עדכונים מקוד האתר", to add to the live list or ignore.
 
 ## Setting up the Worker
 

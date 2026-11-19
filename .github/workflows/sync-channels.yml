@@ -1,0 +1,62 @@
+name: Sync channels
+
+# Copies the channel list saved in the admin area into src/channels/channels.json on dev,
+# so the code keeps a versioned record of it and the next release ships it as the fallback.
+on:
+  schedule:
+    - cron: '41 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-channels
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: dev
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+
+      - name: Fetch the saved list
+        env:
+          API_URL: ${{ vars.API_URL || secrets.API_URL }}
+        run: |
+          node scripts/sync-channels.ts | tee summary.md
+          npx prettier --write src/channels/channels.json
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "The code already matches the saved list." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # A push made with the workflow's token starts no other workflow, so the checks run here.
+      - name: Run every check
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          npx playwright install --with-deps chromium
+          npm run check
+          npm run build
+          npm run e2e
+
+      - name: Commit to dev
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Sync channels from the admin area" -m "$(cat summary.md)"
+          git push origin HEAD:dev

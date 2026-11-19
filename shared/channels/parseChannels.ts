@@ -4,9 +4,9 @@ import {
   type CatalogChannel,
   type ChannelGroup,
   type ChannelLanguage,
-} from './types';
-import { isStreamSource } from './sources';
-import { isHttpsUrl } from './url';
+} from './types.ts';
+import { isStreamSource } from './sources.ts';
+import { isHttpsUrl } from './url.ts';
 
 const ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const LOCAL_LOGO_PATTERN = /^logos\/[a-z0-9-]+\.(svg|png|jpg|webp)$/;
