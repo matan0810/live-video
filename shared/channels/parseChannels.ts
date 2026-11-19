@@ -1,4 +1,10 @@
-import { CHANNEL_GROUPS, type CatalogChannel, type ChannelGroup } from './types';
+import {
+  CHANNEL_GROUPS,
+  CHANNEL_LANGUAGES,
+  type CatalogChannel,
+  type ChannelGroup,
+  type ChannelLanguage,
+} from './types';
 import { isStreamSource } from './sources';
 import { isHttpsUrl } from './url';
 
@@ -13,6 +19,10 @@ function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
+function isChannelLanguage(value: unknown): value is ChannelLanguage {
+  return CHANNEL_LANGUAGES.some((language) => language === value);
+}
+
 function isChannelGroup(value: unknown): value is ChannelGroup {
   return CHANNEL_GROUPS.some((group) => group === value);
 }
@@ -23,7 +33,7 @@ function parseChannel(value: unknown, position: number): CatalogChannel {
   };
 
   if (!isRecord(value)) return fail('must be an object');
-  const { id, name, nameEn, short, logo, group, sources } = value;
+  const { id, name, nameEn, short, logo, language, group, sources } = value;
 
   if (typeof id !== 'string' || !ID_PATTERN.test(id)) {
     return fail('"id" must contain only lowercase letters, digits and dashes');
@@ -49,12 +59,17 @@ function parseChannel(value: unknown, position: number): CatalogChannel {
     (typeof logo === 'string' && (LOCAL_LOGO_PATTERN.test(logo) || isHttpsUrl(logo)));
   if (!isValidLogo) return fail(`"logo" must be logos/<file> or an https URL (id: ${id})`);
 
+  if (language !== undefined && !isChannelLanguage(language)) {
+    return fail(`"language" must be one of: ${CHANNEL_LANGUAGES.join(', ')} (id: ${id})`);
+  }
+
   return {
     id,
     name,
     ...(nameEn === undefined ? {} : { nameEn }),
     short,
     ...(logo === undefined ? {} : { logo }),
+    ...(language === undefined ? {} : { language }),
     group,
     sources,
   };

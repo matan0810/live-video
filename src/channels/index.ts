@@ -5,4 +5,10 @@ import rawChannels from './channels.json';
 export const bundledChannels = parseChannels(rawChannels);
 
 export { CHANNEL_GROUPS } from '../../shared/channels/types';
-export type { CatalogChannel, Channel, ChannelGroup } from '../../shared/channels/types';
+export { GROUP_LANGUAGES } from '../../shared/channels/types';
+export type {
+  CatalogChannel,
+  Channel,
+  ChannelGroup,
+  ChannelLanguage,
+} from '../../shared/channels/types';

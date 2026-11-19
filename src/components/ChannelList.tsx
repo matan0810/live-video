@@ -1,5 +1,6 @@
 import type { Channel } from '../channels';
 import { useI18n } from '../i18n/context';
+import { useCollapsedSections } from '../hooks/useCollapsedSections';
 import { ChannelCard } from './ChannelCard';
 import styles from './ChannelList.module.css';
 
@@ -32,12 +33,41 @@ export function ChannelList({
   onRemove,
 }: ChannelListProps) {
   const { t } = useI18n();
+  const { collapsed, toggle } = useCollapsedSections();
   return (
     <nav className={styles.list} aria-label={t.channels}>
       {sections.map((section) => (
         <section key={section.id} className={styles.group}>
-          <h2 className={styles.heading}>{section.title}</h2>
-          <ul className={styles.grid}>
+          <h2 className={styles.heading}>
+            <button
+              type="button"
+              className={styles.toggle}
+              aria-expanded={!collapsed.has(section.id)}
+              aria-controls={`section-${section.id}`}
+              aria-label={
+                collapsed.has(section.id)
+                  ? t.expandSection(section.title)
+                  : t.collapseSection(section.title)
+              }
+              onClick={() => toggle(section.id)}
+            >
+              <span className={styles.chevron} aria-hidden="true" />
+              <span data-section-title>{section.title}</span>
+              {collapsed.has(section.id) && (
+                <span className={styles.count}>
+                  {t.channelCount(section.channels.length)}
+                  {section.channels.some((channel) => channel.id === activeChannelId) && (
+                    <span className={styles.playing}> · {t.playingInside}</span>
+                  )}
+                </span>
+              )}
+            </button>
+          </h2>
+          <ul
+            id={`section-${section.id}`}
+            className={styles.grid}
+            hidden={collapsed.has(section.id)}
+          >
             {section.channels.map((channel) => (
               <li key={channel.id}>
                 <ChannelCard

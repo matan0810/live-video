@@ -7,6 +7,16 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- Channel sections fold and unfold from their heading, and the choice is remembered. A folded section shows how many channels it holds, and says so when the channel playing is inside it.
+- A small language tag (AR, RU, FR…) on channels whose language differs from their section, such as Makan 33 among the Israeli channels.
+
+### Changed
+- Channels are organised into Israel, World in English, In Arabic, and Other languages, ordered by prominence.
+
+### Removed
+- Bloomberg: its stream uses a video packaging browsers outside Safari cannot play.
+
 ## [2.3.0] - 2026-11-19
 
 ### Changed

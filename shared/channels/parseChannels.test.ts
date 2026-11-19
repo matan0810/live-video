@@ -20,7 +20,7 @@ describe('parseChannels', () => {
     expect(parseChannels([{ ...valid, nameEn: 'Demo EN' }])).toEqual([
       { ...valid, nameEn: 'Demo EN' },
     ]);
-    const withLogo = { ...valid, logo: 'logos/demo.svg' };
+    const withLogo = { ...valid, logo: 'logos/demo.svg', language: 'fr' };
     expect(parseChannels([withLogo])).toEqual([withLogo]);
   });
 
@@ -33,6 +33,7 @@ describe('parseChannels', () => {
     ['an empty English name', [{ ...valid, nameEn: ' ' }]],
     ['a logo outside logos/', [{ ...valid, logo: '../secret.svg' }]],
     ['an http logo', [{ ...valid, logo: 'http://a.example/logo.png' }]],
+    ['an unknown language', [{ ...valid, language: 'xx' }]],
     ['an empty source list', [{ ...valid, sources: [] }]],
     ['a non-https source', [{ ...valid, sources: ['http://example.com/live.m3u8'] }]],
     ['a malformed source', [{ ...valid, sources: ['not a url'] }]],

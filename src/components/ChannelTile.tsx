@@ -6,6 +6,8 @@ import styles from './ChannelTile.module.css';
 
 interface ChannelTileProps {
   channel: Channel;
+  /** Short language tag shown in the tile's corner, e.g. "AR". */
+  badge?: string | null;
   className?: string;
 }
 
@@ -17,7 +19,7 @@ function logoUrl(logo: string) {
  * The channel's logo on a light square tinted with the logo's own colour, or its short label
  * on a coloured square when it has no logo or the logo fails to load. Decorative: the name is always shown beside it.
  */
-export function ChannelTile({ channel, className }: ChannelTileProps) {
+export function ChannelTile({ channel, badge, className }: ChannelTileProps) {
   const [failedLogo, setFailedLogo] = useState<string | null>(null);
   const logo = channel.logo && channel.logo !== failedLogo ? channel.logo : null;
   const logoHue = useLogoTint(logo ? logoUrl(logo) : null);
@@ -47,6 +49,7 @@ export function ChannelTile({ channel, className }: ChannelTileProps) {
       ) : (
         channel.short
       )}
+      {badge && <span className={styles.badge}>{badge}</span>}
     </span>
   );
 }

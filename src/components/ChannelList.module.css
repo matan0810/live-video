@@ -1,20 +1,68 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 
 .group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .heading {
   margin: 0;
-  color: var(--color-text-muted);
   font-size: 0.8125rem;
   font-weight: 600;
+}
+
+/* The whole heading is the fold button, so it is an easy target on phones. */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 36px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font: inherit;
+  text-align: start;
+  transition: color var(--transition);
+}
+
+.toggle:hover {
+  color: var(--color-text);
+}
+
+.chevron {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  /* Physical borders on purpose: the arrow's direction is set by rotation below. */
+  border-right: 2px solid currentcolor;
+  border-bottom: 2px solid currentcolor;
+  transform: translateY(-2px) rotate(45deg); /* pointing down: open */
+  transition: transform var(--transition);
+}
+
+/* Closed: pointing toward the reading direction. */
+.toggle[aria-expanded='false'] .chevron {
+  transform: rotate(-45deg);
+}
+
+:global([dir='rtl']) .toggle[aria-expanded='false'] .chevron {
+  transform: rotate(135deg);
+}
+
+.count {
+  margin-inline-start: auto;
+  font-weight: 500;
+}
+
+.playing {
+  color: var(--color-accent);
 }
 
 .grid {
@@ -30,4 +78,9 @@
   .grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* `display: grid` above would otherwise override the hidden attribute. */
+.grid[hidden] {
+  display: none;
 }

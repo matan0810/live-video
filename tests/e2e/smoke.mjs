@@ -29,7 +29,7 @@ async function main() {
     return page;
   };
   const step = (name) => console.log(`ok  ${name}`);
-  const sectionTitles = (page) => page.locator('nav h2').allInnerTexts();
+  const sectionTitles = (page) => page.locator('nav [data-section-title]').allInnerTexts();
 
   // ---------- Desktop ----------
   const desktop = await open(
@@ -38,7 +38,12 @@ async function main() {
   );
   await desktop.goto(url);
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'rtl');
-  assert.deepEqual(await sectionTitles(desktop), ['ישראל', 'עולם', 'שפות נוספות']);
+  assert.deepEqual(await sectionTitles(desktop), [
+    'ישראל',
+    'עולם · באנגלית',
+    'בערבית',
+    'שפות נוספות',
+  ]);
   const { version } = JSON.parse(await readFile(new URL('../../package.json', import.meta.url)));
   await desktop.getByText(`v${version}`, { exact: true }).waitFor();
   await desktop.getByText('בחרו ערוץ מהרשימה').waitFor();
@@ -82,6 +87,30 @@ async function main() {
   assert.equal((await sectionTitles(desktop))[0], 'מועדפים');
   step('desktop: favourites come first');
 
+  const arabic = desktop.getByRole('button', { name: 'קיפול: בערבית' });
+  await arabic.click();
+  await desktop.getByRole('button', { name: 'הרחבה: בערבית' }).getByText('3 ערוצים').waitFor();
+  assert.equal(await desktop.locator('#section-arabic').isHidden(), true);
+  await desktop.reload();
+  assert.equal(await desktop.locator('#section-arabic').isHidden(), true, 'folding is remembered');
+  await desktop.getByRole('button', { name: 'הרחבה: בערבית' }).click();
+  assert.equal(await desktop.locator('#section-arabic').isVisible(), true);
+  step('desktop: sections fold and unfold, and it is remembered');
+
+  assert.equal(
+    await desktop
+      .locator('li', { hasText: 'מכאן 33' })
+      .locator('span', { hasText: /^AR$/ })
+      .count(),
+    1,
+    'an Arabic channel among the Israeli ones is tagged',
+  );
+  assert.equal(
+    await desktop.locator('li', { hasText: 'רשת 13' }).locator('span', { hasText: /^HE$/ }).count(),
+    0,
+  );
+  step('desktop: language tags only where the section does not say it');
+
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
   await desktop.getByLabel('שם הערוץ').fill('בדיקה');
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('http://insecure.example/a.m3u8');
@@ -98,11 +127,18 @@ async function main() {
     'מועדפים',
     'הערוצים שלי',
     'ישראל',
-    'עולם',
+    'עולם · באנגלית',
+    'בערבית',
     'שפות נוספות',
   ]);
   await desktop.getByRole('button', { name: 'מחיקת בדיקה' }).click();
-  assert.deepEqual(await sectionTitles(desktop), ['מועדפים', 'ישראל', 'עולם', 'שפות נוספות']);
+  assert.deepEqual(await sectionTitles(desktop), [
+    'מועדפים',
+    'ישראל',
+    'עולם · באנגלית',
+    'בערבית',
+    'שפות נוספות',
+  ]);
   step('desktop: choices survive a reload; a custom channel can be deleted');
 
   await desktop.goto(`${url}#/admin`);
@@ -113,7 +149,7 @@ async function main() {
   await desktop.getByRole('button', { name: 'Switch to English' }).click();
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'ltr');
   assert.equal(await desktop.evaluate(() => document.documentElement.lang), 'en');
-  await desktop.getByRole('heading', { name: 'Israel' }).waitFor();
+  await desktop.getByText('Israel', { exact: true }).waitFor();
   await desktop.getByRole('button', { name: 'Kan 11', exact: true }).waitFor();
   await desktop.reload();
   await desktop.getByRole('button', { name: 'החלפה לעברית' }).click();

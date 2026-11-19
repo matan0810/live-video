@@ -1,5 +1,6 @@
 import type { Channel } from '../channels';
 import { displayName } from '../channels/displayName';
+import { languageBadge } from '../channels/languageBadge';
 import { useI18n } from '../i18n/context';
 import { ChannelTile } from './ChannelTile';
 import { IconButton } from './IconButton';
@@ -36,7 +37,7 @@ export function ChannelCard({
         aria-pressed={isActive}
         onClick={() => onSelect(channel.id)}
       >
-        <ChannelTile channel={channel} className={styles.tile} />
+        <ChannelTile channel={channel} badge={languageBadge(channel)} className={styles.tile} />
         <span className={styles.text}>
           <span className={styles.name}>
             <bdi>{name}</bdi>

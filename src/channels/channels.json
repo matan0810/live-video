@@ -5,6 +5,7 @@
     "nameEn": "Kan 11",
     "short": "11",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Kan11Logo.svg",
+    "language": "he",
     "group": "israel",
     "sources": [
       "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/kan11/live.livx/playlist.m3u8"
@@ -16,6 +17,7 @@
     "nameEn": "Channel 13",
     "short": "13",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Channel_13_%28Israel%29_logo.svg",
+    "language": "he",
     "group": "israel",
     "sources": [
       "https://d2xg1g9o5vns8m.cloudfront.net/out/v1/0855d703f7d5436fae6a9c7ce8ca5075/index.m3u8"
@@ -27,6 +29,7 @@
     "nameEn": "Now 14",
     "short": "14",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Noamperetz-now14logo.png",
+    "language": "he",
     "group": "israel",
     "sources": ["https://r.il.cdn-redge.media/livehls/oil/ch14/live/ch14/live.livx/playlist.m3u8"]
   },
@@ -35,6 +38,7 @@
     "name": "i24NEWS",
     "short": "i24",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6f/I24NEWS_logo.svg",
+    "language": "he",
     "group": "israel",
     "sources": [
       "https://i24newshebrew-cdn.encoders.immergo.tv/master.m3u8",
@@ -47,6 +51,7 @@
     "nameEn": "Knesset Channel",
     "short": "כנסת",
     "logo": "https://i.imgur.com/QXB1jv8.png",
+    "language": "he",
     "group": "israel",
     "sources": ["https://kneset.gostreaming.tv/p2-kneset/_definst_/myStream/chunklist.m3u8"]
   },
@@ -56,20 +61,10 @@
     "nameEn": "Makan 33",
     "short": "33",
     "logo": "https://i.imgur.com/RVtQTed.png",
+    "language": "ar",
     "group": "israel",
     "sources": [
       "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/makan/live.livx/playlist.m3u8"
-    ]
-  },
-  {
-    "id": "comedy",
-    "name": "ערוץ הקומדיות",
-    "nameEn": "Comedy Channel",
-    "short": "קומדי",
-    "group": "israel",
-    "sources": [
-      "https://d15ds134q59udk.cloudfront.net/out/v1/fbba879221d045598540ee783b140fe2/index.m3u8",
-      "https://d15ds134q59udk.cloudfront.net/media/3b45de9e-c944-4fdc-a344-7c3042b5b104/profile/1/profileManifest.m3u8?_uid=942a06d5-6c6d-42d3-a980-cd7e46ebb2e7&rK=a2&_did=d08df654dedf5609e7d0943be084337edb50cdd7"
     ]
   },
   {
@@ -78,14 +73,28 @@
     "nameEn": "Channel 9",
     "short": "9",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/7/73/Arutz_9_logo.png",
+    "language": "ru",
     "group": "israel",
     "sources": ["https://contact.gostreaming.tv/Con-11/index.m3u8"]
+  },
+  {
+    "id": "comedy",
+    "name": "ערוץ הקומדיות",
+    "nameEn": "Comedy Channel",
+    "short": "קומדי",
+    "language": "he",
+    "group": "israel",
+    "sources": [
+      "https://d15ds134q59udk.cloudfront.net/out/v1/fbba879221d045598540ee783b140fe2/index.m3u8",
+      "https://d15ds134q59udk.cloudfront.net/media/3b45de9e-c944-4fdc-a344-7c3042b5b104/profile/1/profileManifest.m3u8?_uid=942a06d5-6c6d-42d3-a980-cd7e46ebb2e7&rK=a2&_did=d08df654dedf5609e7d0943be084337edb50cdd7"
+    ]
   },
   {
     "id": "cnn-international",
     "name": "CNN International",
     "short": "CNN",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9d/CNN_Logo_%282014%29.svg",
+    "language": "en",
     "group": "world",
     "sources": [
       "https://d3bp6dwmpbdajl.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-ury0meh5m4nzm/index.m3u8",
@@ -93,40 +102,27 @@
     ]
   },
   {
-    "id": "nbc-news",
-    "name": "NBC News",
-    "short": "NBC",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/77/NBC_News_Now_2023_%28Alt%29.svg",
-    "group": "world",
-    "sources": ["https://xumo-drct-nbcnn-ir8ze.fast.nbcuni.com/live/master.m3u8"]
-  },
-  {
-    "id": "fox-news",
-    "name": "Fox News",
-    "short": "FOX",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/Fox_News_Channel_logo.svg",
-    "group": "world",
-    "sources": ["https://247preview.foxnews.com/hls/live/2020027/fncv3preview/index.m3u8"]
-  },
-  {
-    "id": "abc-news",
-    "name": "ABC News",
-    "short": "ABC",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/63/ABC_News_Live_logo_2021.svg",
+    "id": "bbc-news",
+    "name": "BBC News",
+    "short": "BBC",
+    "logo": "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/BBC-logo_2000_X_1125_Transparent.png",
+    "language": "en",
     "group": "world",
     "sources": [
-      "https://aegis-cloudfront-1.tubi.video/d6cbb0de-68e4-4f3b-82f9-bf5d526e0bde/index.m3u8",
-      "https://pb-0n3n2ej0w8pl9.akamaized.net/ABCNewsLive_Disney.m3u8"
+      "https://vs-hls-push-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_news_channel_hd/mobile_wifi_main_hd_abr_v2.m3u8",
+      "https://pb-iiczlgfysam0q.akamaized.net/v1/amcnetworks_bbcnews_1/samsungheadend_us/latest/main/hls/playlist.m3u8"
     ]
   },
   {
-    "id": "cbs-news",
-    "name": "CBS News",
-    "short": "CBS",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b0/CBS_News_247_logo.svg",
+    "id": "al-jazeera",
+    "name": "Al Jazeera",
+    "short": "AJ",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/71/Aljazeera.svg",
+    "language": "en",
     "group": "world",
     "sources": [
-      "https://cbsn-us.cbsnstream.cbsnews.com/out/v1/55a8648e8f134e82a470f83d562deeca/master.m3u8"
+      "https://live-hls-web-aje-fa.thehlive.com/AJE/index.m3u8",
+      "https://live-hls-apps-aje-fa.getaj.net/AJE/index.m3u8"
     ]
   },
   {
@@ -134,6 +130,7 @@
     "name": "France 24",
     "short": "F24",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg",
+    "language": "en",
     "group": "world",
     "sources": [
       "https://live.france24.com/hls/live/2037218/F24_EN_HI_HLS/master_5000.m3u8",
@@ -145,6 +142,7 @@
     "name": "DW",
     "short": "DW",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
+    "language": "en",
     "group": "world",
     "sources": [
       "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/master.m3u8",
@@ -152,40 +150,91 @@
     ]
   },
   {
-    "id": "rt",
-    "name": "RT",
-    "short": "RT",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Russia-today-logo.svg",
-    "group": "world",
-    "sources": [
-      "https://rt-glb.rttv.com/dvr/rtnews/playlist.m3u8",
-      "https://rt-glb.rttv.com/live/rtnews/playlist_4500Kb.m3u8"
-    ]
-  },
-  {
-    "id": "al-jazeera",
-    "name": "Al Jazeera",
-    "short": "AJ",
-    "logo": "https://upload.wikimedia.org/wikipedia/en/7/71/Aljazeera.svg",
-    "group": "world",
-    "sources": [
-      "https://live-hls-web-aje-fa.thehlive.com/AJE/index.m3u8",
-      "https://live-hls-apps-aje-fa.getaj.net/AJE/index.m3u8"
-    ]
-  },
-  {
     "id": "euronews",
     "name": "Euronews",
     "short": "EN",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Euronews_Logo_2025.svg",
+    "language": "en",
     "group": "world",
     "sources": ["https://cdn-euronews.akamaized.net/live/eds/euronews-en/25002/index.m3u8"]
+  },
+  {
+    "id": "reuters",
+    "name": "Reuters",
+    "short": "RTRS",
+    "logo": "https://i.imgur.com/6eQ2nCJ.png",
+    "language": "en",
+    "group": "world",
+    "sources": [
+      "https://amg00453-reuters-amg00453c1-xumo-us-2073.playouts.now.amagi.tv/reuters-reuters-hls/playlist.m3u8",
+      "https://d5bxknkoxytmb.cloudfront.net/playlist/amg00453-reuters-reuters-samsunggb/playlist.m3u8"
+    ]
+  },
+  {
+    "id": "nbc-news",
+    "name": "NBC News",
+    "short": "NBC",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/77/NBC_News_Now_2023_%28Alt%29.svg",
+    "language": "en",
+    "group": "world",
+    "sources": ["https://xumo-drct-nbcnn-ir8ze.fast.nbcuni.com/live/master.m3u8"]
+  },
+  {
+    "id": "abc-news",
+    "name": "ABC News",
+    "short": "ABC",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/63/ABC_News_Live_logo_2021.svg",
+    "language": "en",
+    "group": "world",
+    "sources": [
+      "https://aegis-cloudfront-1.tubi.video/d6cbb0de-68e4-4f3b-82f9-bf5d526e0bde/index.m3u8",
+      "https://pb-0n3n2ej0w8pl9.akamaized.net/ABCNewsLive_Disney.m3u8"
+    ]
+  },
+  {
+    "id": "cbs-news",
+    "name": "CBS News",
+    "short": "CBS",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b0/CBS_News_247_logo.svg",
+    "language": "en",
+    "group": "world",
+    "sources": [
+      "https://cbsn-us.cbsnstream.cbsnews.com/out/v1/55a8648e8f134e82a470f83d562deeca/master.m3u8"
+    ]
+  },
+  {
+    "id": "fox-news",
+    "name": "Fox News",
+    "short": "FOX",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/Fox_News_Channel_logo.svg",
+    "language": "en",
+    "group": "world",
+    "sources": ["https://247preview.foxnews.com/hls/live/2020027/fncv3preview/index.m3u8"]
+  },
+  {
+    "id": "gb-news",
+    "name": "GB News",
+    "short": "GB",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/35/GB_News_Logo.svg",
+    "language": "en",
+    "group": "world",
+    "sources": ["https://hlspackager.akamaized.net/live/DB/GB_NEWS/HLS/GB_NEWS.m3u8"]
+  },
+  {
+    "id": "newsmax",
+    "name": "Newsmax",
+    "short": "NMX",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/85/Newsmax_logo.svg",
+    "language": "en",
+    "group": "world",
+    "sources": ["https://nmx1ota.akamaized.net/hls/live/2107010/Live_1/index.m3u8"]
   },
   {
     "id": "nhk-world",
     "name": "NHK World",
     "short": "NHK",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7b/NHK_World.svg",
+    "language": "en",
     "group": "world",
     "sources": [
       "https://media-tyo.hls.nhkworld.jp/hls/w/live/master.m3u8",
@@ -197,64 +246,29 @@
     "name": "CNA",
     "short": "CNA",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/8/83/CNA_new_logo.svg",
+    "language": "en",
     "group": "world",
     "sources": ["https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index.m3u8"]
-  },
-  {
-    "id": "gb-news",
-    "name": "GB News",
-    "short": "GB",
-    "logo": "https://upload.wikimedia.org/wikipedia/en/3/35/GB_News_Logo.svg",
-    "group": "world",
-    "sources": ["https://hlspackager.akamaized.net/live/DB/GB_NEWS/HLS/GB_NEWS.m3u8"]
-  },
-  {
-    "id": "newsmax",
-    "name": "Newsmax",
-    "short": "NMX",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/85/Newsmax_logo.svg",
-    "group": "world",
-    "sources": ["https://nmx1ota.akamaized.net/hls/live/2107010/Live_1/index.m3u8"]
   },
   {
     "id": "al-arabiya",
     "name": "Al Arabiya English",
     "short": "AA",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Al-Arabiya_new_logo.svg",
+    "language": "en",
     "group": "world",
     "sources": ["https://live.alarabiya.net/alarabiapublish/english/playlist_dvr.m3u8"]
   },
   {
-    "id": "bbc-news",
-    "name": "BBC News",
-    "short": "BBC",
-    "logo": "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/BBC-logo_2000_X_1125_Transparent.png",
+    "id": "rt",
+    "name": "RT",
+    "short": "RT",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Russia-today-logo.svg",
+    "language": "en",
     "group": "world",
     "sources": [
-      "https://vs-hls-push-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_news_channel_hd/mobile_wifi_main_hd_abr_v2.m3u8",
-      "https://pb-iiczlgfysam0q.akamaized.net/v1/amcnetworks_bbcnews_1/samsungheadend_us/latest/main/hls/playlist.m3u8"
-    ]
-  },
-  {
-    "id": "bloomberg",
-    "name": "Bloomberg",
-    "short": "BBG",
-    "logo": "https://i.imgur.com/OuogLHx.png",
-    "group": "world",
-    "sources": [
-      "https://d2d98ykcmmhgd4.cloudfront.net/v1/bloomberg_bloombergtv_2/samsungheadend_us/latest/main/hls/playlist.m3u8",
-      "https://d8975dc3.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/U2Ftc3VuZy1nYl9CbG9vbWJlcmdUVlBsdXNfSExT/playlist.m3u8"
-    ]
-  },
-  {
-    "id": "reuters",
-    "name": "Reuters",
-    "short": "RTRS",
-    "logo": "https://i.imgur.com/6eQ2nCJ.png",
-    "group": "world",
-    "sources": [
-      "https://amg00453-reuters-amg00453c1-xumo-us-2073.playouts.now.amagi.tv/reuters-reuters-hls/playlist.m3u8",
-      "https://d5bxknkoxytmb.cloudfront.net/playlist/amg00453-reuters-reuters-samsunggb/playlist.m3u8"
+      "https://rt-glb.rttv.com/dvr/rtnews/playlist.m3u8",
+      "https://rt-glb.rttv.com/live/rtnews/playlist_4500Kb.m3u8"
     ]
   },
   {
@@ -263,7 +277,8 @@
     "nameEn": "Al Jazeera Arabic",
     "short": "AJ",
     "logo": "https://upload.wikimedia.org/wikipedia/en/7/71/Aljazeera.svg",
-    "group": "languages",
+    "language": "ar",
+    "group": "arabic",
     "sources": [
       "https://live-hls-web-aja.getaj.net/AJA/index.m3u8",
       "https://live-hls-web-aja-fa.thehlive.com/AJA/index.m3u8"
@@ -275,7 +290,8 @@
     "nameEn": "Al Arabiya",
     "short": "AA",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Al-Arabiya_new_logo.svg",
-    "group": "languages",
+    "language": "ar",
+    "group": "arabic",
     "sources": ["https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8"]
   },
   {
@@ -284,7 +300,8 @@
     "nameEn": "Sky News Arabia",
     "short": "SNA",
     "logo": "https://i.imgur.com/SvjU4h6.png",
-    "group": "languages",
+    "language": "ar",
+    "group": "arabic",
     "sources": ["https://stream.skynewsarabia.com/hls/sna.m3u8"]
   },
   {
@@ -292,6 +309,7 @@
     "name": "France 24 Français",
     "short": "F24",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg",
+    "language": "fr",
     "group": "languages",
     "sources": [
       "https://live.france24.com/hls/live/2037179/F24_FR_HI_HLS/master_5000.m3u8",
@@ -303,6 +321,7 @@
     "name": "24 Horas",
     "short": "24H",
     "logo": "https://i.ibb.co/21sXZ3GT/24h.png",
+    "language": "es",
     "group": "languages",
     "sources": [
       "https://rtvelivestream.rtve.es/rtvesec/24h/24h_main_dvr.m3u8",
@@ -314,6 +333,7 @@
     "name": "CNN en Español",
     "short": "CNN",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9d/CNN_Logo_%282014%29.svg",
+    "language": "es",
     "group": "languages",
     "sources": [
       "https://amg00803-cnnfast-amg00803c3-lg-es-5477.playouts.now.amagi.tv/playlist.m3u8"
@@ -324,6 +344,7 @@
     "name": "tagesschau24",
     "short": "TS24",
     "logo": "https://i.imgur.com/LH0Gctv.png",
+    "language": "de",
     "group": "languages",
     "sources": [
       "https://tagesschau.akamaized.net/hls/live/2020115/tagesschau/tagesschau_1/master.m3u8"
@@ -334,6 +355,7 @@
     "name": "Rai News 24",
     "short": "RAI",
     "logo": "https://i.imgur.com/n2u57y3.png",
+    "language": "it",
     "group": "languages",
     "sources": ["https://d3k8wzt41aflvx.cloudfront.net/RAINEWS24/Live.m3u8"]
   },
@@ -343,6 +365,7 @@
     "nameEn": "DW Russian",
     "short": "DW",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
+    "language": "ru",
     "group": "languages",
     "sources": ["https://dwamdstream110.akamaized.net/hls/live/2017971/dwstream110/master.m3u8"]
   }
