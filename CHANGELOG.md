@@ -7,6 +7,13 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- No sound on GB News, NHK World, Sky News Arabia, 24 Horas and Rai News 24, whose audio is a separate track: the player now uses the full hls.js build, which supports that.
+- The Al Jazeera logo spilled out of its tile.
+
+### Removed
+- LiveNOW from FOX: its stream is blocked outside the US.
+
 ## [2.2.0] - 2026-11-19
 
 ### Added

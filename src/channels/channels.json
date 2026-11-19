@@ -201,14 +201,6 @@
     "sources": ["https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index.m3u8"]
   },
   {
-    "id": "livenow-fox",
-    "name": "LiveNOW from FOX",
-    "short": "LIVE",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d9/LiveNow_from_Fox_logo_%28vertical%29.svg",
-    "group": "world",
-    "sources": ["https://pb-k5p02dtnr2162.akamaized.net/LiveNOW_from_FOX.m3u8"]
-  },
-  {
     "id": "gb-news",
     "name": "GB News",
     "short": "GB",

@@ -1,4 +1,4 @@
-import Hls from 'hls.js/light';
+import Hls from 'hls.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { resolveStreamUrl } from '../../shared/channels/sources';
 

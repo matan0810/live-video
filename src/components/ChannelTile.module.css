@@ -14,13 +14,16 @@
 
 /* Logos are designed for light backgrounds, so they sit on a soft white card. */
 .tile[data-logo='true'] {
-  padding: 6px;
+  position: relative;
+  overflow: hidden;
   background: #f4f5f7;
 }
 
+/* Absolutely placed so a tall logo cannot stretch the tile: it is fitted inside the padding. */
 .logo {
-  display: block;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 6px;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
   object-fit: contain;
 }
