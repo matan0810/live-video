@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-11-19
+
 ### Changed
 - Logo tiles are tinted with each logo's own colour instead of plain white, so channels are easier to tell apart. The colour is worked out in the browser, so channels added later are tinted too; black-and-white logos keep a neutral card.
 
