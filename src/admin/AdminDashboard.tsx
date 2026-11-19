@@ -17,6 +17,11 @@ import {
   withPrimarySource,
   type DraftChannel,
 } from './drafts';
+import type { BookmarkletPayload } from './bookmarklet';
+import { BookmarkletPanel } from './BookmarkletPanel';
+import { diffChannels, type ChannelDiff } from './channelDiff';
+import { CodeUpdates } from './CodeUpdates';
+import { IncomingLinks } from './IncomingLinks';
 import { LinkFinder } from './LinkFinder';
 import { ReportsPanel } from './ReportsPanel';
 import { StreamSearch } from './StreamSearch';
@@ -25,6 +30,9 @@ import styles from './Admin.module.css';
 interface AdminDashboardProps {
   token: string;
   onSignOut: () => void;
+  /** Links sent by the bookmark, waiting to be looked at. */
+  incoming: BookmarkletPayload | null;
+  onDismissIncoming: () => void;
 }
 
 /** The saved remote list, or the list bundled with the site when none was saved yet. */
@@ -33,9 +41,17 @@ async function loadChannels() {
   return remote === null ? bundledChannels : parseChannels(remote);
 }
 
-export function AdminDashboard({ token, onSignOut }: AdminDashboardProps) {
+const NO_DIFF: ChannelDiff = { added: [], changed: [] };
+
+export function AdminDashboard({
+  token,
+  onSignOut,
+  incoming,
+  onDismissIncoming,
+}: AdminDashboardProps) {
   const [drafts, setDrafts] = useState<DraftChannel[] | null>(null);
   const [reports, setReports] = useState<Report[]>([]);
+  const [codeDiff, setCodeDiff] = useState<ChannelDiff>(NO_DIFF);
   const [saveState, setSaveState] = useState<SaveState>('clean');
   const [error, setError] = useState<string | null>(null);
 
@@ -51,6 +67,7 @@ export function AdminDashboard({ token, onSignOut }: AdminDashboardProps) {
       .then(([channels, loadedReports]) => {
         if (isCancelled) return;
         setDrafts(channels.map(toDraft));
+        setCodeDiff(diffChannels(bundledChannels, channels));
         setReports(loadedReports);
       })
       .catch((caught: unknown) => {
@@ -110,6 +127,28 @@ export function AdminDashboard({ token, onSignOut }: AdminDashboardProps) {
         <p className={styles.muted}>{error ?? 'טוען…'}</p>
       ) : (
         <>
+          <CodeUpdates
+            diff={codeDiff}
+            onApply={(updates) => {
+              const ids = new Set(updates.map((channel) => channel.id));
+              const kept = drafts.filter((draft) => !ids.has(draft.id));
+              handleChange([...updates.map(toDraft), ...kept]);
+              setCodeDiff((current) => ({
+                added: current.added.filter((channel) => !ids.has(channel.id)),
+                changed: current.changed.filter(({ code }) => !ids.has(code.id)),
+              }));
+            }}
+          />
+          {incoming && (
+            <IncomingLinks
+              payload={incoming}
+              onDismiss={onDismissIncoming}
+              onCreateChannel={(url, name) => {
+                handleChange([createEmptyDraft(url, name), ...drafts]);
+                onDismissIncoming();
+              }}
+            />
+          )}
           <ReportsPanel
             reports={reports}
             hasChannel={(channelId) => drafts.some((draft) => draft.id === channelId)}
@@ -132,6 +171,7 @@ export function AdminDashboard({ token, onSignOut }: AdminDashboardProps) {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
+          <BookmarkletPanel />
           <StreamSearch />
         </>
       )}
