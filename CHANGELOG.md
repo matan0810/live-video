@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-11-19
+
 ### Added
 - The admin link finder works in stages: the page source, then the players it embeds, then a real browser in the cloud that opens the page, starts the player and records the playlist it requests, and finally the iptv-org directory for the same website. Each link shows where it was found, its best quality, whether it is a recording, and a warning when it carries a short-lived token.
 
