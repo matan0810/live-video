@@ -1,9 +1,21 @@
+import { CHANNEL_LANGUAGES, type ChannelLanguage } from '../../shared/channels/types';
 import { CHANNEL_GROUPS, type ChannelGroup } from '../channels';
 import { STRINGS } from '../i18n/strings';
 import { CheckBadge } from './CheckBadge';
 import { draftSources, type DraftChannel } from './drafts';
 import type { StreamCheckState } from './useStreamChecks';
 import styles from './Admin.module.css';
+
+const LANGUAGE_NAMES: Record<ChannelLanguage, string> = {
+  he: 'עברית',
+  en: 'אנגלית',
+  ar: 'ערבית',
+  fr: 'צרפתית',
+  es: 'ספרדית',
+  de: 'גרמנית',
+  it: 'איטלקית',
+  ru: 'רוסית',
+};
 
 interface ChannelEditorRowProps {
   draft: DraftChannel;
@@ -75,6 +87,30 @@ export function ChannelEditorRow({
               </option>
             ))}
           </select>
+        </label>
+        <label className={styles.field}>
+          <span className={styles.label}>שפה</span>
+          <select
+            className={styles.input}
+            value={draft.language}
+            onChange={(event) => update({ language: event.target.value as ChannelLanguage | '' })}
+          >
+            <option value="">לפי הקבוצה</option>
+            {CHANNEL_LANGUAGES.map((language) => (
+              <option key={language} value={language}>
+                {LANGUAGE_NAMES[language]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className={styles.field}>
+          <span className={styles.label}>קישור ללוגו (לא חובה)</span>
+          <input
+            className={styles.input}
+            dir="ltr"
+            value={draft.logo}
+            onChange={(event) => update({ logo: event.target.value })}
+          />
         </label>
       </div>
 

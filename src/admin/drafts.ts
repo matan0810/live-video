@@ -1,5 +1,5 @@
 import { parseChannels } from '../../shared/channels/parseChannels';
-import type { CatalogChannel, ChannelGroup } from '../../shared/channels/types';
+import type { CatalogChannel, ChannelGroup, ChannelLanguage } from '../../shared/channels/types';
 
 /** A channel as it is being edited: sources are free text, one address per line. */
 export interface DraftChannel {
@@ -10,13 +10,24 @@ export interface DraftChannel {
   /** Empty when the channel has no separate English name. */
   nameEn: string;
   short: string;
+  /** Empty when the channel has no logo. */
+  logo: string;
+  /** Empty when the channel's language is the one its group implies. */
+  language: ChannelLanguage | '';
   group: ChannelGroup;
   sourcesText: string;
 }
 
 export function toDraft(channel: CatalogChannel): DraftChannel {
-  const { sources, nameEn = '', ...rest } = channel;
-  return { ...rest, nameEn, key: crypto.randomUUID(), sourcesText: sources.join('\n') };
+  const { sources, nameEn = '', logo = '', language = '', ...rest } = channel;
+  return {
+    ...rest,
+    nameEn,
+    logo,
+    language,
+    key: crypto.randomUUID(),
+    sourcesText: sources.join('\n'),
+  };
 }
 
 export function createEmptyDraft(sourcesText = '', name = ''): DraftChannel {
@@ -26,6 +37,8 @@ export function createEmptyDraft(sourcesText = '', name = ''): DraftChannel {
     name,
     nameEn: '',
     short: '',
+    logo: '',
+    language: '',
     group: 'israel',
     sourcesText,
   };
@@ -46,6 +59,8 @@ export function draftsToChannels(drafts: readonly DraftChannel[]): CatalogChanne
       name: draft.name.trim(),
       ...(draft.nameEn.trim() ? { nameEn: draft.nameEn.trim() } : {}),
       short: draft.short.trim(),
+      ...(draft.logo.trim() ? { logo: draft.logo.trim() } : {}),
+      ...(draft.language ? { language: draft.language } : {}),
       group: draft.group,
       sources: draftSources(draft),
     })),
