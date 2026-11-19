@@ -136,8 +136,9 @@ viewer's browser, so no Worker is involved. N12 only plays from Israel.
 
 ## Link checks
 
-`.github/workflows/check-links.yml` runs `npm run check:links` daily against
-`channels.json`. When a channel is down it opens an issue with the details, and closes it
+`.github/workflows/check-links.yml` runs `npm run check:links` daily against the list
+viewers actually get: the one saved in the admin area, or `channels.json` when none is
+saved or the Worker cannot be reached (the report says which). When a channel is down it opens an issue with the details, and closes it
 once everything works again. It runs from servers outside Israel, so a channel that is
 blocked abroad is reported as down even when it is fine. The admin area's link check runs
 from your own browser and does not have that problem.

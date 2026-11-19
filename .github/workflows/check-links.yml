@@ -25,6 +25,8 @@ jobs:
 
       - name: Check every stream
         id: check
+        env:
+          API_URL: ${{ vars.API_URL || secrets.API_URL }}
         run: |
           set +e
           node scripts/check-links.ts > report.md
