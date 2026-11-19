@@ -7,6 +7,10 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- Saving in the admin area no longer drops every channel's logo and language tag. The editor now shows both, and channels that lost them appear under "ערוצים מעדכון האתר", to restore in one step.
+- The admin area always loads the current channel list, not the browser's copy from up to a minute earlier, so a save never overwrites newer changes.
+
 ## [2.5.0] - 2026-11-19
 
 ### Added

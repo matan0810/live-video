@@ -37,7 +37,7 @@ interface AdminDashboardProps {
 
 /** The saved remote list, or the list bundled with the site when none was saved yet. */
 async function loadChannels() {
-  const remote = await fetchRemoteChannels();
+  const remote = await fetchRemoteChannels({ fresh: true });
   return remote === null ? bundledChannels : parseChannels(remote);
 }
 

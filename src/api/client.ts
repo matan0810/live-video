@@ -20,9 +20,13 @@ interface RequestOptions {
   method?: string;
   body?: unknown;
   token?: string;
+  cache?: RequestCache;
 }
 
-async function request<T>(path: string, { method = 'GET', body, token }: RequestOptions = {}) {
+async function request<T>(
+  path: string,
+  { method = 'GET', body, token, cache }: RequestOptions = {},
+) {
   if (!API_URL) throw new ApiError(0, 'The API is not configured');
 
   const headers: Record<string, string> = {};
@@ -33,6 +37,7 @@ async function request<T>(path: string, { method = 'GET', body, token }: Request
     method,
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
+    cache,
   });
   const data: unknown = await response.json().catch(() => null);
   if (!response.ok) {
@@ -43,9 +48,13 @@ async function request<T>(path: string, { method = 'GET', body, token }: Request
   return data as T;
 }
 
-/** The remotely managed channel list, unvalidated; null when none has been saved. */
-export async function fetchRemoteChannels(): Promise<unknown> {
-  return (await request<{ channels: unknown }>('/channels')).channels;
+/**
+ * The remotely managed channel list, unvalidated; null when none has been saved.
+ * `fresh` skips the browser's one-minute copy: the admin area must never edit a stale list.
+ */
+export async function fetchRemoteChannels({ fresh = false } = {}): Promise<unknown> {
+  const options: RequestOptions = fresh ? { cache: 'no-cache' } : {};
+  return (await request<{ channels: unknown }>('/channels', options)).channels;
 }
 
 export async function submitReport(report: ReportInput) {
