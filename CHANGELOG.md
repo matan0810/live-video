@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-11-19
+
 ### Added
 - Link finder in the admin area: paste a channel's web page and it lists the stream links found there and in the player it embeds, each checked, with a button to start a new channel from one.
 - The site is now called OnAir, in both languages.
@@ -19,7 +21,6 @@ breaking changes are major.
 - The channel row over the video in full screen is shown only with a mouse: on phones and tablets it was too easy to tap by accident.
 - Work now lands on a `dev` branch and reaches the live site only on a release, as in KAVOOM.
 - Updated GitHub Actions used by the build and deploy workflows to their latest versions.
-
 - Search engines are asked not to index the site, which is for personal use.
 
 ### Removed
