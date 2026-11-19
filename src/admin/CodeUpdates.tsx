@@ -5,11 +5,30 @@ import styles from './Admin.module.css';
 
 interface CodeUpdatesProps {
   diff: ChannelDiff;
-  /** Puts these code versions into the editor (adding or replacing by id); saved as usual. */
+  /** Puts these channels into the editor (adding or replacing by id); saved as usual. */
   onApply: (channels: CatalogChannel[]) => void;
 }
 
-/** Channel updates that arrived with a release of the site's code, offered for the live list. */
+const FIELD_NAMES: Record<keyof CatalogChannel, string> = {
+  id: 'מזהה',
+  name: 'שם',
+  nameEn: 'שם באנגלית',
+  short: 'כינוי קצר',
+  logo: 'לוגו',
+  language: 'שפה',
+  group: 'קבוצה',
+  sources: 'קישורי שידור',
+};
+
+/** The fields, in words, that a site update changed in a channel. */
+function changedFields(next: CatalogChannel, current: CatalogChannel) {
+  return (Object.keys(FIELD_NAMES) as (keyof CatalogChannel)[])
+    .filter((key) => JSON.stringify(next[key]) !== JSON.stringify(current[key]))
+    .map((key) => FIELD_NAMES[key])
+    .join(', ');
+}
+
+/** Channels that a site update added or changed, offered for the list viewers see. */
 export function CodeUpdates({ diff, onApply }: CodeUpdatesProps) {
   const [hidden, setHidden] = useState<ReadonlySet<string>>(() => new Set());
   const added = diff.added.filter((channel) => !hidden.has(channel.id));
@@ -22,28 +41,28 @@ export function CodeUpdates({ diff, onApply }: CodeUpdatesProps) {
   return (
     <section className={styles.section}>
       <div className={styles.sectionHeader}>
-        <h2 className={styles.subheading}>עדכונים מקוד האתר</h2>
+        <h2 className={styles.subheading}>ערוצים מעדכון האתר</h2>
         <button type="button" className={styles.secondary} onClick={() => onApply(all)}>
-          להחיל הכל
+          לקבל את כולם
         </button>
       </div>
       <p className={styles.muted}>
-        ערוצים שנוספו או השתנו בקוד האתר (בגרסה האחרונה) ועדיין לא ברשימה החיה. החלה מכניסה אותם
-        לעורך למטה; הם נשמרים רק אחרי "שמירת השינויים".
+        העדכון האחרון של האתר הוסיף או שינה ערוצים שעדיין לא ברשימה שלך. מה שתקבל ייכנס לרשימה למטה,
+        והצופים יראו אותו רק אחרי "שמירת השינויים". מה שתדחה יישאר כמו שהוא.
       </p>
       <ul className={styles.list}>
         {added.map((channel) => (
           <li key={channel.id} className={styles.card}>
             <div className={styles.reportTitle}>
-              <span className={styles.tag}>חדש בקוד</span>
+              <span className={styles.tag}>ערוץ חדש</span>
               <strong>{channel.name}</strong>
             </div>
             <div className={styles.actions}>
               <button type="button" className={styles.secondary} onClick={() => onApply([channel])}>
-                הוספה
+                להוסיף לרשימה
               </button>
               <button type="button" className={styles.secondary} onClick={() => hide(channel.id)}>
-                התעלמות
+                לא להוסיף
               </button>
             </div>
           </li>
@@ -51,9 +70,10 @@ export function CodeUpdates({ diff, onApply }: CodeUpdatesProps) {
         {changed.map(({ code, live }) => (
           <li key={code.id} className={styles.card}>
             <div className={styles.reportTitle}>
-              <span className={styles.tag}>השתנה בקוד</span>
+              <span className={styles.tag}>עודכן</span>
               <strong>{live.name}</strong>
             </div>
+            <p className={styles.muted}>השתנה: {changedFields(code, live)}</p>
             {code.sources.join() !== live.sources.join() && (
               <p className={styles.url} dir="ltr">
                 {code.sources[0]}
@@ -61,10 +81,10 @@ export function CodeUpdates({ diff, onApply }: CodeUpdatesProps) {
             )}
             <div className={styles.actions}>
               <button type="button" className={styles.secondary} onClick={() => onApply([code])}>
-                לקחת את גרסת הקוד
+                לעדכן את הערוץ
               </button>
               <button type="button" className={styles.secondary} onClick={() => hide(code.id)}>
-                להשאיר את שלי
+                להשאיר כמו שהוא
               </button>
             </div>
           </li>

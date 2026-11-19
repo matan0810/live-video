@@ -92,7 +92,7 @@ kept in step both ways:
   `dev`, after every check passes. The next release then ships it as the fallback, and git
   keeps its history. It needs the `API_URL` variable, as the deploy does.
 - **Code → admin:** when a release adds or changes a channel in `channels.json`, the admin
-  area shows it under "עדכונים מקוד האתר", to add to the live list or ignore.
+  area shows it under "ערוצים מעדכון האתר", to accept into the live list or decline.
 
 ## Setting up the Worker
 
