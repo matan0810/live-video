@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { draftsToChannels, moveDraft, toDraft, withPrimarySource } from './drafts';
+import { draftsToChannels, moveDraft, toDraft, withChannels, withPrimarySource } from './drafts';
 
 const channel = (id: string, sources = [`https://a.example/${id}.m3u8`]) => ({
   id,
@@ -37,6 +37,16 @@ describe('drafts', () => {
     const drafts = [toDraft(channel('one', ['https://a.example/old', 'https://a.example/new']))];
     const updated = withPrimarySource(drafts, 'one', 'https://a.example/new');
     expect(updated[0]?.sourcesText).toBe('https://a.example/new\nhttps://a.example/old');
+  });
+
+  it('updates channels in place and puts new ones first', () => {
+    const drafts = ['a', 'b'].map((id) => toDraft(channel(id)));
+    const next = withChannels(drafts, [{ ...channel('b'), name: 'New B' }, channel('c')]);
+    expect(next.map((draft) => [draft.id, draft.name])).toEqual([
+      ['c', 'C'],
+      ['a', 'A'],
+      ['b', 'New B'],
+    ]);
   });
 
   it('moves a draft and leaves the list alone at the edges', () => {

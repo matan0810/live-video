@@ -83,6 +83,21 @@ export function withPrimarySource(
   );
 }
 
+/** Replaces drafts by channel id where they exist, in place, and puts new ones first. */
+export function withChannels(
+  drafts: readonly DraftChannel[],
+  channels: readonly CatalogChannel[],
+): DraftChannel[] {
+  const byId = new Map(channels.map((channel) => [channel.id, channel]));
+  const existing = new Set(drafts.map((draft) => draft.id));
+  const added = channels.filter((channel) => !existing.has(channel.id)).map(toDraft);
+  const updated = drafts.map((draft) => {
+    const channel = byId.get(draft.id);
+    return channel ? toDraft(channel) : draft;
+  });
+  return [...added, ...updated];
+}
+
 export function moveDraft(drafts: readonly DraftChannel[], key: string, offset: -1 | 1) {
   const index = drafts.findIndex((draft) => draft.key === key);
   const target = index + offset;

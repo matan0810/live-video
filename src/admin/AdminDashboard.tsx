@@ -14,6 +14,7 @@ import {
   createEmptyDraft,
   draftsToChannels,
   toDraft,
+  withChannels,
   withPrimarySource,
   type DraftChannel,
 } from './drafts';
@@ -131,8 +132,7 @@ export function AdminDashboard({
             diff={codeDiff}
             onApply={(updates) => {
               const ids = new Set(updates.map((channel) => channel.id));
-              const kept = drafts.filter((draft) => !ids.has(draft.id));
-              handleChange([...updates.map(toDraft), ...kept]);
+              handleChange(withChannels(drafts, updates));
               setCodeDiff((current) => ({
                 added: current.added.filter((channel) => !ids.has(channel.id)),
                 changed: current.changed.filter(({ code }) => !ids.has(code.id)),
