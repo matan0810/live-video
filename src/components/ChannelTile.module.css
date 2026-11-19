@@ -12,11 +12,18 @@
   letter-spacing: 0.01em;
 }
 
-/* Logos are designed for light backgrounds, so they sit on a soft white card. */
+/* Logos are designed for light backgrounds, so they sit on a soft light card, tinted with
+   the logo's own colour once it is known, so the list is not a column of white squares. */
 .tile[data-logo='true'] {
   position: relative;
   overflow: hidden;
   background: #f4f5f7;
+  transition: background-color 300ms ease;
+}
+
+.tile[data-logo='true'][data-tinted='true'] {
+  background: hsl(var(--logo-hue) 70% 92%);
+  box-shadow: inset 0 0 0 1px hsl(var(--logo-hue) 45% 80%);
 }
 
 /* Absolutely placed so a tall logo cannot stretch the tile: it is fitted inside the padding. */

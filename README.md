@@ -105,7 +105,7 @@ button and admin area are hidden. It runs on Cloudflare's free plan and is deplo
 5. **Actions** → **Deploy Worker** → **Run workflow**. The run creates the storage, deploys
    the Worker, sets the password, and shows the Worker's address in its summary.
 6. **Settings** → **Secrets and variables** → **Actions** → **Variables** → **New repository
-   variable**: name `API_URL`, value the address from step 5.
+   variable**: name `API_URL`, value the address from step 5. (A secret with the same name works too.)
 7. **Actions** → **Deploy** → **Run workflow**. The report button and `#/admin` are now active.
 
 To change the password, update the `ADMIN_PASSWORD` secret and run Deploy Worker again;

@@ -7,7 +7,11 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Changed
+- Logo tiles are tinted with each logo's own colour instead of plain white, so channels are easier to tell apart. The colour is worked out in the browser, so channels added later are tinted too; black-and-white logos keep a neutral card.
+
 ### Fixed
+- The admin area stayed off when the Worker's address was saved as a repository secret rather than a variable; either works now.
 - No sound on GB News, NHK World, Sky News Arabia, 24 Horas and Rai News 24, whose audio is a separate track: the player now uses the full hls.js build, which supports that.
 - The Al Jazeera logo spilled out of its tile.
 
