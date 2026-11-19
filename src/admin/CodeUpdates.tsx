@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CatalogChannel } from '../../shared/channels/types';
 import type { ChannelDiff } from './channelDiff';
+import { LogoPreview } from './LogoPreview';
 import styles from './Admin.module.css';
 
 interface CodeUpdatesProps {
@@ -57,6 +58,7 @@ export function CodeUpdates({ diff, onApply }: CodeUpdatesProps) {
               <span className={styles.tag}>ערוץ חדש</span>
               <strong>{channel.name}</strong>
             </div>
+            <LogoPreview channel={channel} />
             <div className={styles.actions}>
               <button type="button" className={styles.secondary} onClick={() => onApply([channel])}>
                 להוסיף לרשימה
@@ -74,6 +76,7 @@ export function CodeUpdates({ diff, onApply }: CodeUpdatesProps) {
               <strong>{live.name}</strong>
             </div>
             <p className={styles.muted}>השתנה: {changedFields(code, live)}</p>
+            {code.logo !== live.logo && <LogoPreview channel={code} />}
             {code.sources.join() !== live.sources.join() && (
               <p className={styles.url} dir="ltr">
                 {code.sources[0]}

@@ -2,20 +2,11 @@ import { CHANNEL_LANGUAGES, type ChannelLanguage } from '../../shared/channels/t
 import { CHANNEL_GROUPS, type ChannelGroup } from '../channels';
 import { STRINGS } from '../i18n/strings';
 import { CheckBadge } from './CheckBadge';
+import { LANGUAGE_NAMES } from './languageNames';
+import { LogoPreview } from './LogoPreview';
 import { draftSources, type DraftChannel } from './drafts';
 import type { StreamCheckState } from './useStreamChecks';
 import styles from './Admin.module.css';
-
-const LANGUAGE_NAMES: Record<ChannelLanguage, string> = {
-  he: 'עברית',
-  en: 'אנגלית',
-  ar: 'ערבית',
-  fr: 'צרפתית',
-  es: 'ספרדית',
-  de: 'גרמנית',
-  it: 'איטלקית',
-  ru: 'רוסית',
-};
 
 interface ChannelEditorRowProps {
   draft: DraftChannel;
@@ -113,6 +104,16 @@ export function ChannelEditorRow({
           />
         </label>
       </div>
+
+      <LogoPreview
+        channel={{
+          id: draft.id,
+          name: draft.name,
+          short: draft.short,
+          sources: [],
+          logo: draft.logo,
+        }}
+      />
 
       <label className={styles.field}>
         <span className={styles.label}>קישורים – אחד בכל שורה, הראשון הוא הראשי</span>
