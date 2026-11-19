@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-11-19
+
 ### Added
 - Channel sections fold and unfold from their heading, and the choice is remembered. A folded section shows how many channels it holds, and says so when the channel playing is inside it.
 - A small language tag (AR, RU, FR…) on channels whose language differs from their section, such as Makan 33 among the Israeli channels.
