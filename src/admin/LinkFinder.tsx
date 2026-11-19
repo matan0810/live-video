@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { ApiError, extractStreamLinks } from '../api/client';
 import { CheckBadge } from './CheckBadge';
+import { findStreamsForSite } from './siteDirectory';
 import { useStreamChecks } from './useStreamChecks';
 import styles from './Admin.module.css';
 
@@ -14,7 +15,17 @@ type FinderState =
   | { kind: 'idle' }
   | { kind: 'searching' }
   | { kind: 'failed'; message: string }
-  | { kind: 'done'; links: string[]; pagesScanned: number };
+  | {
+      kind: 'done';
+      links: string[];
+      pagesScanned: number;
+      /** True when the links came from the iptv-org directory, not from the page itself. */
+      fromDirectory: boolean;
+    };
+
+function linkCount(count: number) {
+  return count === 1 ? 'קישור אחד' : `${count} קישורים`;
+}
 
 function describeError(error: unknown) {
   if (error instanceof ApiError && error.status === 429)
@@ -34,9 +45,19 @@ export function LinkFinder({ token, onCreateChannel }: LinkFinderProps) {
     event.preventDefault();
     setState({ kind: 'searching' });
     try {
-      const found = await extractStreamLinks(token, pageUrl.trim());
-      setState({ kind: 'done', ...found });
-      check(found.links);
+      const url = pageUrl.trim();
+      const found = await extractStreamLinks(token, url);
+      if (found.links.length > 0) {
+        setState({ kind: 'done', ...found, fromDirectory: false });
+        check(found.links);
+        return;
+      }
+      // Many sites only fetch the stream address once their player starts, so it is not in
+      // the page. Fall back to streams the community directory lists for the same site.
+      const listed = await findStreamsForSite(url).catch(() => []);
+      const links = [...new Set(listed.map((stream) => stream.url))];
+      setState({ kind: 'done', links, pagesScanned: found.pagesScanned, fromDirectory: true });
+      check(links);
     } catch (error) {
       setState({ kind: 'failed', message: describeError(error) });
     }
@@ -72,9 +93,11 @@ export function LinkFinder({ token, onCreateChannel }: LinkFinderProps) {
       )}
       {state.kind === 'done' && (
         <p className={styles.muted}>
-          {state.links.length === 0
-            ? `לא נמצאו קישורים (נסרקו ${state.pagesScanned} דפים).`
-            : `נמצאו ${state.links.length} קישורים ב-${state.pagesScanned} דפים.`}
+          {!state.fromDirectory
+            ? `נמצאו ${linkCount(state.links.length)} (נסרקו ${state.pagesScanned} דפים).`
+            : state.links.length > 0
+              ? `הדף לא חושף את הקישור (הנגן שלו טוען אותו רק בזמן הניגון), אבל המאגר הקהילתי iptv-org מכיר ${linkCount(state.links.length)} לאתר הזה:`
+              : 'הדף לא חושף את הקישור (הנגן שלו טוען אותו רק בזמן הניגון), וגם במאגר הקהילתי אין קישור לאתר הזה. נסו את החיפוש לפי שם הערוץ למטה.'}
         </p>
       )}
 
