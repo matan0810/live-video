@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-11-19
+
 ### Added
 - Channel 16, with its Hebrew and English names.
 
