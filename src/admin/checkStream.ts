@@ -1,4 +1,5 @@
 import { resolveStreamUrl } from '../../shared/channels/sources';
+import { readPlaylistInfo } from '../../shared/playlistInfo';
 
 export interface StreamCheck {
   isWorking: boolean;
@@ -18,9 +19,17 @@ export async function checkStream(url: string): Promise<StreamCheck> {
     const response = await fetch(resolved, { signal: AbortSignal.timeout(TIMEOUT_MS) });
     if (!response.ok) return { isWorking: false, detail: `HTTP ${response.status}` };
     const body = await response.text();
-    return body.trimStart().startsWith(HLS_SIGNATURE)
-      ? { isWorking: true, detail: 'תקין' }
-      : { isWorking: false, detail: 'לא פלייליסט HLS' };
+    if (!body.trimStart().startsWith(HLS_SIGNATURE)) {
+      return { isWorking: false, detail: 'לא פלייליסט HLS' };
+    }
+    const info = readPlaylistInfo(body);
+    const parts = [
+      'תקין',
+      info.maxHeight ? `עד ${info.maxHeight}p` : null,
+      info.variants > 1 ? `${info.variants} איכויות` : null,
+      info.isLive ? null : 'הקלטה, לא שידור חי',
+    ];
+    return { isWorking: true, detail: parts.filter(Boolean).join(' · ') };
   } catch {
     return { isWorking: false, detail: 'לא נגיש (חסום, לא קיים או בלי CORS)' };
   }

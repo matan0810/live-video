@@ -4,6 +4,11 @@
   "name": "live-video-api",
   "main": "src/index.ts",
   "compatibility_date": "2026-11-01",
+  // Browser Rendering's client library needs the Node.js compatibility layer.
+  "compatibility_flags": ["nodejs_compat"],
+  // A real browser for the link finder (Cloudflare Browser Rendering; the free plan allows
+  // 10 minutes a day). Deploying needs the API token's "Browser Rendering: Edit" permission.
+  "browser": { "binding": "BROWSER" },
   "kv_namespaces": [
     {
       "binding": "KV",

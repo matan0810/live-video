@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { findIframes, findStreamLinks, MAX_STREAM_LINKS } from './streamLinks';
+import {
+  findIframes,
+  findStreamLinks,
+  isStreamRequest,
+  isTemporaryLink,
+  MAX_STREAM_LINKS,
+} from './streamLinks';
 
 const BASE = 'https://tv.example/live/';
 
@@ -46,5 +52,30 @@ describe('findIframes', () => {
       'https://tv.example/embed/player',
       'https://p.example/x',
     ]);
+  });
+});
+
+describe('isStreamRequest', () => {
+  it.each([
+    ['https://cdn.example/live/master.m3u8', true],
+    ['https://cdn.example/live/index.m3u8?token=1', true],
+    ['https://cdn.example/live/seg001.ts', false],
+    ['https://cdn.example/m3u8-guide.html', false],
+    ['http://cdn.example/live.m3u8', false],
+  ])('%s → %s', (url, expected) => {
+    expect(isStreamRequest(url)).toBe(expected);
+  });
+});
+
+describe('isTemporaryLink', () => {
+  it.each([
+    ['https://cdn.example/live.m3u8', false],
+    ['https://cdn.example/live.m3u8?quality=hd', false],
+    ['https://a.akamaized.net/x/index.m3u8?hdnea=st%3D1~exp%3D2~hmac%3Dab', true],
+    ['https://d1.cloudfront.net/x.m3u8?Policy=a&Signature=b&Key-Pair-Id=c', true],
+    ['https://cdn.example/x.m3u8?token=abc&expires=123', true],
+    ['https://a.akamaized.net/hdntl=exp=1~hmac=2/index.m3u8', true],
+  ])('%s → %s', (url, expected) => {
+    expect(isTemporaryLink(url)).toBe(expected);
   });
 });

@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- The admin link finder works in stages: the page source, then the players it embeds, then a real browser in the cloud that opens the page, starts the player and records the playlist it requests, and finally the iptv-org directory for the same website. Each link shows where it was found, its best quality, whether it is a recording, and a warning when it carries a short-lived token.
+
 ### Changed
 - The admin link finder explains when a page hides its stream address (many players fetch it only once they start), and then offers the streams the iptv-org directory lists for the same website, with short steps for finding the link in the browser's developer tools.
 

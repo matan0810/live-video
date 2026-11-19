@@ -2,6 +2,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Env } from './env';
 import worker from './index';
 
+const capture = vi.hoisted(() => ({ urls: [] as string[], calls: 0 }));
+vi.mock('./cloudflareBrowser', () => ({
+  startCloudflareSession: async () => ({
+    async open(_url: string, onRequest: (url: string) => void) {
+      capture.calls += 1;
+      for (const url of capture.urls) onRequest(url);
+    },
+    async tryPlay() {
+      // The fake page needs no nudge.
+    },
+    async close() {
+      // Nothing to release.
+    },
+  }),
+}));
+
 const ORIGIN = 'https://site.example';
 const PASSWORD = 'correct horse battery staple';
 
@@ -159,27 +175,66 @@ describe('routing', () => {
 });
 
 describe('stream link extraction', () => {
-  afterEach(() => vi.restoreAllMocks());
+  afterEach(() => {
+    vi.restoreAllMocks();
+    capture.urls = [];
+    capture.calls = 0;
+  });
 
-  it('finds links on the page and in its embedded player', async () => {
-    const pages: Record<string, string> = {
-      'https://tv.example/live':
-        '<script>src: "https://cdn.example/a.m3u8"</script><iframe src="/player"></iframe>',
-      'https://tv.example/player': '<video src="https://cdn.example/b.m3u8"></video>',
-    };
+  function servePages(pages: Record<string, string>) {
     vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
       const page = pages[String(input)];
       return page === undefined ? new Response('', { status: 404 }) : new Response(page);
     });
+  }
+
+  it('finds links on the page and in its embedded player, without a browser', async () => {
+    servePages({
+      'https://tv.example/live':
+        '<script>src: "https://cdn.example/a.m3u8"</script><iframe src="/player"></iframe>',
+      'https://tv.example/player': '<video src="https://cdn.example/b.m3u8"></video>',
+    });
+    env.BROWSER = {} as Fetcher;
     const token = await signIn();
     const response = await call('POST', '/admin/extract', {
       body: { url: 'https://tv.example/live' },
       token,
     });
     expect(await response.json()).toEqual({
-      links: ['https://cdn.example/a.m3u8', 'https://cdn.example/b.m3u8'],
+      links: [
+        { url: 'https://cdn.example/a.m3u8', source: 'page' },
+        { url: 'https://cdn.example/b.m3u8', source: 'frame' },
+      ],
       pagesScanned: 2,
+      browser: 'not-needed',
     });
+    expect(capture.calls).toBe(0);
+  });
+
+  it('opens the page in a browser when the source holds no link', async () => {
+    servePages({ 'https://tv.example/live': '<div id="app"></div>' });
+    capture.urls = ['https://site.example/app.js', 'https://cdn.example/live/master.m3u8'];
+    env.BROWSER = {} as Fetcher;
+    const token = await signIn();
+    const response = await call('POST', '/admin/extract', {
+      body: { url: 'https://tv.example/live' },
+      token,
+    });
+    expect(await response.json()).toEqual({
+      links: [{ url: 'https://cdn.example/live/master.m3u8', source: 'browser' }],
+      pagesScanned: 1,
+      browser: 'used',
+    });
+  });
+
+  it('says when no browser is configured', async () => {
+    servePages({ 'https://tv.example/live': '<div id="app"></div>' });
+    const token = await signIn();
+    const response = await call('POST', '/admin/extract', {
+      body: { url: 'https://tv.example/live' },
+      token,
+    });
+    expect(await response.json()).toMatchObject({ links: [], browser: 'unavailable' });
   });
 
   it('rejects addresses that are not https, and pages that fail to load', async () => {

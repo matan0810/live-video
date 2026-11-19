@@ -1,5 +1,6 @@
 import type { CatalogChannel } from '../../shared/channels/types';
 import type { Report, ReportInput } from '../../shared/reports';
+import type { FoundLink } from '../../shared/streamLinks';
 
 const configuredUrl: string | undefined = import.meta.env.VITE_API_URL;
 
@@ -69,9 +70,13 @@ export async function deleteReport(token: string, reportId: string) {
   return (await request<{ reports: Report[] }>(path, { method: 'DELETE', token })).reports;
 }
 
+/** How the Worker's real-browser stage went, when the page itself held no link. */
+export type BrowserOutcome = 'not-needed' | 'used' | 'unavailable' | 'limit-reached' | 'failed';
+
 export interface ExtractedLinks {
-  links: string[];
+  links: FoundLink[];
   pagesScanned: number;
+  browser: BrowserOutcome;
 }
 
 /** Asks the Worker to find stream links on a web page (and the players it embeds). */

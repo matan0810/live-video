@@ -108,6 +108,10 @@ button and admin area are hidden. It runs on Cloudflare's free plan and is deplo
    variable**: name `API_URL`, value the address from step 5. (A secret with the same name works too.)
 7. **Actions** → **Deploy** → **Run workflow**. The report button and `#/admin` are now active.
 
+The admin link finder can open pages in a real browser (Cloudflare Browser Rendering, free up
+to 10 minutes a day). For that the API token also needs **Account → Browser Rendering →
+Edit**; add it under My Profile → API Tokens → the token → Edit, before the next release.
+
 To change the password, update the `ADMIN_PASSWORD` secret and run Deploy Worker again;
 every existing admin session is signed out. Later changes to `worker/` or `shared/` deploy
 the Worker by themselves when they reach `master`.

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
-import { ApiError, extractStreamLinks } from '../api/client';
-import { CheckBadge } from './CheckBadge';
+import type { FoundLink } from '../../shared/streamLinks';
+import { ApiError, extractStreamLinks, type BrowserOutcome } from '../api/client';
+import { FoundLinkList } from './FoundLinkList';
 import { findStreamsForSite } from './siteDirectory';
 import { useStreamChecks } from './useStreamChecks';
 import styles from './Admin.module.css';
@@ -15,13 +16,14 @@ type FinderState =
   | { kind: 'idle' }
   | { kind: 'searching' }
   | { kind: 'failed'; message: string }
-  | {
-      kind: 'done';
-      links: string[];
-      pagesScanned: number;
-      /** True when the links came from the iptv-org directory, not from the page itself. */
-      fromDirectory: boolean;
-    };
+  | { kind: 'done'; links: FoundLink[]; browser: BrowserOutcome };
+
+const BROWSER_NOTES: Partial<Record<BrowserOutcome, string>> = {
+  used: 'הדף נפתח גם בדפדפן בענן.',
+  unavailable: 'הדפדפן בענן לא מוגדר ב-Worker, אז נסרק רק קוד הדף.',
+  'limit-reached': 'נוצלה המכסה היומית של הדפדפן בענן, אז נסרק רק קוד הדף. נסו שוב מחר.',
+  failed: 'הדפדפן בענן לא הצליח לפתוח את הדף.',
+};
 
 function linkCount(count: number) {
   return count === 1 ? 'קישור אחד' : `${count} קישורים`;
@@ -35,7 +37,7 @@ function describeError(error: unknown) {
   return 'החיפוש נכשל.';
 }
 
-/** Finds stream links on a channel's own web page, through the Worker. */
+/** Finds the stream links for a channel's web page: page, players, real browser, directory. */
 export function LinkFinder({ token, onCreateChannel }: LinkFinderProps) {
   const [pageUrl, setPageUrl] = useState('');
   const [state, setState] = useState<FinderState>({ kind: 'idle' });
@@ -47,17 +49,17 @@ export function LinkFinder({ token, onCreateChannel }: LinkFinderProps) {
     try {
       const url = pageUrl.trim();
       const found = await extractStreamLinks(token, url);
-      if (found.links.length > 0) {
-        setState({ kind: 'done', ...found, fromDirectory: false });
-        check(found.links);
-        return;
+      let links = found.links;
+      if (links.length === 0) {
+        // Last resort: streams the community directory lists for the same website.
+        const listed = await findStreamsForSite(url).catch(() => []);
+        links = [...new Set(listed.map((stream) => stream.url))].map((link) => ({
+          url: link,
+          source: 'directory' as const,
+        }));
       }
-      // Many sites only fetch the stream address once their player starts, so it is not in
-      // the page. Fall back to streams the community directory lists for the same site.
-      const listed = await findStreamsForSite(url).catch(() => []);
-      const links = [...new Set(listed.map((stream) => stream.url))];
-      setState({ kind: 'done', links, pagesScanned: found.pagesScanned, fromDirectory: true });
-      check(links);
+      setState({ kind: 'done', links, browser: found.browser });
+      check(links.map((link) => link.url));
     } catch (error) {
       setState({ kind: 'failed', message: describeError(error) });
     }
@@ -67,8 +69,9 @@ export function LinkFinder({ token, onCreateChannel }: LinkFinderProps) {
     <section className={styles.section}>
       <h2 className={styles.subheading}>חילוץ קישור מאתר</h2>
       <p className={styles.muted}>
-        הדביקו כתובת של דף שידור חי (למשל דף ה-Live של ערוץ). אחפש בו ובנגן שמוטמע בו קישורי m3u8,
-        ואבדוק כל אחד. אתרים שבונים את הקישור רק בזמן הניגון לא יחזירו תוצאה.
+        הדביקו כתובת של דף שידור חי. אחפש קישורי m3u8 בקוד הדף ובנגן שמוטמע בו. אם לא נמצא, אפתח את
+        הדף בדפדפן אמיתי בענן, אפעיל את הנגן ואתעד איזה קישור הוא מבקש. ואם גם זה לא עובד, אחפש
+        במאגר הקהילתי לפי כתובת האתר. כל קישור נבדק אוטומטית.
       </p>
       <form className={styles.searchForm} onSubmit={(event) => void handleSubmit(event)}>
         <input
@@ -86,6 +89,11 @@ export function LinkFinder({ token, onCreateChannel }: LinkFinderProps) {
         </button>
       </form>
 
+      {state.kind === 'searching' && (
+        <p className={styles.muted} role="status">
+          סורק… אם הדף מסתיר את הקישור, פתיחה בדפדפן בענן לוקחת עד חצי דקה.
+        </p>
+      )}
       {state.kind === 'failed' && (
         <p className={styles.error} role="alert">
           {state.message}
@@ -93,58 +101,30 @@ export function LinkFinder({ token, onCreateChannel }: LinkFinderProps) {
       )}
       {state.kind === 'done' && (
         <p className={styles.muted}>
-          {!state.fromDirectory
-            ? `נמצאו ${linkCount(state.links.length)} (נסרקו ${state.pagesScanned} דפים).`
-            : state.links.length > 0
-              ? `הדף לא חושף את הקישור (הנגן שלו טוען אותו רק בזמן הניגון), אבל המאגר הקהילתי iptv-org מכיר ${linkCount(state.links.length)} לאתר הזה:`
-              : 'הדף לא חושף את הקישור (הנגן שלו טוען אותו רק בזמן הניגון), וגם במאגר הקהילתי אין קישור לאתר הזה. נסו את החיפוש לפי שם הערוץ למטה.'}
+          {state.links.length > 0 ? `נמצאו ${linkCount(state.links.length)}.` : 'לא נמצא קישור.'}{' '}
+          {BROWSER_NOTES[state.browser]}
         </p>
       )}
 
-      {state.kind === 'done' && state.fromDirectory && (
-        <details className={styles.howTo}>
+      {state.kind === 'done' && state.links.length === 0 && (
+        <details className={styles.howTo} open>
           <summary>איך מוצאים את הקישור בעצמכם (30 שניות, במחשב)</summary>
           <ol>
             <li>לפתוח את דף השידור בכרום, וללחוץ F12.</li>
             <li>לעבור ללשונית Network, ולכתוב m3u8 בשדה הסינון.</li>
             <li>להפעיל את השידור בדף (ולרענן אם צריך).</li>
-            <li>
-              ללחוץ ימני על השורה הראשונה שמופיעה, Copy ואז Copy URL, ולהדביק כאן למעלה או ישירות
-              בערוץ חדש.
-            </li>
+            <li>ללחוץ ימני על השורה הראשונה שמופיעה, Copy ואז Copy URL, ולהדביק בערוץ חדש.</li>
           </ol>
         </details>
       )}
 
       {state.kind === 'done' && state.links.length > 0 && (
-        <ul className={styles.list}>
-          {state.links.map((link) => (
-            <li key={link} className={styles.card}>
-              <p className={styles.url} dir="ltr">
-                {link} <CheckBadge state={results.get(link)} />
-              </p>
-              <div className={styles.actions}>
-                <button type="button" className={styles.secondary} onClick={() => check([link])}>
-                  בדיקה
-                </button>
-                <button
-                  type="button"
-                  className={styles.secondary}
-                  onClick={() => void navigator.clipboard.writeText(link).catch(() => undefined)}
-                >
-                  העתקה
-                </button>
-                <button
-                  type="button"
-                  className={styles.secondary}
-                  onClick={() => onCreateChannel(link)}
-                >
-                  ערוץ חדש מהקישור
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <FoundLinkList
+          links={state.links}
+          checks={results}
+          onCheck={(url) => check([url])}
+          onCreateChannel={onCreateChannel}
+        />
       )}
     </section>
   );

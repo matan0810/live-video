@@ -1,7 +1,9 @@
 import { parseChannels } from '../../shared/channels/parseChannels';
 import { isHttpsUrl } from '../../shared/channels/url';
 import { parseReportInput, type Report } from '../../shared/reports';
-import { findIframes, findStreamLinks } from '../../shared/streamLinks';
+import { findIframes, findStreamLinks, type FoundLink } from '../../shared/streamLinks';
+import { captureStreamRequests } from './browserCapture';
+import { startCloudflareSession } from './cloudflareBrowser';
 import { createSessionToken, isCorrectPassword, requireAdmin } from './auth';
 import { KV_KEYS, type Env } from './env';
 import { corsHeaders, HttpError, json, readJson } from './http';
@@ -15,6 +17,8 @@ const MAX_LOGIN_BYTES = 1024;
 const LOGIN_LIMIT = { scope: 'login', maxRequests: 5, windowSeconds: 15 * 60 };
 const REPORT_LIMIT = { scope: 'report', maxRequests: 10, windowSeconds: 60 * 60 };
 const EXTRACT_LIMIT = { scope: 'extract', maxRequests: 30, windowSeconds: 60 * 60 };
+/** The free plan allows 10 browser minutes a day; at ~25 s a search this keeps well inside it. */
+const BROWSER_LIMIT = { scope: 'browser', maxRequests: 15, windowSeconds: 24 * 60 * 60 };
 const MAX_EXTRACT_BYTES = 1024;
 const MAX_PAGE_CHARS = 2 * 1024 * 1024;
 const MAX_IFRAMES = 3;
@@ -93,10 +97,34 @@ async function fetchPage(url: string): Promise<string | null> {
   }
 }
 
+type BrowserOutcome = 'not-needed' | 'used' | 'unavailable' | 'limit-reached' | 'failed';
+
+/** Opens the page in a real browser and records the playlists its player requests. */
+async function captureWithBrowser(
+  request: Request,
+  env: Env,
+  url: string,
+): Promise<{ links: FoundLink[]; outcome: BrowserOutcome }> {
+  const binding = env.BROWSER;
+  if (!binding) return { links: [], outcome: 'unavailable' };
+  try {
+    await enforceRateLimit(request, env, BROWSER_LIMIT);
+  } catch {
+    return { links: [], outcome: 'limit-reached' };
+  }
+  try {
+    const urls = await captureStreamRequests(() => startCloudflareSession(binding), url);
+    return { links: urls.map((link) => ({ url: link, source: 'browser' })), outcome: 'used' };
+  } catch (error) {
+    console.error('Browser capture failed', error);
+    return { links: [], outcome: 'failed' };
+  }
+}
+
 /**
- * Finds stream links on a web page and in the players it embeds (one level of iframes).
- * Only links present in the page source are found: a player that builds the address at
- * run time from a separate request will not show one.
+ * Finds stream links for a channel's web page, in stages, stopping at the first that finds
+ * something: the page source, then the players it embeds (one level of iframes), then a
+ * real browser that plays the page and records what the player requests.
  */
 async function extractStreams(request: Request, env: Env) {
   await requireAdmin(request, env);
@@ -106,15 +134,30 @@ async function extractStreams(request: Request, env: Env) {
   if (!isHttpsUrl(url)) throw new HttpError(400, 'The page address must be an https URL');
 
   const page = await fetchPage(url);
-  if (page === null) throw new HttpError(502, 'Could not load the page');
-
-  const links = findStreamLinks(page, url);
-  const iframes = findIframes(page, url).slice(0, MAX_IFRAMES);
+  const links: FoundLink[] =
+    page === null ? [] : findStreamLinks(page, url).map((link) => ({ url: link, source: 'page' }));
+  const iframes = page === null ? [] : findIframes(page, url).slice(0, MAX_IFRAMES);
   for (const frame of iframes) {
     const framePage = await fetchPage(frame);
-    if (framePage !== null) links.push(...findStreamLinks(framePage, frame));
+    if (framePage === null) continue;
+    links.push(
+      ...findStreamLinks(framePage, frame).map((link) => ({ url: link, source: 'frame' as const })),
+    );
   }
-  return json({ links: [...new Set(links)], pagesScanned: 1 + iframes.length });
+
+  // Pages that block plain requests (page === null) may still open in a real browser.
+  let browser: BrowserOutcome = 'not-needed';
+  if (links.length === 0) {
+    const captured = await captureWithBrowser(request, env, url);
+    links.push(...captured.links);
+    browser = captured.outcome;
+  }
+  if (page === null && links.length === 0) throw new HttpError(502, 'Could not load the page');
+
+  const unique = links.filter(
+    (link, index) => links.findIndex((other) => other.url === link.url) === index,
+  );
+  return json({ links: unique, pagesScanned: (page === null ? 0 : 1) + iframes.length, browser });
 }
 
 function route(request: Request, env: Env): Promise<Response> {
