@@ -27,7 +27,7 @@
 - **Link finder:** only a signed-in admin can make the Worker fetch a web page. It accepts
   https addresses only, gives up after 10 seconds, reads at most 2 MB per page, follows at
   most three embedded players, and allows 30 searches an hour. When a page holds no link,
-  the Worker may open it in Cloudflare's Browser Rendering for up to 25 seconds, at most 15
+  the Worker may open it in Cloudflare Browser Run for up to 25 seconds, at most 15
   times a day, recording only the addresses of HLS playlists the page requests. The
   browser identifies itself as automated; sites that refuse automated browsers are not
   worked around.

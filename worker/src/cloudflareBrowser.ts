@@ -25,7 +25,7 @@ const PLAY_SCRIPT = `(() => {
   }
 })()`;
 
-/** A tab in Cloudflare's Browser Rendering, adapted to what the capture needs. */
+/** A tab in Cloudflare Browser Run, adapted to what the capture needs. */
 export async function startCloudflareSession(binding: Fetcher): Promise<CaptureSession> {
   const browser = await puppeteer.launch(binding);
   const page = await browser.newPage();
