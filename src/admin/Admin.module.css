@@ -215,3 +215,22 @@ textarea.input {
   color: var(--color-accent);
   font-size: 0.875rem;
 }
+
+.howTo {
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: 0.875rem;
+}
+
+.howTo summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.howTo ol {
+  margin: 10px 0 0;
+  padding-inline-start: 20px;
+  line-height: 1.7;
+}

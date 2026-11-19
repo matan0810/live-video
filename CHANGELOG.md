@@ -8,7 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Changed
-- The admin link finder explains when a page hides its stream address (many players fetch it only once they start), and then offers the streams the iptv-org directory lists for the same website.
+- The admin link finder explains when a page hides its stream address (many players fetch it only once they start), and then offers the streams the iptv-org directory lists for the same website, with short steps for finding the link in the browser's developer tools.
 
 ## [2.4.0] - 2026-11-19
 

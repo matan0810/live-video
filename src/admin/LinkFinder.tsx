@@ -101,6 +101,21 @@ export function LinkFinder({ token, onCreateChannel }: LinkFinderProps) {
         </p>
       )}
 
+      {state.kind === 'done' && state.fromDirectory && (
+        <details className={styles.howTo}>
+          <summary>איך מוצאים את הקישור בעצמכם (30 שניות, במחשב)</summary>
+          <ol>
+            <li>לפתוח את דף השידור בכרום, וללחוץ F12.</li>
+            <li>לעבור ללשונית Network, ולכתוב m3u8 בשדה הסינון.</li>
+            <li>להפעיל את השידור בדף (ולרענן אם צריך).</li>
+            <li>
+              ללחוץ ימני על השורה הראשונה שמופיעה, Copy ואז Copy URL, ולהדביק כאן למעלה או ישירות
+              בערוץ חדש.
+            </li>
+          </ol>
+        </details>
+      )}
+
       {state.kind === 'done' && state.links.length > 0 && (
         <ul className={styles.list}>
           {state.links.map((link) => (
