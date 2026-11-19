@@ -34,15 +34,6 @@
     "sources": ["https://r.il.cdn-redge.media/livehls/oil/ch14/live/ch14/live.livx/playlist.m3u8"]
   },
   {
-    "id": "say16",
-    "name": "ערוץ 16",
-    "nameEn": "Channel 16",
-    "short": "16",
-    "language": "he",
-    "group": "israel",
-    "sources": ["https://ch16israel-cdn.encoders.immergo.tv/master.m3u8"]
-  },
-  {
     "id": "i24news",
     "name": "i24NEWS",
     "short": "i24",
@@ -53,6 +44,15 @@
       "https://i24newshebrew-cdn.encoders.immergo.tv/master.m3u8",
       "https://i24newsenglish-cdn.encoders.immergo.tv/master.m3u8"
     ]
+  },
+  {
+    "id": "say16",
+    "name": "ערוץ 16",
+    "nameEn": "Channel 16",
+    "short": "16",
+    "language": "he",
+    "group": "israel",
+    "sources": ["https://ch16israel-cdn.encoders.immergo.tv/master.m3u8"]
   },
   {
     "id": "knesset",
