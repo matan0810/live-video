@@ -7,6 +7,13 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- The admin editor shows each channel's tile as viewers will see it, and says when a logo address does not load. Logo changes arriving with a site update are previewed the same way.
+- Channel 16's logo.
+
+### Changed
+- The daily link check tests the channel list saved in the admin area, which is what viewers get, instead of the copy in the site's code.
+
 ## [2.6.0] - 2026-11-19
 
 ### Added

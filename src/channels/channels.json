@@ -50,6 +50,7 @@
     "name": "ערוץ 16",
     "nameEn": "Channel 16",
     "short": "16",
+    "logo": "https://ch16israel.vod.immergo.tv/ch16israel/uploaded/c7c1f896-addf-4818-a789-8a3eaa3eef6c.png",
     "language": "he",
     "group": "israel",
     "sources": ["https://ch16israel-cdn.encoders.immergo.tv/master.m3u8"]
