@@ -31,6 +31,11 @@
   times a day, recording only the addresses of HLS playlists the page requests. The
   browser identifies itself as automated; sites that refuse automated browsers are not
   worked around.
+- **Bookmark:** the admin area's bookmark runs only when the admin clicks it, in their own
+  browser on the page they are viewing. It reads the addresses of https HLS playlists that
+  page loaded and opens the admin area with them in the address's `#` part, which browsers
+  never send to a server. The admin area accepts at most 20 such links, validates each, and
+  removes them from the address once read.
 - **Browsers:** the API answers cross-origin requests only for the origins listed in
   `ALLOWED_ORIGINS` (`worker/wrangler.jsonc`).
 

@@ -145,6 +145,15 @@ async function main() {
   await desktop.getByRole('heading', { name: 'הניהול לא פעיל' }).waitFor();
   step('desktop: the admin area is inert without an API');
 
+  const sent = {
+    links: ['https://stream.example/live.m3u8'],
+    title: 'Test',
+    page: 'https://tv.example/',
+  };
+  await desktop.goto(`${url}#/admin?add=${encodeURIComponent(JSON.stringify(sent))}`);
+  await desktop.getByRole('heading', { name: 'הניהול לא פעיל' }).waitFor();
+  step('desktop: an address from the bookmark opens the admin area');
+
   await desktop.goto(url);
   await desktop.getByRole('button', { name: 'Switch to English' }).click();
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'ltr');

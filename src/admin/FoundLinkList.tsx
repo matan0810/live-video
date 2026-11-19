@@ -8,6 +8,7 @@ const SOURCE_LABELS: Record<LinkSource, string> = {
   frame: 'בנגן המוטמע',
   browser: 'בדפדפן בענן',
   directory: 'מהמאגר הקהילתי',
+  bookmark: 'מהסימנייה',
 };
 
 interface FoundLinkListProps {
