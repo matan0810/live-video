@@ -76,6 +76,10 @@ A channel looks like this:
 | `group`   | `israel`, `world`, `arabic` or `languages`                                                  |
 | `sources` | https HLS (`.m3u8`) links in priority order: primary first, then backups; or a `mako:` path |
 
+An important channel with no working link is not deleted: give it an empty `sources` list
+(or clear its links in the admin area). Viewers see it marked as unavailable, the daily
+check lists it apart without opening an issue, and it returns once a link is added.
+
 There are two ways to change the list:
 
 1. **Admin area** (once the Worker is set up): open `#/admin`, edit, save. The site picks

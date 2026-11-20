@@ -29,8 +29,8 @@ describe('drafts', () => {
   });
 
   it('reports invalid drafts', () => {
-    const draft = { ...toDraft(channel('one')), sourcesText: '' };
-    expect(() => draftsToChannels([draft])).toThrow(/sources/);
+    const draft = { ...toDraft(channel('one')), sourcesText: 'http://insecure.example/a.m3u8' };
+    expect(() => draftsToChannels([draft])).toThrow(/source/);
   });
 
   it('puts a suggested link first without duplicating it', () => {

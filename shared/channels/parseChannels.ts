@@ -43,8 +43,10 @@ function parseChannel(value: unknown, position: number): CatalogChannel {
   if (!isChannelGroup(group)) {
     return fail(`"group" must be one of: ${CHANNEL_GROUPS.join(', ')} (id: ${id})`);
   }
-  if (!Array.isArray(sources) || sources.length === 0) {
-    return fail(`"sources" must be a non-empty list (id: ${id})`);
+  // An empty list is allowed: an important channel with no working link right now stays
+  // listed, shown as unavailable, until a link is added.
+  if (!Array.isArray(sources)) {
+    return fail(`"sources" must be a list (id: ${id})`);
   }
   if (!sources.every(isStreamSource)) {
     return fail(`every source must be an https URL or a mako: path (id: ${id})`);

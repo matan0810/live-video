@@ -93,11 +93,15 @@ export function Player({
     onStatusChange?.(channel.id, status);
   }, [channel.id, status, onStatusChange]);
 
+  // A channel kept on the list without a working link has nothing to retry.
+  const hasNoLink = channel.sources.length === 0;
+  const isUnsupportedFormat = errorDetail?.includes('IncompatibleCodecs') ?? false;
+
   useEffect(() => {
-    if (status !== 'error') return;
+    if (status !== 'error' || hasNoLink) return;
     const timeout = setTimeout(retry, AUTO_RETRY_DELAY_MS);
     return () => clearTimeout(timeout);
-  }, [status, retry]);
+  }, [status, retry, hasNoLink]);
 
   return (
     <div className={styles.player}>
@@ -125,10 +129,19 @@ export function Player({
           </div>
         )}
 
-        {status === 'error' && (
+        {status === 'error' && hasNoLink && (
+          <div className={styles.overlay} role="alert">
+            <strong className={styles.errorTitle}>{t.noLinkTitle(name)}</strong>
+            <span className={styles.errorHint}>{t.noLinkHint}</span>
+          </div>
+        )}
+
+        {status === 'error' && !hasNoLink && (
           <div className={styles.overlay} role="alert">
             <strong className={styles.errorTitle}>{t.channelUnavailable(name)}</strong>
-            <span className={styles.errorHint}>{t.retryingSoon}</span>
+            <span className={styles.errorHint}>
+              {isUnsupportedFormat ? t.unsupportedFormat : t.retryingSoon}
+            </span>
             {errorDetail && (
               <span className={styles.errorDetail} dir="ltr">
                 {errorDetail}

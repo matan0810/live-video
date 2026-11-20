@@ -12,7 +12,7 @@ import { parseChannels } from '../shared/channels/parseChannels.ts';
 import { resolveStreamUrl } from '../shared/channels/sources.ts';
 import type { CatalogChannel } from '../shared/channels/types.ts';
 import { findStreamProblems } from '../shared/streamProblems.ts';
-import { formatReport, needsAttention, type SourceResult } from './linkReport.ts';
+import { formatReport, LIMITATIONS, needsAttention, type SourceResult } from './linkReport.ts';
 
 const CHANNELS_FILE = new URL('../src/channels/channels.json', import.meta.url);
 const TIMEOUT_MS = 15_000;
@@ -42,7 +42,9 @@ async function checkSource(url: string): Promise<SourceResult> {
     if (!body.trimStart().startsWith(HLS_SIGNATURE)) return down('not an HLS playlist');
     const allowed = response.headers.get('Access-Control-Allow-Origin');
     const problems = findStreamProblems(body, allowed, SITE_ORIGIN);
-    return { url, state: problems.length > 0 ? 'problems' : 'ok', detail: 'OK', problems };
+    const isSevere = problems.some((problem) => !LIMITATIONS.includes(problem));
+    const state = isSevere ? 'problems' : problems.length > 0 ? 'limited' : 'ok';
+    return { url, state, detail: 'OK', problems };
   } catch (error) {
     return down(error instanceof Error ? String(error.cause ?? error) : String(error));
   }

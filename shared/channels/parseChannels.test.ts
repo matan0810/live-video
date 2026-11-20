@@ -24,6 +24,10 @@ describe('parseChannels', () => {
     expect(parseChannels([withLogo])).toEqual([withLogo]);
   });
 
+  it('keeps a channel that has no working link right now', () => {
+    expect(parseChannels([{ ...valid, sources: [] }])).toEqual([{ ...valid, sources: [] }]);
+  });
+
   it.each([
     ['a non-array', { ...valid }],
     ['an invalid id', [{ ...valid, id: 'Not Valid' }]],
@@ -34,7 +38,6 @@ describe('parseChannels', () => {
     ['a logo outside logos/', [{ ...valid, logo: '../secret.svg' }]],
     ['an http logo', [{ ...valid, logo: 'http://a.example/logo.png' }]],
     ['an unknown language', [{ ...valid, language: 'xx' }]],
-    ['an empty source list', [{ ...valid, sources: [] }]],
     ['a non-https source', [{ ...valid, sources: ['http://example.com/live.m3u8'] }]],
     ['a malformed source', [{ ...valid, sources: ['not a url'] }]],
     ['duplicate ids', [valid, valid]],

@@ -62,9 +62,8 @@ export function App() {
   const { favoriteIds, toggleFavorite } = useFavorites();
   const { customChannels, addCustomChannel, removeCustomChannel } = useCustomChannels();
   const [isTheaterMode, setIsTheaterMode] = useState(false);
-  const [unavailableChannelIds, setUnavailableChannelIds] = useState<ReadonlySet<string>>(
-    () => new Set(),
-  );
+  /** Channels whose stream failed while trying to play them, in this visit. */
+  const [failedChannelIds, setFailedChannelIds] = useState<ReadonlySet<string>>(() => new Set());
 
   const sections = useMemo(
     () => buildSections(catalogChannels, customChannels, favoriteIds, t),
@@ -76,10 +75,19 @@ export function App() {
     [sections],
   );
   const activeChannel = orderedChannels.find((channel) => channel.id === activeChannelId) ?? null;
+  /** Failed ones, and those kept on the list without any link, marked before anyone tries. */
+  const unavailableChannelIds = useMemo(
+    () =>
+      new Set([
+        ...failedChannelIds,
+        ...orderedChannels.filter((channel) => channel.sources.length === 0).map(({ id }) => id),
+      ]),
+    [failedChannelIds, orderedChannels],
+  );
 
   const handleStatusChange = useCallback((channelId: string, status: PlayerStatus) => {
     if (status === 'loading') return;
-    setUnavailableChannelIds((current) => {
+    setFailedChannelIds((current) => {
       const isUnavailable = status === 'error';
       if (current.has(channelId) === isUnavailable) return current;
       const next = new Set(current);

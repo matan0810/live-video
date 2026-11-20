@@ -64,6 +64,14 @@ async function main() {
   await desktop.getByRole('button', { name: 'כאן 11 לא זמין כרגע' }).waitFor();
   step('desktop: unreachable channel shows the error state and is marked in the list');
 
+  // Kept on the list without a link: marked before anyone tries, and nothing to retry.
+  await desktop.getByRole('button', { name: 'Fox News לא זמין כרגע' }).waitFor();
+  await desktop.getByRole('button', { name: 'Fox News לא זמין כרגע' }).click();
+  await desktop.getByRole('alert').getByText('אין כרגע קישור לשידור').waitFor();
+  assert.equal(await desktop.getByRole('button', { name: 'נסה שוב עכשיו' }).count(), 0);
+  await desktop.getByRole('button', { name: 'כאן 11 לא זמין כרגע' }).click();
+  step('desktop: a channel with no link is shown as unavailable, without retries');
+
   await desktop.keyboard.press('ArrowDown');
   await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
   await desktop.keyboard.press('Digit1');

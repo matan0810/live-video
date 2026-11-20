@@ -17,6 +17,10 @@ describe('channelVerdict', () => {
     expect(channelVerdict([source('problems'), source('down')])).toBe('problems');
     expect(channelVerdict([source('down'), source('abroad')])).toBe('down');
     expect(channelVerdict([source('abroad')])).toBe('abroad');
+    expect(channelVerdict([source('down'), source('limited', { problems: ['hevc-only'] })])).toBe(
+      'limited',
+    );
+    expect(channelVerdict([])).toBe('no-link');
   });
 });
 
@@ -27,6 +31,7 @@ describe('needsAttention', () => {
       needsAttention([channel([source('down'), source('ok')]), channel([source('abroad')])]),
     ).toBe(false);
     expect(needsAttention([channel([source('problems')])])).toBe(true);
+    expect(needsAttention([channel([]), channel([source('limited')])])).toBe(false);
     expect(needsAttention([channel([source('down')])])).toBe(true);
   });
 });
@@ -38,6 +43,7 @@ describe('formatReport', () => {
         { name: 'Silent', id: 'silent', sources: [source('problems')] },
         { name: 'Kan', id: 'kan', sources: [source('abroad')] },
         { name: 'Fine', id: 'fine', sources: [source('ok')] },
+        { name: 'Waiting', id: 'waiting', sources: [] },
       ],
       'הרשימה שבניהול',
     );
@@ -45,5 +51,6 @@ describe('formatReport', () => {
     expect(report).toContain('קישור ראשי: בלי קול');
     expect(report).toContain('### לא ניתן לבדוק מחוץ לישראל');
     expect(report).not.toContain('Fine');
+    expect(report).toContain('### בלי קישור (מוצגים לצופים כלא זמינים)');
   });
 });
