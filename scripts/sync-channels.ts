@@ -6,10 +6,12 @@
  * Prints a Markdown summary. Leaves channels.json untouched when no list was saved.
  */
 import { readFile, writeFile } from 'node:fs/promises';
+import { isSavedListCurrent, isVersion } from '../shared/channels/listVersion.ts';
 import { parseChannels } from '../shared/channels/parseChannels.ts';
 import type { CatalogChannel } from '../shared/channels/types.ts';
 
 const CHANNELS_FILE = new URL('../src/channels/channels.json', import.meta.url);
+const PACKAGE_FILE = new URL('../package.json', import.meta.url);
 const TIMEOUT_MS = 15_000;
 
 function summarize(before: readonly CatalogChannel[], after: readonly CatalogChannel[]) {
@@ -48,6 +50,19 @@ async function main() {
   if (saved === undefined) throw new Error('The Worker answered without a channel list');
   if (saved === null) {
     console.log('No list was saved in the admin area yet; the code is left as it is.');
+    return;
+  }
+  // A list saved on an older release than the code is not newer than the code: copying it
+  // would undo channel changes made in code since. Only saves on this version or later count.
+  const appVersion =
+    typeof body === 'object' && body !== null && 'appVersion' in body && isVersion(body.appVersion)
+      ? body.appVersion
+      : null;
+  const { version } = JSON.parse(await readFile(PACKAGE_FILE, 'utf8')) as { version: string };
+  if (!isSavedListCurrent(appVersion, version)) {
+    console.log(
+      `The saved list predates version ${version} (saved on ${appVersion ?? 'an unversioned site'}); the code is left as it is.`,
+    );
     return;
   }
 

@@ -8,7 +8,11 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Fixed
+- Channel changes in a release reach viewers at once. Until now the list saved in the admin area kept overriding them until each change was accepted there, so the new channels, logos and link fixes of 2.7.0 never appeared. A saved list now records the site version it was saved on; a newer release brings its own list (the admin's list is copied into it before every release), and the next save in the admin area wins again.
 - Channel logos are stored with the site instead of loading from Wikimedia, which had started refusing many of them, so most channels showed no logo.
+
+### Removed
+- The admin area's "channels from the site update" panel, which the fix above makes unnecessary.
 
 ## [2.7.0] - 2026-11-20
 

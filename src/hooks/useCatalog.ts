@@ -1,24 +1,15 @@
 import { useEffect, useMemo } from 'react';
-import { parseChannels } from '../../shared/channels/parseChannels';
 import { API_URL, fetchRemoteChannels } from '../api/client';
 import { bundledChannels, type CatalogChannel } from '../channels';
+import { effectiveChannels } from '../channels/effectiveChannels';
 import { useLocalStorage } from './useLocalStorage';
 
 const CACHE_KEY = 'live-video:remote-channels';
 
-function parseOrNull(data: unknown): CatalogChannel[] | null {
-  try {
-    const channels = parseChannels(data);
-    return channels.length > 0 ? channels : null;
-  } catch {
-    return null;
-  }
-}
-
 /**
- * The built-in channel list. Starts from the last list the API returned (cached locally)
- * or the one bundled with the site, then refreshes from the API in the background.
- * Any failure leaves the current list in place.
+ * The built-in channel list: the admin's saved list when it is current for this release,
+ * else the release's own (see effectiveChannels). Starts from the last API answer (cached
+ * locally) and refreshes in the background; any failure leaves the current list in place.
  */
 export function useCatalog(): readonly CatalogChannel[] {
   const [cached, setCached] = useLocalStorage<unknown>(CACHE_KEY, null);
@@ -38,5 +29,5 @@ export function useCatalog(): readonly CatalogChannel[] {
     };
   }, [cachedJson, setCached]);
 
-  return useMemo(() => parseOrNull(cached) ?? bundledChannels, [cached]);
+  return useMemo(() => effectiveChannels(cached, bundledChannels, __APP_VERSION__), [cached]);
 }

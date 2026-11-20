@@ -88,15 +88,17 @@ There are two ways to change the list:
    site is built with, used until the admin saves a list and whenever the Worker cannot be
    reached. An invalid file fails the checks and is not deployed.
 
-Once a list is saved in the admin area it takes precedence over the file. The two are
-kept in step both ways:
+Which one viewers get is decided by version (`shared/channels/listVersion.ts`): a list
+saved in the admin area records the site version it was saved on. It wins until a newer
+release ships; that release's own `channels.json` then takes over at once, with no step in
+the admin area, and the next save there wins again. So nothing saved is lost, the admin's
+list is copied into the code before every release (CLAUDE.md, section 8):
 
-- **Admin → code:** the _Sync channels_ workflow (`.github/workflows/sync-channels.yml`,
-  weekly and by hand from the Actions tab) copies the saved list into `channels.json` on
-  `dev`, after every check passes. The next release then ships it as the fallback, and git
-  keeps its history. It needs the `API_URL` variable, as the deploy does.
-- **Code → admin:** when a release adds or changes a channel in `channels.json`, the admin
-  area shows it under "ערוצים מעדכון האתר", to accept into the live list or decline.
+- The _Sync channels_ workflow (`.github/workflows/sync-channels.yml`, weekly and by hand
+  from the Actions tab) copies the saved list into `channels.json` on `dev` after every
+  check passes, and git keeps its history. It copies only a list saved on the code's
+  version or later, so it never undoes changes made in code. It needs the `API_URL`
+  variable, as the deploy does.
 
 ## Setting up the Worker
 

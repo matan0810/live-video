@@ -144,11 +144,17 @@ describe('admin endpoints', () => {
 
 describe('channels', () => {
   it('returns null until a list is saved, then the saved list', async () => {
-    expect(await (await call('GET', '/channels')).json()).toEqual({ channels: null });
+    expect(await (await call('GET', '/channels')).json()).toEqual({
+      channels: null,
+      appVersion: null,
+    });
 
     const token = await signIn();
     expect((await call('PUT', '/admin/channels', { body: [channel], token })).status).toBe(200);
-    expect(await (await call('GET', '/channels')).json()).toEqual({ channels: [channel] });
+    expect(await (await call('GET', '/channels')).json()).toEqual({
+      channels: [channel],
+      appVersion: null,
+    });
   });
 
   it('rejects an invalid list and keeps the saved one', async () => {
@@ -156,7 +162,10 @@ describe('channels', () => {
     await call('PUT', '/admin/channels', { body: [channel], token });
     const invalid = [{ ...channel, sources: ['http://a.example/live.m3u8'] }];
     expect((await call('PUT', '/admin/channels', { body: invalid, token })).status).toBe(400);
-    expect(await (await call('GET', '/channels')).json()).toEqual({ channels: [channel] });
+    expect(await (await call('GET', '/channels')).json()).toEqual({
+      channels: [channel],
+      appVersion: null,
+    });
   });
 
   it('keeps the previous list as a backup', async () => {
@@ -164,6 +173,37 @@ describe('channels', () => {
     await call('PUT', '/admin/channels', { body: [channel], token });
     await call('PUT', '/admin/channels', { body: [], token });
     expect(JSON.parse(kv.store.get('channels:previous') ?? 'null')).toEqual([channel]);
+  });
+});
+
+describe('channel list version', () => {
+  it('stores the site version a list was saved on, and reports it', async () => {
+    const token = await signIn();
+    const saved = await call('PUT', '/admin/channels', {
+      body: { channels: [channel], appVersion: '2.7.1' },
+      token,
+    });
+    expect(saved.status).toBe(200);
+    expect(await (await call('GET', '/channels')).json()).toEqual({
+      channels: [channel],
+      appVersion: '2.7.1',
+    });
+  });
+
+  it('still accepts a bare list from older sites, with no version', async () => {
+    const token = await signIn();
+    kv.store.set('channels:version', '2.7.1');
+    expect((await call('PUT', '/admin/channels', { body: [channel], token })).status).toBe(200);
+    expect(await (await call('GET', '/channels')).json()).toEqual({
+      channels: [channel],
+      appVersion: null,
+    });
+  });
+
+  it('rejects a malformed version', async () => {
+    const token = await signIn();
+    const body = { channels: [channel], appVersion: '2.7.1; drop' };
+    expect((await call('PUT', '/admin/channels', { body, token })).status).toBe(400);
   });
 });
 

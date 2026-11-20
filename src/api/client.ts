@@ -48,13 +48,20 @@ async function request<T>(
   return data as T;
 }
 
+/** The list saved in the admin area (unvalidated; null when none) and the site version it was saved on. */
+export interface RemoteChannels {
+  channels: unknown;
+  appVersion: unknown;
+}
+
 /**
- * The remotely managed channel list, unvalidated; null when none has been saved.
- * `fresh` skips the browser's one-minute copy: the admin area must never edit a stale list.
+ * The remotely managed channel list. `fresh` skips the browser's one-minute copy: the
+ * admin area must never edit a stale list.
  */
-export async function fetchRemoteChannels({ fresh = false } = {}): Promise<unknown> {
+export async function fetchRemoteChannels({ fresh = false } = {}): Promise<RemoteChannels> {
   const options: RequestOptions = fresh ? { cache: 'no-cache' } : {};
-  return (await request<{ channels: unknown }>('/channels', options)).channels;
+  const { channels, appVersion } = await request<RemoteChannels>('/channels', options);
+  return { channels, appVersion };
 }
 
 export async function submitReport(report: ReportInput) {
@@ -67,7 +74,8 @@ export async function login(password: string) {
 }
 
 export async function saveChannels(token: string, channels: readonly CatalogChannel[]) {
-  await request('/admin/channels', { method: 'PUT', body: channels, token });
+  const body = { channels, appVersion: __APP_VERSION__ };
+  await request('/admin/channels', { method: 'PUT', body, token });
 }
 
 export async function fetchReports(token: string) {

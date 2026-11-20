@@ -1,3 +1,4 @@
+import { isVersion } from '../../shared/channels/listVersion';
 import { parseChannels } from '../../shared/channels/parseChannels';
 import { isHttpsUrl } from '../../shared/channels/url';
 import { parseReportInput } from '../../shared/reports';
@@ -25,17 +26,28 @@ const PAGE_TIMEOUT_MS = 10_000;
 const PAGE_HEADERS = { 'User-Agent': 'Mozilla/5.0 (compatible; OnAir link finder)' };
 
 async function getChannels(env: Env) {
-  const channels = await env.KV.get(KV_KEYS.channels, 'json');
-  // Null tells the site to keep using the list it was built with.
-  return json({ channels }, 200, { 'Cache-Control': 'public, max-age=60' });
+  const [channels, appVersion] = await Promise.all([
+    env.KV.get(KV_KEYS.channels, 'json'),
+    env.KV.get(KV_KEYS.channelsVersion),
+  ]);
+  // Null channels tell the site to keep the list it was built with; the version tells it
+  // whether this list is newer than that one (see shared/channels/listVersion.ts).
+  return json({ channels, appVersion: isVersion(appVersion) ? appVersion : null }, 200, {
+    'Cache-Control': 'public, max-age=60',
+  });
 }
 
 async function saveChannels(request: Request, env: Env) {
   await requireAdmin(request, env);
   const body = await readJson(request, MAX_CHANNELS_BYTES);
+  // Sites before 2.7.1 send the bare list; newer ones add the version they run.
+  const isWrapped = typeof body === 'object' && body !== null && !Array.isArray(body);
+  const list = isWrapped && 'channels' in body ? body.channels : body;
+  const appVersion = isWrapped && 'appVersion' in body ? body.appVersion : null;
+  if (appVersion !== null && !isVersion(appVersion)) throw new HttpError(400, 'Invalid version');
   let channels;
   try {
-    channels = parseChannels(body);
+    channels = parseChannels(list);
   } catch (error) {
     throw new HttpError(400, error instanceof Error ? error.message : 'Invalid channel list');
   }
@@ -43,7 +55,9 @@ async function saveChannels(request: Request, env: Env) {
   const previous = await env.KV.get(KV_KEYS.channels);
   if (previous) await env.KV.put(KV_KEYS.previousChannels, previous);
   await env.KV.put(KV_KEYS.channels, JSON.stringify(channels));
-  return json({ channels });
+  if (appVersion === null) await env.KV.delete(KV_KEYS.channelsVersion);
+  else await env.KV.put(KV_KEYS.channelsVersion, appVersion);
+  return json({ channels, appVersion });
 }
 
 async function login(request: Request, env: Env) {

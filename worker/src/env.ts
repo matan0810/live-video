@@ -19,4 +19,6 @@ export interface Env {
 export const KV_KEYS = {
   channels: 'channels',
   previousChannels: 'channels:previous',
+  /** The site version the list was saved on. */
+  channelsVersion: 'channels:version',
 } as const;

@@ -8,6 +8,7 @@
  * cannot be watched.
  */
 import { readFile } from 'node:fs/promises';
+import { isSavedListCurrent, isVersion } from '../shared/channels/listVersion.ts';
 import { parseChannels } from '../shared/channels/parseChannels.ts';
 import { resolveStreamUrl } from '../shared/channels/sources.ts';
 import type { CatalogChannel } from '../shared/channels/types.ts';
@@ -15,6 +16,7 @@ import { findStreamProblems } from '../shared/streamProblems.ts';
 import { formatReport, LIMITATIONS, needsAttention, type SourceResult } from './linkReport.ts';
 
 const CHANNELS_FILE = new URL('../src/channels/channels.json', import.meta.url);
+const PACKAGE_FILE = new URL('../package.json', import.meta.url);
 const TIMEOUT_MS = 15_000;
 const HLS_SIGNATURE = '#EXTM3U';
 const SITE_ORIGIN = 'https://matan0810.github.io';
@@ -65,6 +67,18 @@ async function loadChannels(): Promise<{ channels: CatalogChannel[]; from: strin
     const saved =
       typeof body === 'object' && body !== null && 'channels' in body ? body.channels : null;
     if (saved === null || saved === undefined) return await fromCode('לא נשמרה רשימה בניהול');
+    // Viewers get the release's list when the saved one predates it (see listVersion.ts).
+    const appVersion =
+      typeof body === 'object' &&
+      body !== null &&
+      'appVersion' in body &&
+      isVersion(body.appVersion)
+        ? body.appVersion
+        : null;
+    const { version } = JSON.parse(await readFile(PACKAGE_FILE, 'utf8')) as { version: string };
+    if (!isSavedListCurrent(appVersion, version)) {
+      return await fromCode(`הרשימה שבניהול ישנה מגרסה ${version}`);
+    }
     return { channels: parseChannels(saved), from: 'הרשימה שבניהול' };
   } catch (error) {
     return fromCode(`אין גישה לוורקר: ${error instanceof Error ? error.message : error}`);

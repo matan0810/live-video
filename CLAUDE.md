@@ -150,6 +150,10 @@ cannot push tags, so never try.
 - [ ] `## [Unreleased]` in `CHANGELOG.md` describes everything in
       `git log origin/master..origin/dev`. If it is empty there is nothing to release: say so.
 - [ ] Pick the bump by section 7 and tell the owner which one and why.
+- [ ] Bring the admin's latest channel list into the code first: a release's list replaces
+      a list saved on an older version, so anything not synced would disappear for viewers.
+      Run `API_URL=<worker url> node scripts/sync-channels.ts`, review the diff, run the
+      checks and commit it (`Sync channels from the admin area`) before bumping.
 
 ### Release
 
