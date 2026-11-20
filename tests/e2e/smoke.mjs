@@ -127,13 +127,16 @@ async function main() {
   assert.equal(
     await desktop
       .locator('li', { hasText: 'מכאן 33' })
-      .locator('span', { hasText: /^AR$/ })
+      .locator('span:not(:has(span))', { hasText: /^AR$/ })
       .count(),
     1,
     'an Arabic channel among the Israeli ones is tagged',
   );
   assert.equal(
-    await desktop.locator('li', { hasText: 'רשת 13' }).locator('span', { hasText: /^HE$/ }).count(),
+    await desktop
+      .locator('li', { hasText: 'רשת 13' })
+      .locator('span:not(:has(span))', { hasText: /^HE$/ })
+      .count(),
     0,
   );
   step('desktop: language tags only where the section does not say it');

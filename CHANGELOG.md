@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- Channel logos are stored with the site instead of loading from Wikimedia, which had started refusing many of them, so most channels showed no logo.
+
 ## [2.7.0] - 2026-11-20
 
 ### Added
