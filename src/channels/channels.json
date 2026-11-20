@@ -99,6 +99,7 @@
     "name": "ערוץ הקומדיות",
     "nameEn": "Comedy Channel",
     "short": "קומדי",
+    "logo": "https://images.frp1.ott.kaltura.com/Service.svc/GetImage/p/5031/entry_id/fc0d8109a18a4db3b585f154d32bd5b1/version/93/width/288/height/153/",
     "language": "he",
     "group": "israel",
     "sources": [
@@ -144,7 +145,7 @@
     "id": "sky-news",
     "name": "Sky News",
     "short": "SKY",
-    "logo": "https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1404.png",
+    "logo": "logos/sky-news.svg",
     "language": "en",
     "group": "world",
     "sources": []
