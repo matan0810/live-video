@@ -9,6 +9,13 @@
   // A real browser for the link finder (Cloudflare Browser Run (formerly Browser Rendering); the free plan allows
   // 10 minutes a day). Deploying needs the API token's "Browser Run: Edit" permission.
   "browser": { "binding": "BROWSER" },
+  // Keeps the Worker's own log lines (Workers Logs, free) so failures can be diagnosed.
+  // Cloudflare's automatic per-request log is off: it would store request headers. The
+  // Worker logs one line per request itself, without addresses, tokens or bodies.
+  "observability": {
+    "enabled": true,
+    "logs": { "invocation_logs": false },
+  },
   "kv_namespaces": [
     {
       "binding": "KV",

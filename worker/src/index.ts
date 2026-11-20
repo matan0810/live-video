@@ -191,6 +191,7 @@ export default {
     const cors = corsHeaders(request, env);
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
 
+    const startedAt = Date.now();
     let response: Response;
     try {
       response = await route(request, env);
@@ -204,6 +205,10 @@ export default {
 
     for (const [name, value] of Object.entries(cors)) response.headers.set(name, value);
     response.headers.set('X-Content-Type-Options', 'nosniff');
+    // Method, path and outcome only: no address, token, query or body is logged.
+    console.log(
+      `${request.method} ${new URL(request.url).pathname} ${response.status} ${Date.now() - startedAt}ms`,
+    );
     return response;
   },
 } satisfies ExportedHandler<Env>;

@@ -11,6 +11,10 @@
   a rate-limit counter, which expires with the limit's window (an hour for reports, 15
   minutes for logins). Raw addresses are never stored.
 - The admin's session token is kept in the admin's browser.
+- **Worker logs (Cloudflare Workers Logs):** one line per request with its method, path,
+  status and duration, plus error messages. No addresses, tokens, queries or bodies.
+  Cloudflare's automatic request log, which would include headers, is turned off. Logs
+  are kept for Cloudflare's retention period (a few days on the free plan).
 
 ## What is protected
 
