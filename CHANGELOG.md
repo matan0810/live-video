@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.7.3] - 2026-11-20
+
 ### Changed
 - N12 is shown as unavailable again: mako's servers refuse its stream to any site but mako's own, from Israel too.
 - Al Jazeera (English and Arabic) moved to the bottom of its sections.
