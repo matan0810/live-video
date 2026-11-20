@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Fixed
+- Signing in to the admin area no longer hangs when Cloudflare's rate limiter is slow or failing at the nearest location: the Worker waits at most a second for it (the 15-minute login limit still applies). The login screen gives up after 20 seconds and says whether the server did not answer, the connection failed, or which error it returned.
 - Channel changes in a release reach viewers at once. Until now the list saved in the admin area kept overriding them until each change was accepted there, so the new channels, logos and link fixes of 2.7.0 never appeared. A saved list now records the site version it was saved on; a newer release brings its own list (the admin's list is copied into it before every release), and the next save in the admin area wins again.
 - Channel logos are stored with the site instead of loading from Wikimedia, which had started refusing many of them, so most channels showed no logo.
 

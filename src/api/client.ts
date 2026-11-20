@@ -7,6 +7,9 @@ const configuredUrl: string | undefined = import.meta.env.VITE_API_URL;
 /** Base address of the Worker API, or null when the site is built without one. */
 export const API_URL = configuredUrl ? configuredUrl.replace(/\/+$/, '') : null;
 
+/** A request that has not answered by then is given up, so the page never hangs. */
+const REQUEST_TIMEOUT_MS = 20_000;
+
 export class ApiError extends Error {
   constructor(
     readonly status: number,
@@ -33,12 +36,20 @@ async function request<T>(
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const response = await fetch(`${API_URL}${path}`, {
-    method,
-    headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
-    cache,
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      method,
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body),
+      cache,
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
+  } catch (error) {
+    // Status 0: no answer at all (offline, blocked, or the server took too long).
+    const isTimeout = error instanceof DOMException && error.name === 'TimeoutError';
+    throw new ApiError(0, isTimeout ? 'timeout' : 'network');
+  }
   const data: unknown = await response.json().catch(() => null);
   if (!response.ok) {
     const message =

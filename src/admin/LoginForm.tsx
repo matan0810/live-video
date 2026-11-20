@@ -11,7 +11,13 @@ function describeError(error: unknown) {
   if (error instanceof ApiError && error.status === 429) {
     return 'יותר מדי ניסיונות. נסו שוב בעוד רבע שעה.';
   }
-  return 'ההתחברות נכשלה. בדקו את החיבור ונסו שוב.';
+  if (error instanceof ApiError && error.status === 0) {
+    return error.message === 'timeout'
+      ? 'השרת לא ענה בזמן. נסו שוב, ואם זה חוזר, נסו ברשת אחרת (Wi-Fi או סלולרי).'
+      : 'אין חיבור לשרת. בדקו את החיבור ונסו שוב.';
+  }
+  const code = error instanceof ApiError ? ` (HTTP ${error.status})` : '';
+  return `ההתחברות נכשלה${code}. נסו שוב בעוד דקה.`;
 }
 
 export function LoginForm({ onSignIn }: LoginFormProps) {

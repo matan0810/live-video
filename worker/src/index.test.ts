@@ -176,6 +176,19 @@ describe('channels', () => {
   });
 });
 
+describe('rate limiter trouble', () => {
+  it('lets a login through when the limiter throws or never answers', async () => {
+    env.LOGIN_LIMITER = {
+      limit: () => Promise.reject(new Error('limiter down')),
+    } as unknown as Env['LOGIN_LIMITER'];
+    expect((await call('POST', '/admin/login', { body: { password: PASSWORD } })).status).toBe(200);
+    env.LOGIN_LIMITER = {
+      limit: () => new Promise(() => undefined),
+    } as unknown as Env['LOGIN_LIMITER'];
+    expect((await call('POST', '/admin/login', { body: { password: PASSWORD } })).status).toBe(200);
+  });
+});
+
 describe('channel list version', () => {
   it('stores the site version a list was saved on, and reports it', async () => {
     const token = await signIn();
