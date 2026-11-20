@@ -16,6 +16,13 @@
     "enabled": true,
     "logs": { "invocation_logs": false },
   },
+  // Cloudflare's rate limiter: per address, per minute, free, and it writes nothing to KV.
+  // The namespace ids are arbitrary numbers that keep the three counters apart.
+  "ratelimits": [
+    { "name": "LOGIN_LIMITER", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } },
+    { "name": "REPORT_LIMITER", "namespace_id": "1002", "simple": { "limit": 3, "period": 60 } },
+    { "name": "EXTRACT_LIMITER", "namespace_id": "1003", "simple": { "limit": 10, "period": 60 } },
+  ],
   "kv_namespaces": [
     {
       "binding": "KV",

@@ -1,5 +1,5 @@
 export interface Env {
-  /** Stores the channel list, viewer reports and rate-limit counters. */
+  /** Stores the channel list, viewer reports and the long-window rate-limit counters. */
   KV: KVNamespace;
   /** Secret. The only credential for the admin API. */
   ADMIN_PASSWORD: string;
@@ -10,10 +10,13 @@ export interface Env {
    * stream address only at run time. Optional: without it the finder scans pages only.
    */
   BROWSER?: Fetcher;
+  /** Cloudflare rate limiters (per address, per minute); see wrangler.jsonc. */
+  LOGIN_LIMITER: RateLimit;
+  REPORT_LIMITER: RateLimit;
+  EXTRACT_LIMITER: RateLimit;
 }
 
 export const KV_KEYS = {
   channels: 'channels',
   previousChannels: 'channels:previous',
-  reports: 'reports',
 } as const;

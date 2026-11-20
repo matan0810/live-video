@@ -18,6 +18,8 @@ breaking changes are major.
 - The page appears faster: the video library loads after it, in parallel.
 - The daily link check tests the channel list saved in the admin area, which is what viewers get, instead of the copy in the site's code.
 - The Worker keeps a short log in Cloudflare (each request's path, result and duration, and any error), so failures can be diagnosed. Nothing about the sender is logged.
+- Viewer reports are stored one by one, so two reports sent at the same moment can no longer overwrite each other, and they delete themselves after 90 days. Existing reports are carried over.
+- Login attempts, reports and link searches are limited per minute by Cloudflare's own rate limiter, which stores nothing, so a flood of requests cannot use up the storage allowance the admin's saves need.
 - The daily link check also catches links that answer but cannot be watched (no sound, below 360p, HEVC only, a recording, or a server that refuses the site), reports in Hebrew, and lists Kan's channels as not checkable from abroad instead of as broken.
 
 ## [2.6.0] - 2026-11-19

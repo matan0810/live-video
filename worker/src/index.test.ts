@@ -31,6 +31,26 @@ function createFakeKv() {
       return value !== null && type === 'json' ? JSON.parse(value) : value;
     },
     put: async (key: string, value: string) => void store.set(key, value),
+    delete: async (key: string) => void store.delete(key),
+    list: async ({ prefix = '', limit = 1000 }: { prefix?: string; limit?: number }) => ({
+      keys: [...store.keys()]
+        .filter((name) => name.startsWith(prefix))
+        .sort()
+        .slice(0, limit)
+        .map((name) => ({ name })),
+    }),
+  };
+}
+
+/** Cloudflare's per-minute rate limiter, counting in memory like the real one. */
+function createFakeLimiter(limit: number) {
+  const counts = new Map<string, number>();
+  return {
+    limit: async ({ key }: { key: string }) => {
+      const count = (counts.get(key) ?? 0) + 1;
+      counts.set(key, count);
+      return { success: count <= limit };
+    },
   };
 }
 
@@ -39,7 +59,14 @@ let env: Env;
 
 beforeEach(() => {
   kv = createFakeKv();
-  env = { KV: kv as unknown as Env['KV'], ADMIN_PASSWORD: PASSWORD, ALLOWED_ORIGINS: ORIGIN };
+  env = {
+    KV: kv as unknown as Env['KV'],
+    ADMIN_PASSWORD: PASSWORD,
+    ALLOWED_ORIGINS: ORIGIN,
+    LOGIN_LIMITER: createFakeLimiter(5),
+    REPORT_LIMITER: createFakeLimiter(3),
+    EXTRACT_LIMITER: createFakeLimiter(10),
+  };
 });
 
 function call(method: string, path: string, options: { body?: unknown; token?: string } = {}) {
@@ -162,9 +189,40 @@ describe('reports', () => {
     expect((await call('POST', '/reports', { body: oversized })).status).toBe(413);
   });
 
-  it('limits how many reports one address can send', async () => {
-    for (let count = 0; count < 10; count += 1) await call('POST', '/reports', { body: report });
+  it('limits how many reports one address can send, without writing to KV for it', async () => {
+    for (let count = 0; count < 3; count += 1) await call('POST', '/reports', { body: report });
     expect((await call('POST', '/reports', { body: report })).status).toBe(429);
+    expect([...kv.store.keys()].filter((key) => key.startsWith('rate:'))).toEqual([]);
+  });
+
+  it('keeps reports sent at the same moment, newest first', async () => {
+    await Promise.all(
+      ['a', 'b', 'c'].map((note) => call('POST', '/reports', { body: { ...report, note } })),
+    );
+    const token = await signIn();
+    const { reports } = (await (await call('GET', '/admin/reports', { token })).json()) as {
+      reports: { note: string; createdAt: string }[];
+    };
+    expect(reports.map((item) => item.note).sort()).toEqual(['a', 'b', 'c']);
+    const times = reports.map((item) => item.createdAt);
+    expect(times).toEqual([...times].sort().reverse());
+  });
+
+  it('carries over reports stored in the old single list', async () => {
+    const old = { ...report, note: 'old', id: 'legacy', createdAt: '2026-01-01T00:00:00.000Z' };
+    kv.store.set('reports', JSON.stringify([old, { junk: true }]));
+    const token = await signIn();
+    const { reports } = (await (await call('GET', '/admin/reports', { token })).json()) as {
+      reports: { note: string; id: string }[];
+    };
+    expect(reports).toMatchObject([{ note: 'old' }]);
+    expect(reports[0]?.id).toMatch(/^\d{13}-/);
+    expect(kv.store.has('reports')).toBe(false);
+  });
+
+  it('refuses to delete an id that is not a report id', async () => {
+    const token = await signIn();
+    expect((await call('DELETE', '/admin/reports/..%2Fchannels', { token })).status).toBe(404);
   });
 });
 

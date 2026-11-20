@@ -1,22 +1,21 @@
 import { parseChannels } from '../../shared/channels/parseChannels';
 import { isHttpsUrl } from '../../shared/channels/url';
-import { parseReportInput, type Report } from '../../shared/reports';
+import { parseReportInput } from '../../shared/reports';
 import { findIframes, findStreamLinks, type FoundLink } from '../../shared/streamLinks';
 import { captureStreamRequests } from './browserCapture';
 import { startCloudflareSession } from './cloudflareBrowser';
 import { createSessionToken, isCorrectPassword, requireAdmin } from './auth';
 import { KV_KEYS, type Env } from './env';
 import { corsHeaders, HttpError, json, readJson } from './http';
-import { enforceRateLimit } from './rateLimit';
+import { enforceBurstLimit, enforceWindowLimit } from './rateLimit';
+import { addReport, isReportId, listReports as readReports, removeReport } from './reports';
 
-const MAX_REPORTS = 200;
 const MAX_REPORT_BYTES = 4 * 1024;
 const MAX_CHANNELS_BYTES = 256 * 1024;
 const MAX_LOGIN_BYTES = 1024;
 
+/** On top of the per-minute limit, which alone would allow too many password guesses. */
 const LOGIN_LIMIT = { scope: 'login', maxRequests: 5, windowSeconds: 15 * 60 };
-const REPORT_LIMIT = { scope: 'report', maxRequests: 10, windowSeconds: 60 * 60 };
-const EXTRACT_LIMIT = { scope: 'extract', maxRequests: 30, windowSeconds: 60 * 60 };
 /** The free plan allows 10 browser minutes a day; at ~25 s a search this keeps well inside it. */
 const BROWSER_LIMIT = { scope: 'browser', maxRequests: 15, windowSeconds: 24 * 60 * 60 };
 const MAX_EXTRACT_BYTES = 1024;
@@ -24,10 +23,6 @@ const MAX_PAGE_CHARS = 2 * 1024 * 1024;
 const MAX_IFRAMES = 3;
 const PAGE_TIMEOUT_MS = 10_000;
 const PAGE_HEADERS = { 'User-Agent': 'Mozilla/5.0 (compatible; OnAir link finder)' };
-
-async function readReports(env: Env): Promise<Report[]> {
-  return (await env.KV.get<Report[]>(KV_KEYS.reports, 'json')) ?? [];
-}
 
 async function getChannels(env: Env) {
   const channels = await env.KV.get(KV_KEYS.channels, 'json');
@@ -52,7 +47,8 @@ async function saveChannels(request: Request, env: Env) {
 }
 
 async function login(request: Request, env: Env) {
-  await enforceRateLimit(request, env, LOGIN_LIMIT);
+  await enforceBurstLimit(request, env, env.LOGIN_LIMITER, 'login');
+  await enforceWindowLimit(request, env, LOGIN_LIMIT);
   const body = await readJson(request, MAX_LOGIN_BYTES);
   const password = typeof body === 'object' && body !== null && 'password' in body && body.password;
   if (!(await isCorrectPassword(env, password))) throw new HttpError(401, 'Wrong password');
@@ -60,13 +56,10 @@ async function login(request: Request, env: Env) {
 }
 
 async function createReport(request: Request, env: Env) {
-  await enforceRateLimit(request, env, REPORT_LIMIT);
+  await enforceBurstLimit(request, env, env.REPORT_LIMITER, 'report');
   const input = parseReportInput(await readJson(request, MAX_REPORT_BYTES));
   if (!input) throw new HttpError(400, 'Invalid report');
-
-  const report: Report = { ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
-  const reports = [report, ...(await readReports(env))].slice(0, MAX_REPORTS);
-  await env.KV.put(KV_KEYS.reports, JSON.stringify(reports));
+  await addReport(env, input);
   return json({ ok: true }, 201);
 }
 
@@ -77,9 +70,8 @@ async function listReports(request: Request, env: Env) {
 
 async function deleteReport(request: Request, env: Env, reportId: string) {
   await requireAdmin(request, env);
-  const reports = (await readReports(env)).filter((report) => report.id !== reportId);
-  await env.KV.put(KV_KEYS.reports, JSON.stringify(reports));
-  return json({ reports });
+  if (!isReportId(reportId)) throw new HttpError(404, 'Not found');
+  return json({ reports: await removeReport(env, reportId) });
 }
 
 /** Downloads a page as text, giving up on slow pages and cutting oversized ones. */
@@ -108,7 +100,7 @@ async function captureWithBrowser(
   const binding = env.BROWSER;
   if (!binding) return { links: [], outcome: 'unavailable' };
   try {
-    await enforceRateLimit(request, env, BROWSER_LIMIT);
+    await enforceWindowLimit(request, env, BROWSER_LIMIT);
   } catch {
     return { links: [], outcome: 'limit-reached' };
   }
@@ -128,7 +120,7 @@ async function captureWithBrowser(
  */
 async function extractStreams(request: Request, env: Env) {
   await requireAdmin(request, env);
-  await enforceRateLimit(request, env, EXTRACT_LIMIT);
+  await enforceBurstLimit(request, env, env.EXTRACT_LIMITER, 'extract');
   const body = await readJson(request, MAX_EXTRACT_BYTES);
   const url = typeof body === 'object' && body !== null && 'url' in body ? body.url : null;
   if (!isHttpsUrl(url)) throw new HttpError(400, 'The page address must be an https URL');
