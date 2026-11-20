@@ -36,14 +36,12 @@
   {
     "id": "i24news",
     "name": "i24NEWS",
+    "nameEn": "i24NEWS Hebrew",
     "short": "i24",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6f/I24NEWS_logo.svg",
     "language": "he",
     "group": "israel",
-    "sources": [
-      "https://i24newshebrew-cdn.encoders.immergo.tv/master.m3u8",
-      "https://i24newsenglish-cdn.encoders.immergo.tv/master.m3u8"
-    ]
+    "sources": ["https://i24newshebrew-cdn.encoders.immergo.tv/master.m3u8"]
   },
   {
     "id": "say16",
@@ -169,6 +167,18 @@
     "sources": ["https://cdn-euronews.akamaized.net/live/eds/euronews-en/25002/index.m3u8"]
   },
   {
+    "id": "i24news-en",
+    "name": "i24NEWS English",
+    "short": "i24",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6f/I24NEWS_logo.svg",
+    "language": "en",
+    "group": "world",
+    "sources": [
+      "https://i24newsenglish-cdn.encoders.immergo.tv/master.m3u8",
+      "https://hlspackager.akamaized.net/live/DB/i24_ENGLISH/HLS/i24_ENGLISH.m3u8"
+    ]
+  },
+  {
     "id": "reuters",
     "name": "Reuters",
     "short": "RTRS",
@@ -176,8 +186,9 @@
     "language": "en",
     "group": "world",
     "sources": [
-      "https://amg00453-reuters-amg00453c1-xumo-us-2073.playouts.now.amagi.tv/reuters-reuters-hls/playlist.m3u8",
-      "https://d5bxknkoxytmb.cloudfront.net/playlist/amg00453-reuters-reuters-samsunggb/playlist.m3u8"
+      "https://d5bxknkoxytmb.cloudfront.net/playlist/amg00453-reuters-reuters-samsunggb/playlist.m3u8",
+      "https://amg00453-reuters-amg00453c1-samsung-gb-2113.playouts.now.amagi.tv/playlist/amg00453-reuters-reuters-samsunggb/playlist.m3u8",
+      "https://amg00453-reuters-amg00453c1-rakuten-uk-2110.playouts.now.amagi.tv/playlist/amg00453-reuters-reuters-rakutenuk/playlist.m3u8"
     ]
   },
   {
@@ -196,10 +207,7 @@
     "logo": "https://upload.wikimedia.org/wikipedia/commons/6/63/ABC_News_Live_logo_2021.svg",
     "language": "en",
     "group": "world",
-    "sources": [
-      "https://aegis-cloudfront-1.tubi.video/d6cbb0de-68e4-4f3b-82f9-bf5d526e0bde/index.m3u8",
-      "https://pb-0n3n2ej0w8pl9.akamaized.net/ABCNewsLive_Disney.m3u8"
-    ]
+    "sources": ["https://pb-0n3n2ej0w8pl9.akamaized.net/ABCNewsLive_Disney.m3u8"]
   },
   {
     "id": "cbs-news",
@@ -219,7 +227,7 @@
     "logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/Fox_News_Channel_logo.svg",
     "language": "en",
     "group": "world",
-    "sources": ["https://247preview.foxnews.com/hls/live/2020027/fncv3preview/index.m3u8"]
+    "sources": []
   },
   {
     "id": "gb-news",

@@ -8,11 +8,17 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- i24NEWS English, with a backup link on a second server.
+- An important channel with no working link stays on the list, marked as unavailable, instead of being removed; a link can be added to it in the admin area. Fox News is kept this way, since it has no free official stream.
+- When a browser cannot play a channel's video format, the player says so and suggests another browser or device.
 - The phone's lock screen and the system's media controls show the channel playing and its logo; their previous and next buttons switch channel.
 - The admin editor shows each channel's tile as viewers will see it, and says when a logo address does not load. Logo changes arriving with a site update are previewed the same way.
 - Channel 16's logo.
 
 ### Changed
+- ABC News: its broken first link is removed. Its stream uses HEVC, which plays on most devices; the daily check now treats that as a limitation, not a failure.
+- Reuters: a server that allows playing from the site comes first, with two backups.
+- i24NEWS (Hebrew) no longer falls back to the English broadcast.
 - The player rides out network drops: a channel that was playing retries the same stream with growing pauses, and at once when the device is back online, instead of showing "unavailable". Video that freezes without an error is restarted after 15 seconds.
 - The player never downloads a higher quality than its size on screen can show, which saves data on phones.
 - The page appears faster: the video library loads after it, in parallel.
