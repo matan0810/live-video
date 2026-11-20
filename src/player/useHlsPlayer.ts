@@ -1,6 +1,7 @@
 import type Hls from 'hls.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { resolveStreamUrl } from '../../shared/channels/sources';
+import { UNSUPPORTED_FORMAT } from './codecSupport';
 import { networkRetryDelay, RestartBudget, StallWatch } from './recovery';
 
 export type PlayerStatus = 'loading' | 'playing' | 'error';
@@ -170,6 +171,12 @@ export function useHlsPlayer(sources: readonly string[]) {
         });
         hls.on(HlsClass.Events.ERROR, (_event, data) => {
           if (!data.fatal || !HlsClass) return;
+          // A format the browser cannot decode (HEVC in most desktop browsers) comes as a
+          // media error, but no recovery helps: move on, and say why.
+          if (data.details === HlsClass.ErrorDetails.MANIFEST_INCOMPATIBLE_CODECS_ERROR) {
+            loadNextSource(UNSUPPORTED_FORMAT);
+            return;
+          }
           if (data.type === HlsClass.ErrorTypes.MEDIA_ERROR && !hasTriedMediaRecovery) {
             hasTriedMediaRecovery = true;
             hls.recoverMediaError();

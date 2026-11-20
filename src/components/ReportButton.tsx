@@ -1,14 +1,23 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { REPORT_LIMITS, REPORT_REASONS, type ReportReason } from '../../shared/reports';
-import { submitReport } from '../api/client';
+import { ApiError, submitReport } from '../api/client';
 import type { Channel } from '../channels';
 import { displayName } from '../channels/displayName';
 import { useI18n } from '../i18n/context';
+import type { Strings } from '../i18n/strings';
 import { IconButton } from './IconButton';
 import { FlagIcon } from './icons';
 import styles from './ReportButton.module.css';
 
 type SubmitState = 'editing' | 'sending' | 'sent' | 'failed';
+
+/** Says why a report did not go through, so a blocked network is told apart from a refusal. */
+function describeFailure(error: unknown, t: Strings) {
+  if (!(error instanceof ApiError)) return t.reportFailed;
+  if (error.status === 429) return t.reportTooMany;
+  if (error.status === 0) return t.reportNoConnection;
+  return t.reportFailedCode(error.status);
+}
 
 interface ReportButtonProps {
   channel: Channel;
@@ -20,6 +29,7 @@ export function ReportButton({ channel }: ReportButtonProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [reason, setReason] = useState<ReportReason>('not-working');
   const [suggestedUrl, setSuggestedUrl] = useState('');
+  const [failure, setFailure] = useState<unknown>(null);
   const [note, setNote] = useState('');
   const [state, setState] = useState<SubmitState>('editing');
 
@@ -43,7 +53,8 @@ export function ReportButton({ channel }: ReportButtonProps) {
       setState('sent');
       setNote('');
       setSuggestedUrl('');
-    } catch {
+    } catch (caught) {
+      setFailure(caught);
       setState('failed');
     }
   };
@@ -113,7 +124,7 @@ export function ReportButton({ channel }: ReportButtonProps) {
 
             {state === 'failed' && (
               <p className={styles.error} role="alert">
-                {t.reportFailed}
+                {describeFailure(failure, t)}
               </p>
             )}
 

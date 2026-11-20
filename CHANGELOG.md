@@ -7,6 +7,10 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- A channel in a format the browser cannot play (ABC News and Bloomberg use HEVC, which most desktop browsers lack) says so within seconds and stops retrying, instead of loading for 20 seconds and retrying forever.
+- When a report cannot be sent, the form says why: too many reports in a minute, no connection to the report server (a network filter or ad blocker can cause this), or the server's error code.
+
 ## [2.9.0] - 2026-11-20
 
 ### Added
