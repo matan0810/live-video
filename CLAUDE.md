@@ -126,11 +126,14 @@ soon as a fixed version exists, and never downgrade a tool to an old major to si
 
 Semantic versioning, `MAJOR.MINOR.PATCH`:
 
-| Bump    | When                                        | Example                              |
-| ------- | ------------------------------------------- | ------------------------------------ |
-| `patch` | Fixes only, nothing new for viewers         | a broken link replaced, a layout bug |
-| `minor` | Anything new or changed that viewers notice | a channel added, a new button        |
-| `major` | A break with the past                       | saved favourites or channels reset   |
+| Bump    | When                                                     | Example                                             |
+| ------- | -------------------------------------------------------- | --------------------------------------------------- |
+| `patch` | Fixes, and any change to the channel list                | a channel added or removed, a link or logo replaced |
+| `minor` | A new or changed feature of the site that viewers notice | a new button, a new screen, a change to the player  |
+| `major` | A break with the past                                    | saved favourites or channels reset                  |
+
+Channels are content, not features: adding, removing or updating channels, links and logos
+is always a `patch`, even when viewers notice it (the owner's rule).
 
 The version lives in `package.json` and `package-lock.json` (kept in step by
 `npm run bump` and checked by a test) and is shown in the site's header. Past releases,
