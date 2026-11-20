@@ -7,6 +7,11 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Changed
+- N12 is shown as unavailable again: mako's servers refuse its stream to any site but mako's own, from Israel too.
+- Al Jazeera (English and Arabic) moved to the bottom of its sections.
+- Logos for LiveNOW from FOX, N12, Channel 9, NBC News, ABC News, CBS News and Kan Educational, all stored with the site; Sky News gets one too.
+
 ## [2.7.2] - 2026-11-20
 
 ### Added
