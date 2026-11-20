@@ -55,11 +55,10 @@
 - The admin token lives in browser storage: anyone with access to the admin's unlocked
   browser profile can use it until it expires.
 - Channel logos are stored with the site (`public/logos`). A logo added with an address
-  on another host (now only Comedy Channel's, on `images.frp1.ott.kaltura.com`) loads from
-  there until the Sync channels workflow copies it in (`scripts/copy-logos.ts`); that host
-  sees the viewer's address, as with any image on the web. A copy must be a real image by
-  its content, at most 300 KB, and an SVG must contain no scripts, event handlers or
-  outside references, since one opened directly would run on the site's origin.
+  on another host loads from there, and that host sees the viewer's address, until the
+  Sync channels workflow copies it in (`scripts/copy-logos.ts`). A copy must be a real
+  image by its content, at most 300 KB, and an SVG must contain no scripts, event handlers
+  or outside references, since one opened directly would run on the site's origin.
 - To play N12 the browser asks `mass.mako.co.il` for a playback ticket. The request
   carries only the stream path, nothing about the viewer.
 - Streams come from third parties. The site plays them as they are and has no control over
