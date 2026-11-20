@@ -57,8 +57,10 @@
 - Channel logos are stored with the site (`public/logos`). A few still load from other
   hosts named in `channels.json` (Wikimedia, Imgur, and Channel 16's video host
   `ch16israel.vod.immergo.tv`), which see the viewer's address, as with any image on the
-  web. Stored SVG logos are checked to contain no scripts or external references, since
-  one opened directly would run on the site's origin.
+  web. The Sync channels workflow copies those into `public/logos` too
+  (`scripts/copy-logos.ts`): a copy must be a real image by its content, at most 300 KB,
+  and an SVG must contain no scripts, event handlers or outside references, since one
+  opened directly would run on the site's origin.
 - To play N12 the browser asks `mass.mako.co.il` for a playback ticket. The request
   carries only the stream path, nothing about the viewer.
 - Streams come from third parties. The site plays them as they are and has no control over

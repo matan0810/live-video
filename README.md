@@ -98,7 +98,10 @@ list is copied into the code before every release (CLAUDE.md, section 8):
   from the Actions tab) copies the saved list into `channels.json` on `dev` after every
   check passes, and git keeps its history. It copies only a list saved on the code's
   version or later, so it never undoes changes made in code. It needs the `API_URL`
-  variable, as the deploy does.
+  variable, as the deploy does. It also runs `scripts/copy-logos.ts`, which copies any
+  logo still loaded from another host into `public/logos` (checking it is a real image and,
+  for SVG, that it holds no scripts or outside references) and points the channel at the
+  copy. Wikimedia throttles cloud sessions, but not GitHub's runners.
 
 ## Setting up the Worker
 
