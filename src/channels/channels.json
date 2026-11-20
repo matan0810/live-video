@@ -57,7 +57,7 @@
     "name": "ערוץ 16",
     "nameEn": "Channel 16",
     "short": "16",
-    "logo": "https://ch16israel.vod.immergo.tv/ch16israel/uploaded/c7c1f896-addf-4818-a789-8a3eaa3eef6c.png",
+    "logo": "logos/say16.png",
     "language": "he",
     "group": "israel",
     "sources": ["https://ch16israel-cdn.encoders.immergo.tv/master.m3u8"]
@@ -387,7 +387,7 @@
     "id": "rtve-24h",
     "name": "24 Horas",
     "short": "24H",
-    "logo": "https://i.ibb.co/21sXZ3GT/24h.png",
+    "logo": "logos/rtve-24h.png",
     "language": "es",
     "group": "languages",
     "sources": [
