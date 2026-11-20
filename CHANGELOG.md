@@ -17,6 +17,7 @@ breaking changes are major.
 - The player never downloads a higher quality than its size on screen can show, which saves data on phones.
 - The page appears faster: the video library loads after it, in parallel.
 - The daily link check tests the channel list saved in the admin area, which is what viewers get, instead of the copy in the site's code.
+- The daily link check also catches links that answer but cannot be watched (no sound, below 360p, HEVC only, a recording, or a server that refuses the site), reports in Hebrew, and lists Kan's channels as not checkable from abroad instead of as broken.
 
 ## [2.6.0] - 2026-11-19
 

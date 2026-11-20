@@ -138,10 +138,14 @@ viewer's browser, so no Worker is involved. N12 only plays from Israel.
 
 `.github/workflows/check-links.yml` runs `npm run check:links` daily against the list
 viewers actually get: the one saved in the admin area, or `channels.json` when none is
-saved or the Worker cannot be reached (the report says which). When a channel is down it opens an issue with the details, and closes it
-once everything works again. It runs from servers outside Israel, so a channel that is
-blocked abroad is reported as down even when it is fine. The admin area's link check runs
-from your own browser and does not have that problem.
+saved or the Worker cannot be reached (the report says which). Besides whether a link
+answers, it flags links that answer but cannot be watched: no sound, below 360p, HEVC
+only, a recording instead of live, or a server that refuses to serve the site
+(`shared/streamProblems.ts`). When a channel cannot be watched it opens an issue with a
+Hebrew report, and closes it once everything works again. Channels on hosts that refuse
+anyone outside Israel (`ISRAEL_ONLY_HOSTS` in `scripts/check-links.ts`) are listed
+separately rather than as failures, since the check runs abroad; the admin area's link
+check runs from your own browser and covers them.
 
 ## Layout
 
