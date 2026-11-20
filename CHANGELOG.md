@@ -7,6 +7,13 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- N12 is back: mako gives its playback ticket to the site again. It plays only from Israel, so it could not be tried from the cloud.
+- Bloomberg is back, in HEVC (most devices play it; others are told their browser cannot).
+- Walla News, Kan Educational and Sky News are back on the list, marked as unavailable until a working link is added in the admin area.
+- Logos for Walla News and Bloomberg, stored with the site.
+- The weekly Sync channels workflow copies any logo still loaded from another host into the site, so the remaining ones (Channel 9, NBC, ABC, CBS, N12, Channel 16, 24 Horas) follow without a manual step.
+
 ## [2.7.1] - 2026-11-20
 
 ### Fixed

@@ -73,7 +73,7 @@ async function main() {
   step('desktop: a channel with no link is shown as unavailable, without retries');
 
   await desktop.keyboard.press('ArrowDown');
-  await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
+  await desktop.getByRole('heading', { name: 'N12' }).waitFor();
   await desktop.keyboard.press('Digit1');
   await desktop.getByRole('heading', { name: 'כאן 11' }).waitFor();
   step('desktop: keyboard switches channels');
@@ -82,8 +82,8 @@ async function main() {
   const mediaTitle = () => desktop.evaluate(() => navigator.mediaSession.metadata?.title);
   assert.equal(await mediaTitle(), 'כאן 11');
   await desktop.evaluate(() => window.__mediaActions.nexttrack());
-  await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
-  assert.equal(await mediaTitle(), 'רשת 13');
+  await desktop.getByRole('heading', { name: 'N12' }).waitFor();
+  assert.equal(await mediaTitle(), 'N12');
   await desktop.evaluate(() => window.__mediaActions.previoustrack());
   await desktop.getByRole('heading', { name: 'כאן 11' }).waitFor();
   step('desktop: media controls show the channel and switch it');
