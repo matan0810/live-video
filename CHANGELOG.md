@@ -9,6 +9,7 @@ breaking changes are major.
 
 ### Added
 - i24NEWS English, with a backup link on a second server.
+- LiveNOW from FOX, Fox's free live news channel.
 - An important channel with no working link stays on the list, marked as unavailable, instead of being removed; a link can be added to it in the admin area. Fox News is kept this way, since it has no free official stream.
 - When a browser cannot play a channel's video format, the player says so and suggests another browser or device.
 - The phone's lock screen and the system's media controls show the channel playing and its logo; their previous and next buttons switch channel.
