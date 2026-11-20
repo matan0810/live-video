@@ -11,6 +11,7 @@ import { DvrControls } from './DvrControls';
 import { useDvr } from './useDvr';
 import { useFullscreen } from './useFullscreen';
 import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
+import { useMediaSession } from './useMediaSession';
 import { usePlayerControls } from './usePlayerControls';
 import styles from './Player.module.css';
 
@@ -29,6 +30,8 @@ interface PlayerProps {
   /** Shown over the top of the video in full screen, and when `isOverlayEnabled`. */
   overlay?: ReactNode;
   isOverlayEnabled?: boolean;
+  /** Switches to the next (1) or previous (-1) channel, from the system's media controls. */
+  onStep: (offset: 1 | -1) => void;
 }
 
 export function Player({
@@ -37,6 +40,7 @@ export function Player({
   actions,
   overlay,
   isOverlayEnabled = false,
+  onStep,
 }: PlayerProps) {
   const { videoRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow } = useHlsPlayer(
     channel.sources,
@@ -44,6 +48,7 @@ export function Player({
   const dvr = useDvr(videoRef, getLiveWindow);
   const { t, language } = useI18n();
   const name = displayName(channel, language);
+  useMediaSession(videoRef, { title: name, logo: channel.logo, onStep });
 
   const { seekBy } = dvr;
   const frameRef = useRef<HTMLDivElement>(null);

@@ -8,10 +8,14 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- The phone's lock screen and the system's media controls show the channel playing and its logo; their previous and next buttons switch channel.
 - The admin editor shows each channel's tile as viewers will see it, and says when a logo address does not load. Logo changes arriving with a site update are previewed the same way.
 - Channel 16's logo.
 
 ### Changed
+- The player rides out network drops: a channel that was playing retries the same stream with growing pauses, and at once when the device is back online, instead of showing "unavailable". Video that freezes without an error is restarted after 15 seconds.
+- The player never downloads a higher quality than its size on screen can show, which saves data on phones.
+- The page appears faster: the video library loads after it, in parallel.
 - The daily link check tests the channel list saved in the admin area, which is what viewers get, instead of the copy in the site's code.
 
 ## [2.6.0] - 2026-11-19

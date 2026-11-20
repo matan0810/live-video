@@ -100,16 +100,19 @@ export function App() {
     if (channelId === activeChannelId) selectChannel(null);
   };
 
-  const shortcuts = useMemo<KeyboardShortcuts>(() => {
-    const selectByOffset = (offset: number) => {
+  const selectByOffset = useCallback(
+    (offset: number) => {
       if (orderedChannels.length === 0) return;
       const currentIndex = orderedChannels.findIndex((channel) => channel.id === activeChannelId);
       const startIndex = currentIndex === -1 && offset < 0 ? 0 : currentIndex;
       const nextIndex = (startIndex + offset + orderedChannels.length) % orderedChannels.length;
       const next = orderedChannels[nextIndex];
       if (next) selectChannel(next.id);
-    };
+    },
+    [orderedChannels, activeChannelId, selectChannel],
+  );
 
+  const shortcuts = useMemo<KeyboardShortcuts>(() => {
     const digitShortcuts = Object.fromEntries(
       orderedChannels
         .slice(0, DIGIT_SHORTCUT_COUNT)
@@ -122,7 +125,7 @@ export function App() {
       ArrowUp: () => selectByOffset(-1),
       KeyT: () => setIsTheaterMode((current) => !current),
     };
-  }, [orderedChannels, activeChannelId, selectChannel]);
+  }, [orderedChannels, selectChannel, selectByOffset]);
   useKeyboardShortcuts(shortcuts);
 
   return (
@@ -149,6 +152,7 @@ export function App() {
               channel={activeChannel}
               onStatusChange={handleStatusChange}
               isOverlayEnabled={isTheaterMode}
+              onStep={selectByOffset}
               overlay={
                 <ChannelStrip
                   channels={orderedChannels}

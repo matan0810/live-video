@@ -24,6 +24,15 @@ async function main() {
       (target) => target.hostname !== 'localhost',
       (route) => route.abort(),
     );
+    // Records the media control handlers, which only the operating system can press.
+    await context.addInitScript(() => {
+      window.__mediaActions = {};
+      const set = navigator.mediaSession.setActionHandler.bind(navigator.mediaSession);
+      navigator.mediaSession.setActionHandler = (action, handler) => {
+        window.__mediaActions[action] = handler;
+        set(action, handler);
+      };
+    });
     const page = await context.newPage();
     page.on('pageerror', (error) => problems.push(`${tag}: ${error.message}`));
     return page;
@@ -60,6 +69,16 @@ async function main() {
   await desktop.keyboard.press('Digit1');
   await desktop.getByRole('heading', { name: 'כאן 11' }).waitFor();
   step('desktop: keyboard switches channels');
+
+  // The system's media controls (lock screen, headphones) show the channel and switch it.
+  const mediaTitle = () => desktop.evaluate(() => navigator.mediaSession.metadata?.title);
+  assert.equal(await mediaTitle(), 'כאן 11');
+  await desktop.evaluate(() => window.__mediaActions.nexttrack());
+  await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
+  assert.equal(await mediaTitle(), 'רשת 13');
+  await desktop.evaluate(() => window.__mediaActions.previoustrack());
+  await desktop.getByRole('heading', { name: 'כאן 11' }).waitFor();
+  step('desktop: media controls show the channel and switch it');
 
   const strip = desktop.getByRole('navigation', { name: 'החלפת ערוץ' });
   assert.equal(await strip.count(), 0, 'no channel bar over the video in the normal layout');
