@@ -73,100 +73,109 @@ export function PlayerControls({
       {/* Left to right like nearly every video player, so the skip buttons agree with the
           timeline's direction; labels stay in the site's language. */}
       <Controls.Content className={styles.controls} dir="ltr">
-        {dvr.canRewind && (
-          <DvrSlider
-            windowSeconds={dvr.windowSeconds}
-            secondsBehindLive={dvr.secondsBehindLive}
-            onSeekBehind={dvr.seekBehind}
-          />
-        )}
-        <div className={styles.row}>
-          <PlayButton
-            className={styles.button}
-            render={(props, state) => (
-              <button {...props}>{state.paused ? <PlayIcon /> : <PauseIcon />}</button>
-            )}
-          />
-          <div className={styles.volume}>
-            <MuteButton
+        {/* YouTube style: on a phone one tap brings the controls, and this pauses or resumes. */}
+        <PlayButton
+          className={styles.center}
+          render={(props, state) => (
+            <button {...props}>{state.paused ? <PlayIcon /> : <PauseIcon />}</button>
+          )}
+        />
+        <div className={styles.bottom}>
+          {dvr.canRewind && (
+            <DvrSlider
+              windowSeconds={dvr.windowSeconds}
+              secondsBehindLive={dvr.secondsBehindLive}
+              onSeekBehind={dvr.seekBehind}
+            />
+          )}
+          <div className={styles.row}>
+            <PlayButton
               className={styles.button}
               render={(props, state) => (
-                <button {...props}>
-                  {state.volumeLevel === 'off' ? (
-                    <VolumeOffIcon />
-                  ) : state.volumeLevel === 'high' ? (
-                    <VolumeHighIcon />
-                  ) : (
-                    <VolumeLowIcon />
-                  )}
-                </button>
+                <button {...props}>{state.paused ? <PlayIcon /> : <PauseIcon />}</button>
               )}
             />
-            <VolumeSlider.Root className={styles.volumeSlider}>
-              <VolumeSlider.Track className={styles.volumeTrack}>
-                <VolumeSlider.Fill className={styles.volumeFill} />
-              </VolumeSlider.Track>
-              <VolumeSlider.Thumb className={styles.volumeThumb} />
-            </VolumeSlider.Root>
-          </div>
+            <div className={styles.volume}>
+              <MuteButton
+                className={styles.button}
+                render={(props, state) => (
+                  <button {...props}>
+                    {state.volumeLevel === 'off' ? (
+                      <VolumeOffIcon />
+                    ) : state.volumeLevel === 'high' ? (
+                      <VolumeHighIcon />
+                    ) : (
+                      <VolumeLowIcon />
+                    )}
+                  </button>
+                )}
+              />
+              <VolumeSlider.Root className={styles.volumeSlider}>
+                <VolumeSlider.Track className={styles.volumeTrack}>
+                  <VolumeSlider.Fill className={styles.volumeFill} />
+                </VolumeSlider.Track>
+                <VolumeSlider.Thumb className={styles.volumeThumb} />
+              </VolumeSlider.Root>
+            </div>
 
-          <button
-            type="button"
-            className={styles.live}
-            dir={t.dir}
-            data-live={dvr.isLive}
-            onClick={dvr.goLive}
-            disabled={dvr.isLive || !dvr.canRewind}
-            title={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
-          >
-            <span className={styles.dot} aria-hidden="true" />
-            {dvr.isLive ? (
-              t.live
-            ) : (
+            <button
+              type="button"
+              className={styles.live}
+              dir={t.dir}
+              data-live={dvr.isLive}
+              onClick={dvr.goLive}
+              disabled={dvr.isLive || !dvr.canRewind}
+              title={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
+            >
+              <span className={styles.dot} aria-hidden="true" />
+              {dvr.isLive ? (
+                t.live
+              ) : (
+                <>
+                  {t.backToLive} <bdi>−{formatDuration(dvr.secondsBehindLive)}</bdi>
+                </>
+              )}
+            </button>
+
+            <span className={styles.spacer} />
+
+            {dvr.canRewind && (
               <>
-                {t.backToLive} <bdi>−{formatDuration(dvr.secondsBehindLive)}</bdi>
+                <ControlButton
+                  label={t.seekBack(SEEK_STEP_SECONDS)}
+                  onClick={() => dvr.seekBy(-SEEK_STEP_SECONDS)}
+                  disabled={dvr.secondsBehindLive >= dvr.windowSeconds}
+                >
+                  <bdi className={styles.stepText}>−{SEEK_STEP_SECONDS}</bdi>
+                </ControlButton>
+                <ControlButton
+                  label={t.seekForward(SEEK_STEP_SECONDS)}
+                  onClick={() => dvr.seekBy(SEEK_STEP_SECONDS)}
+                  disabled={dvr.isLive}
+                >
+                  <bdi className={styles.stepText}>+{SEEK_STEP_SECONDS}</bdi>
+                </ControlButton>
               </>
             )}
-          </button>
-
-          <span className={styles.spacer} />
-
-          {dvr.canRewind && (
-            <>
-              <ControlButton
-                label={t.seekBack(SEEK_STEP_SECONDS)}
-                onClick={() => dvr.seekBy(-SEEK_STEP_SECONDS)}
-                disabled={dvr.secondsBehindLive >= dvr.windowSeconds}
-              >
-                <bdi className={styles.stepText}>−{SEEK_STEP_SECONDS}</bdi>
+            {isFullscreen && (
+              <>
+                <ControlButton label={t.previousChannel} onClick={() => onStep(-1)}>
+                  <ChevronIcon className={styles.chevronUp} />
+                </ControlButton>
+                <ControlButton label={t.nextChannel} onClick={() => onStep(1)}>
+                  <ChevronIcon className={styles.chevronDown} />
+                </ControlButton>
+              </>
+            )}
+            {CAN_PICTURE_IN_PICTURE && (
+              <ControlButton label={t.pictureInPicture} onClick={onTogglePictureInPicture}>
+                <PipEnterIcon />
               </ControlButton>
-              <ControlButton
-                label={t.seekForward(SEEK_STEP_SECONDS)}
-                onClick={() => dvr.seekBy(SEEK_STEP_SECONDS)}
-                disabled={dvr.isLive}
-              >
-                <bdi className={styles.stepText}>+{SEEK_STEP_SECONDS}</bdi>
-              </ControlButton>
-            </>
-          )}
-          {isFullscreen && (
-            <>
-              <ControlButton label={t.previousChannel} onClick={() => onStep(-1)}>
-                <ChevronIcon className={styles.chevronUp} />
-              </ControlButton>
-              <ControlButton label={t.nextChannel} onClick={() => onStep(1)}>
-                <ChevronIcon className={styles.chevronDown} />
-              </ControlButton>
-            </>
-          )}
-          {CAN_PICTURE_IN_PICTURE && (
-            <ControlButton label={t.pictureInPicture} onClick={onTogglePictureInPicture}>
-              <PipEnterIcon />
+            )}
+            <ControlButton label={t.fullscreen} onClick={onToggleFullscreen}>
+              {isFullscreen ? <FullscreenExitIcon /> : <FullscreenEnterIcon />}
             </ControlButton>
-          )}
-          <ControlButton label={t.fullscreen} onClick={onToggleFullscreen}>
-            {isFullscreen ? <FullscreenExitIcon /> : <FullscreenEnterIcon />}
-          </ControlButton>
+          </div>
         </div>
       </Controls.Content>
     </Controls.Root>

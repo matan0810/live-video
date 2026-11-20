@@ -1,17 +1,57 @@
-/* The bar sits over the bottom of the video and fades out while watching. */
+/* Covers the video but lets clicks and gestures through, except on its own buttons. */
 .controls {
   position: absolute;
-  inset: auto 0 0;
+  inset: 0;
   z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #fff;
+  pointer-events: none;
+  transition:
+    opacity 250ms ease,
+    visibility 0s linear 0s;
+}
+
+/* The bar at the bottom, over a shade so it reads on any picture. */
+.bottom {
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 28px 12px 10px;
   background: linear-gradient(to top, rgb(0 0 0 / 78%), rgb(0 0 0 / 40%) 60%, transparent);
+  pointer-events: auto;
+}
+
+/* The big button in the middle: with the controls on touch screens, and on any screen
+   while paused. */
+.center {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 50%);
   color: #fff;
-  transition:
-    opacity 250ms ease,
-    visibility 0s linear 0s;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.center svg {
+  width: 32px;
+  height: 32px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .center:not([data-paused]) {
+    display: none;
+  }
 }
 
 /* Hidden until the viewer moves, taps or pauses; visibility keeps hidden buttons out of
@@ -242,7 +282,7 @@
 
 /* Narrow players (phones held upright): smaller buttons so the row fits. */
 @media (max-width: 480px) {
-  .controls {
+  .bottom {
     padding: 24px 6px 6px;
   }
 

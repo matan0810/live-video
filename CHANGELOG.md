@@ -7,6 +7,10 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- Skipping back or forward shows on the video, YouTube style: arrows and the seconds on that side, adding up when you skip again quickly.
+- A big play/pause button in the middle of the video: on a phone one tap shows the controls and a second tap on it pauses or resumes; on a computer it appears while paused.
+
 ## [2.8.0] - 2026-11-20
 
 ### Changed

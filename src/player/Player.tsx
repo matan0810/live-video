@@ -9,6 +9,7 @@ import { useMediaQuery } from '../hooks/useMediaQuery';
 import { displayName } from '../channels/displayName';
 import { useI18n } from '../i18n/context';
 import { PlayerControls } from './PlayerControls';
+import { SkipIndicator } from './SkipIndicator';
 import { useDvr } from './useDvr';
 import { useFullscreen } from './useFullscreen';
 import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
@@ -119,6 +120,7 @@ export function Player({
             onPointerDown={reveal}
           >
             <Video ref={videoRef} className={styles.video} playsInline />
+            <SkipIndicator videoRef={videoRef} />
 
             {status === 'loading' && (
               <div className={styles.overlay} data-passive="true" role="status">
