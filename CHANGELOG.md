@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.7.0] - 2026-11-20
+
 ### Added
 - i24NEWS English, with a backup link on a second server.
 - LiveNOW from FOX, Fox's free live news channel.
