@@ -65,6 +65,19 @@ export function useDvr(
     [videoRef, getLiveWindow],
   );
 
+  /** Moves to a point `seconds` behind the live edge, as a timeline does. */
+  const seekBehind = useCallback(
+    (seconds: number) => {
+      const video = videoRef.current;
+      const liveWindow = getLiveWindow();
+      if (!video || !liveWindow) return;
+      const target = liveWindow.end - seconds;
+      video.currentTime = Math.min(liveWindow.end, Math.max(liveWindow.start, target));
+      setState((current) => ({ ...current, secondsBehindLive: Math.max(0, Math.round(seconds)) }));
+    },
+    [videoRef, getLiveWindow],
+  );
+
   const goLive = useCallback(() => {
     const video = videoRef.current;
     const liveWindow = getLiveWindow();
@@ -77,6 +90,7 @@ export function useDvr(
     ...state,
     isLive: state.secondsBehindLive <= LIVE_TOLERANCE_SECONDS,
     seekBy,
+    seekBehind,
     goLive,
   };
 }

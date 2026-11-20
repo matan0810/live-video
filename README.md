@@ -164,7 +164,7 @@ public/                      favicon, icons, manifest.webmanifest
 shared/                      code used by both the site and the Worker: channel and
                              report validation
 src/channels/                channels.json, custom channels, share links
-src/player/                  the player: HLS loading with fallback, rewind, controls
+src/player/                  the player: hls.js playback with fallback and recovery (ours), controls on Video.js 10
 src/components/              channel list, dialogs, buttons, icons
 src/hooks/                   catalog, favourites, custom channels, active channel, shortcuts
 src/admin/                   the admin area (a separate chunk, loaded only at #/admin)

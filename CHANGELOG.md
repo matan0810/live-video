@@ -7,6 +7,12 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Changed
+- A new player, built on Video.js 10: its own controls over the video, in Hebrew or English, that fade out while watching and return on any movement or tap, instead of the browser's controls plus a row of buttons under the video.
+- A timeline for channels that keep past minutes: drag it to go back, with a Live button that shows how far behind you are and returns to the broadcast.
+- On a phone, double-tap the left or right side of the video to jump ten seconds; full screen turns the phone sideways where the browser allows it.
+- In full screen, buttons for the previous and next channel.
+
 ## [2.7.3] - 2026-11-20
 
 ### Changed

@@ -78,6 +78,11 @@ async function main() {
   await desktop.getByRole('heading', { name: 'כאן 11' }).waitFor();
   step('desktop: keyboard switches channels');
 
+  // The player's own controls (Video.js), not the browser's, labelled in the site's language.
+  assert.equal(await desktop.locator('video[controls]').count(), 0, 'no browser controls');
+  await desktop.locator('[data-media-container], video').first().waitFor();
+  step('desktop: the player uses its own controls');
+
   // The system's media controls (lock screen, headphones) show the channel and switch it.
   const mediaTitle = () => desktop.evaluate(() => navigator.mediaSession.metadata?.title);
   assert.equal(await mediaTitle(), 'כאן 11');

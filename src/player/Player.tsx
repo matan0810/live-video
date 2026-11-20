@@ -1,13 +1,14 @@
+import { Container, createPlayer, Gesture } from '@videojs/react';
+import { I18nProvider } from '@videojs/react/i18n';
+import { Video, videoFeatures } from '@videojs/react/video';
 import { useEffect, useMemo, useRef, type PointerEvent, type ReactNode } from 'react';
 import type { Channel } from '../channels';
-import { IconButton } from '../components/IconButton';
-import { FullscreenIcon, PictureInPictureIcon } from '../components/icons';
 import { useAutoHide } from '../hooks/useAutoHide';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { displayName } from '../channels/displayName';
 import { useI18n } from '../i18n/context';
-import { DvrControls } from './DvrControls';
+import { PlayerControls } from './PlayerControls';
 import { useDvr } from './useDvr';
 import { useFullscreen } from './useFullscreen';
 import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
@@ -17,7 +18,9 @@ import styles from './Player.module.css';
 
 const AUTO_RETRY_DELAY_MS = 15_000;
 const KEYBOARD_SEEK_SECONDS = 10;
-const CAN_PICTURE_IN_PICTURE = document.pictureInPictureEnabled;
+const SEEK_GESTURE_SECONDS = 10;
+/** Video.js supplies the controls' state, auto-hiding, gestures and labels; playback stays ours. */
+const { Player: MediaPlayer } = createPlayer({ features: videoFeatures });
 const OVERLAY_HIDE_DELAY_MS = 3000;
 /** The channel bar is for mouse users; on touch screens it is too easy to tap by accident. */
 const MOUSE_QUERY = '(hover: hover) and (pointer: fine)';
@@ -105,97 +108,106 @@ export function Player({
 
   return (
     <div className={styles.player}>
-      <div
-        ref={frameRef}
-        className={styles.frame}
-        data-idle={isOverlayShown && !overlayVisibility.isVisible}
-        onPointerMove={handlePointerMove}
-        onPointerDown={reveal}
-        onDoubleClick={fullscreen.toggle}
-      >
-        {/* The browser's own full-screen button would hide the channel bar; ours keeps it. */}
-        <video
-          ref={videoRef}
-          className={styles.video}
-          controls
-          controlsList="nofullscreen"
-          playsInline
-        />
-
-        {status === 'loading' && (
-          <div className={styles.overlay} data-passive="true" role="status">
-            <span className={styles.spinner} aria-hidden="true" />
-            <span>{t.loading(name)}</span>
-          </div>
-        )}
-
-        {status === 'error' && hasNoLink && (
-          <div className={styles.overlay} role="alert">
-            <strong className={styles.errorTitle}>{t.noLinkTitle(name)}</strong>
-            <span className={styles.errorHint}>{t.noLinkHint}</span>
-          </div>
-        )}
-
-        {status === 'error' && !hasNoLink && (
-          <div className={styles.overlay} role="alert">
-            <strong className={styles.errorTitle}>{t.channelUnavailable(name)}</strong>
-            <span className={styles.errorHint}>
-              {isUnsupportedFormat ? t.unsupportedFormat : t.retryingSoon}
-            </span>
-            {errorDetail && (
-              <span className={styles.errorDetail} dir="ltr">
-                {errorDetail}
-              </span>
-            )}
-            <button type="button" className={styles.primaryButton} onClick={retry}>
-              {t.retryNow}
-            </button>
-          </div>
-        )}
-
-        {isOverlayShown && (
-          <div
-            className={styles.channelOverlay}
-            data-visible={overlayVisibility.isVisible}
-            onPointerEnter={() => overlayVisibility.hold(true)}
-            onPointerLeave={() => overlayVisibility.hold(false)}
-            onDoubleClick={(event) => event.stopPropagation()}
+      <MediaPlayer>
+        {/* Video.js's own labels (play, mute, volume) follow the site's language. */}
+        <I18nProvider locale={language}>
+          <Container
+            ref={frameRef}
+            className={styles.frame}
+            data-idle={isOverlayShown && !overlayVisibility.isVisible}
+            onPointerMove={handlePointerMove}
+            onPointerDown={reveal}
           >
-            {overlay}
-          </div>
-        )}
+            <Video ref={videoRef} className={styles.video} playsInline />
 
-        {status === 'playing' && isAutoMuted && (
-          <button type="button" className={styles.unmute} onClick={unmute}>
-            {t.autoMuted}
-          </button>
-        )}
-      </div>
+            {status === 'loading' && (
+              <div className={styles.overlay} data-passive="true" role="status">
+                <span className={styles.spinner} aria-hidden="true" />
+                <span>{t.loading(name)}</span>
+              </div>
+            )}
+
+            {status === 'error' && hasNoLink && (
+              <div className={styles.overlay} role="alert">
+                <strong className={styles.errorTitle}>{t.noLinkTitle(name)}</strong>
+                <span className={styles.errorHint}>{t.noLinkHint}</span>
+              </div>
+            )}
+
+            {status === 'error' && !hasNoLink && (
+              <div className={styles.overlay} role="alert">
+                <strong className={styles.errorTitle}>{t.channelUnavailable(name)}</strong>
+                <span className={styles.errorHint}>
+                  {isUnsupportedFormat ? t.unsupportedFormat : t.retryingSoon}
+                </span>
+                {errorDetail && (
+                  <span className={styles.errorDetail} dir="ltr">
+                    {errorDetail}
+                  </span>
+                )}
+                <button type="button" className={styles.primaryButton} onClick={retry}>
+                  {t.retryNow}
+                </button>
+              </div>
+            )}
+
+            {isOverlayShown && (
+              <div
+                className={styles.channelOverlay}
+                data-visible={overlayVisibility.isVisible}
+                onPointerEnter={() => overlayVisibility.hold(true)}
+                onPointerLeave={() => overlayVisibility.hold(false)}
+                data-interactive
+              >
+                {overlay}
+              </div>
+            )}
+
+            {status === 'playing' && isAutoMuted && (
+              <button type="button" className={styles.unmute} onClick={unmute}>
+                {t.autoMuted}
+              </button>
+            )}
+
+            {status !== 'error' && (
+              <PlayerControls
+                dvr={dvr}
+                isFullscreen={fullscreen.isFullscreen}
+                onToggleFullscreen={fullscreen.toggle}
+                onTogglePictureInPicture={controls.togglePictureInPicture}
+                onStep={onStep}
+              />
+            )}
+
+            {/* Click pauses; double-click (or double-tap in the middle) is full screen; on
+              touch screens a double tap on either side jumps ten seconds, like most apps. */}
+            <Gesture type="tap" pointer="mouse" action="togglePaused" />
+            <Gesture type="doubletap" pointer="mouse" action="toggleFullscreen" />
+            <Gesture
+              type="doubletap"
+              pointer="touch"
+              region="left"
+              action="seekStep"
+              value={-SEEK_GESTURE_SECONDS}
+              disabled={!dvr.canRewind}
+            />
+            <Gesture
+              type="doubletap"
+              pointer="touch"
+              region="right"
+              action="seekStep"
+              value={SEEK_GESTURE_SECONDS}
+              disabled={!dvr.canRewind}
+            />
+          </Container>
+        </I18nProvider>
+      </MediaPlayer>
 
       <div className={styles.bar}>
         <h2 className={styles.title}>
           <bdi>{name}</bdi>
         </h2>
-        <div className={styles.barEnd}>
-          {status === 'playing' && dvr.canRewind && (
-            <DvrControls
-              isLive={dvr.isLive}
-              secondsBehindLive={dvr.secondsBehindLive}
-              windowSeconds={dvr.windowSeconds}
-              onSeekBy={dvr.seekBy}
-              onGoLive={dvr.goLive}
-            />
-          )}
-          {CAN_PICTURE_IN_PICTURE && (
-            <IconButton label={t.pictureInPicture} onClick={controls.togglePictureInPicture}>
-              <PictureInPictureIcon />
-            </IconButton>
-          )}
-          <IconButton label={t.fullscreen} onClick={fullscreen.toggle}>
-            <FullscreenIcon />
-          </IconButton>
-          {actions}
-        </div>
+        <div className={styles.barEnd}>{actions}</div>
       </div>
     </div>
   );
