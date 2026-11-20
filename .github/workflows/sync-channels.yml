@@ -31,16 +31,16 @@ jobs:
         env:
           API_URL: ${{ vars.API_URL || secrets.API_URL }}
         run: |
-          node scripts/sync-channels.ts | tee summary.md
+          node scripts/sync-channels.ts | tee "$RUNNER_TEMP/summary.md"
           npx prettier --write src/channels/channels.json
-          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/summary.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Copy remote logos into the site
         run: |
-          node scripts/copy-logos.ts | tee logos.md
+          node scripts/copy-logos.ts | tee "$RUNNER_TEMP/logos.md"
           npx prettier --write src/channels/channels.json
-          cat logos.md >> summary.md
-          cat logos.md >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/logos.md" >> "$RUNNER_TEMP/summary.md"
+          cat "$RUNNER_TEMP/logos.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Check for changes
         id: diff
@@ -67,5 +67,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
           git add src/channels/channels.json public/logos
-          git commit -m "Sync channels and logos" -m "$(cat summary.md)"
+          git commit -m "Sync channels and logos" -m "$(cat "$RUNNER_TEMP/summary.md")"
           git push origin HEAD:dev
