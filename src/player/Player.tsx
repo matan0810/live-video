@@ -152,15 +152,14 @@ export function Player({
               </button>
             )}
 
-            {status !== 'error' && (
-              <PlayerControls
-                dvr={dvr}
-                isFullscreen={fullscreen.isFullscreen}
-                onToggleFullscreen={fullscreen.toggle}
-                onTogglePictureInPicture={controls.togglePictureInPicture}
-                onStep={onStep}
-              />
-            )}
+            <PlayerControls
+              dvr={dvr}
+              isFullscreen={fullscreen.isFullscreen}
+              onToggleFullscreen={fullscreen.toggle}
+              onTogglePictureInPicture={controls.togglePictureInPicture}
+              onStep={onStep}
+              isPlayable={status !== 'error'}
+            />
 
             <PlayerGestures canSkip={dvr.canRewind} />
           </Container>

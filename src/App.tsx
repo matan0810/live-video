@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { stepChannel } from './channels/stepChannel';
 import { API_URL } from './api/client';
 import { CHANNEL_GROUPS, type CatalogChannel, type Channel } from './channels';
 import { withChannelParam } from './channels/channelLink';
@@ -109,12 +110,8 @@ export function App() {
   };
 
   const selectByOffset = useCallback(
-    (offset: number) => {
-      if (orderedChannels.length === 0) return;
-      const currentIndex = orderedChannels.findIndex((channel) => channel.id === activeChannelId);
-      const startIndex = currentIndex === -1 && offset < 0 ? 0 : currentIndex;
-      const nextIndex = (startIndex + offset + orderedChannels.length) % orderedChannels.length;
-      const next = orderedChannels[nextIndex];
+    (offset: 1 | -1) => {
+      const next = stepChannel(orderedChannels, activeChannelId, offset);
       if (next) selectChannel(next.id);
     },
     [orderedChannels, activeChannelId, selectChannel],

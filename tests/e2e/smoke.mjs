@@ -73,7 +73,8 @@ async function main() {
   step('desktop: a channel with no link is shown as unavailable, without retries');
 
   await desktop.keyboard.press('ArrowDown');
-  await desktop.getByRole('heading', { name: 'N12' }).waitFor();
+  // N12 has no link, so stepping skips it.
+  await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
   await desktop.keyboard.press('Digit1');
   await desktop.getByRole('heading', { name: 'כאן 11' }).waitFor();
   step('desktop: keyboard switches channels');
@@ -87,8 +88,8 @@ async function main() {
   const mediaTitle = () => desktop.evaluate(() => navigator.mediaSession.metadata?.title);
   assert.equal(await mediaTitle(), 'כאן 11');
   await desktop.evaluate(() => window.__mediaActions.nexttrack());
-  await desktop.getByRole('heading', { name: 'N12' }).waitFor();
-  assert.equal(await mediaTitle(), 'N12');
+  await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
+  assert.equal(await mediaTitle(), 'רשת 13');
   await desktop.evaluate(() => window.__mediaActions.previoustrack());
   await desktop.getByRole('heading', { name: 'כאן 11' }).waitFor();
   step('desktop: media controls show the channel and switch it');
@@ -111,9 +112,15 @@ async function main() {
     ),
     'the channel bar is inside the full-screen element',
   );
+  // Streams are unreachable here, so this channel has failed: switching must still work.
+  await desktop.getByRole('alert').waitFor();
+  await desktop.mouse.move(600, 300);
+  await desktop.mouse.move(610, 310);
+  await desktop.getByRole('button', { name: 'הערוץ הבא' }).click();
+  await desktop.getByRole('heading', { name: 'עכשיו 14' }).waitFor();
   await desktop.keyboard.press('KeyF');
   await desktop.waitForFunction(() => document.fullscreenElement === null);
-  step('desktop: full screen keeps the channel bar');
+  step('desktop: full screen keeps the channel bar, and channel switching on a failed channel');
 
   await desktop.getByRole('button', { name: 'הוספת CNN International למועדפים' }).click();
   assert.equal((await sectionTitles(desktop))[0], 'מועדפים');

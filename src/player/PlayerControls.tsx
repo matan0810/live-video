@@ -27,6 +27,11 @@ interface PlayerControlsProps {
   onTogglePictureInPicture: () => void;
   /** Switches channel; offered in full screen, where the channel list is out of reach. */
   onStep: (offset: 1 | -1) => void;
+  /**
+   * False while the channel cannot play: only switching channel and leaving full screen
+   * remain, so a broken channel never leaves the viewer stuck in full screen.
+   */
+  isPlayable: boolean;
 }
 
 function ControlButton({
@@ -65,6 +70,7 @@ export function PlayerControls({
   onToggleFullscreen,
   onTogglePictureInPicture,
   onStep,
+  isPlayable,
 }: PlayerControlsProps) {
   const { t } = useI18n();
 
@@ -74,14 +80,16 @@ export function PlayerControls({
           timeline's direction; labels stay in the site's language. */}
       <Controls.Content className={styles.controls} dir="ltr">
         {/* YouTube style: on a phone one tap brings the controls, and this pauses or resumes. */}
-        <PlayButton
-          className={styles.center}
-          render={(props, state) => (
-            <button {...props}>{state.paused ? <PlayIcon /> : <PauseIcon />}</button>
-          )}
-        />
+        {isPlayable && (
+          <PlayButton
+            className={styles.center}
+            render={(props, state) => (
+              <button {...props}>{state.paused ? <PlayIcon /> : <PauseIcon />}</button>
+            )}
+          />
+        )}
         <div className={styles.bottom}>
-          {dvr.canRewind && (
+          {isPlayable && dvr.canRewind && (
             <DvrSlider
               windowSeconds={dvr.windowSeconds}
               secondsBehindLive={dvr.secondsBehindLive}
@@ -89,57 +97,61 @@ export function PlayerControls({
             />
           )}
           <div className={styles.row}>
-            <PlayButton
-              className={styles.button}
-              render={(props, state) => (
-                <button {...props}>{state.paused ? <PlayIcon /> : <PauseIcon />}</button>
-              )}
-            />
-            <div className={styles.volume}>
-              <MuteButton
-                className={styles.button}
-                render={(props, state) => (
-                  <button {...props}>
-                    {state.volumeLevel === 'off' ? (
-                      <VolumeOffIcon />
-                    ) : state.volumeLevel === 'high' ? (
-                      <VolumeHighIcon />
-                    ) : (
-                      <VolumeLowIcon />
+            {isPlayable && (
+              <>
+                <PlayButton
+                  className={styles.button}
+                  render={(props, state) => (
+                    <button {...props}>{state.paused ? <PlayIcon /> : <PauseIcon />}</button>
+                  )}
+                />
+                <div className={styles.volume}>
+                  <MuteButton
+                    className={styles.button}
+                    render={(props, state) => (
+                      <button {...props}>
+                        {state.volumeLevel === 'off' ? (
+                          <VolumeOffIcon />
+                        ) : state.volumeLevel === 'high' ? (
+                          <VolumeHighIcon />
+                        ) : (
+                          <VolumeLowIcon />
+                        )}
+                      </button>
                     )}
-                  </button>
-                )}
-              />
-              <VolumeSlider.Root className={styles.volumeSlider}>
-                <VolumeSlider.Track className={styles.volumeTrack}>
-                  <VolumeSlider.Fill className={styles.volumeFill} />
-                </VolumeSlider.Track>
-                <VolumeSlider.Thumb className={styles.volumeThumb} />
-              </VolumeSlider.Root>
-            </div>
+                  />
+                  <VolumeSlider.Root className={styles.volumeSlider}>
+                    <VolumeSlider.Track className={styles.volumeTrack}>
+                      <VolumeSlider.Fill className={styles.volumeFill} />
+                    </VolumeSlider.Track>
+                    <VolumeSlider.Thumb className={styles.volumeThumb} />
+                  </VolumeSlider.Root>
+                </div>
 
-            <button
-              type="button"
-              className={styles.live}
-              dir={t.dir}
-              data-live={dvr.isLive}
-              onClick={dvr.goLive}
-              disabled={dvr.isLive || !dvr.canRewind}
-              title={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
-            >
-              <span className={styles.dot} aria-hidden="true" />
-              {dvr.isLive ? (
-                t.live
-              ) : (
-                <>
-                  {t.backToLive} <bdi>−{formatDuration(dvr.secondsBehindLive)}</bdi>
-                </>
-              )}
-            </button>
+                <button
+                  type="button"
+                  className={styles.live}
+                  dir={t.dir}
+                  data-live={dvr.isLive}
+                  onClick={dvr.goLive}
+                  disabled={dvr.isLive || !dvr.canRewind}
+                  title={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
+                >
+                  <span className={styles.dot} aria-hidden="true" />
+                  {dvr.isLive ? (
+                    t.live
+                  ) : (
+                    <>
+                      {t.backToLive} <bdi>−{formatDuration(dvr.secondsBehindLive)}</bdi>
+                    </>
+                  )}
+                </button>
+              </>
+            )}
 
             <span className={styles.spacer} />
 
-            {dvr.canRewind && (
+            {isPlayable && dvr.canRewind && (
               <>
                 <ControlButton
                   label={t.seekBack(SEEK_STEP_SECONDS)}
@@ -167,7 +179,7 @@ export function PlayerControls({
                 </ControlButton>
               </>
             )}
-            {CAN_PICTURE_IN_PICTURE && (
+            {isPlayable && CAN_PICTURE_IN_PICTURE && (
               <ControlButton label={t.pictureInPicture} onClick={onTogglePictureInPicture}>
                 <PipEnterIcon />
               </ControlButton>

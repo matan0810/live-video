@@ -8,6 +8,8 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Fixed
+- Stepping through channels (the full-screen buttons, the arrow keys, the lock screen) skips channels that have no link, such as N12, instead of stopping on them.
+- On a channel that fails to play, the previous and next channel buttons and the full-screen button stay, so a broken channel no longer leaves you stuck in full screen.
 - A channel in a format the browser cannot play (ABC News and Bloomberg use HEVC, which most desktop browsers lack) says so within seconds and stops retrying, instead of loading for 20 seconds and retrying forever.
 - When a report cannot be sent, the form says why: too many reports in a minute, no connection to the report server (a network filter or ad blocker can cause this), or the server's error code.
 
