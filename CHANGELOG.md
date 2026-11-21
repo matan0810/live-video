@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.9.1] - 2026-11-21
+
 ### Fixed
 - The play/pause button in the middle of the video is bigger and answers to taps that land just beside it; before, a near miss counted as a tap on the video and hid the controls. It also shrinks slightly when pressed.
 - Stepping through channels (the full-screen buttons, the arrow keys, the lock screen) skips channels that have no link, such as N12, instead of stopping on them.
