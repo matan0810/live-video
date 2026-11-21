@@ -95,3 +95,13 @@ export function FlagIcon() {
     </Icon>
   );
 }
+
+export function MoreIcon() {
+  return (
+    <Icon isFilled>
+      <circle cx="12" cy="5" r="1.6" />
+      <circle cx="12" cy="12" r="1.6" />
+      <circle cx="12" cy="19" r="1.6" />
+    </Icon>
+  );
+}

@@ -74,7 +74,7 @@
 
 /* Hidden until the viewer moves, taps or pauses; visibility keeps hidden buttons out of
    the tab order. Focus inside keeps it shown for keyboard users. */
-.controls:not([data-visible]):not(:has(:focus-visible)) {
+.controls:not([data-visible]):not(:has(:focus-visible)):not(:has([data-open='true'])) {
   opacity: 0;
   visibility: hidden;
   transition:
@@ -357,4 +357,60 @@
   .theater {
     display: none;
   }
+}
+
+/* The "⋮" menu opens above its button, toward the start of the bar's end. */
+.more {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.menu {
+  position: absolute;
+  inset-block-end: 52px;
+  inset-inline-end: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  padding: 6px;
+  border-radius: 12px;
+  background: rgb(20 23 28 / 96%);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 50%);
+}
+
+.menuTitle {
+  padding: 8px 12px 4px;
+  color: rgb(255 255 255 / 60%);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.875rem;
+  text-align: start;
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background: rgb(255 255 255 / 10%);
+}
+
+.menuItem::before {
+  content: '';
+  width: 14px;
+}
+
+.menuItem[aria-checked='true']::before {
+  content: '✓';
+  color: var(--color-accent);
 }

@@ -282,5 +282,5 @@ export function useHlsPlayer(sources: readonly string[]) {
     return { start: seekable.start(0), end: seekable.end(seekable.length - 1) };
   }, []);
 
-  return { videoRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow };
+  return { videoRef, hlsRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow };
 }

@@ -15,6 +15,8 @@ import { TheaterIcon } from '../components/icons';
 import { useI18n } from '../i18n/context';
 import { DvrSlider } from './DvrSlider';
 import { formatDuration } from './formatDuration';
+import { MoreMenu } from './MoreMenu';
+import type { useCaptions } from './useCaptions';
 import type { useDvr } from './useDvr';
 import styles from './PlayerControls.module.css';
 
@@ -36,6 +38,7 @@ interface PlayerControlsProps {
   /** Wide screens only, where the channel list sits beside the player. */
   isTheaterMode: boolean;
   onToggleTheater: () => void;
+  captions: ReturnType<typeof useCaptions>;
 }
 
 function ControlButton({
@@ -79,6 +82,7 @@ export function PlayerControls({
   isPlayable,
   isTheaterMode,
   onToggleTheater,
+  captions,
 }: PlayerControlsProps) {
   const { t } = useI18n();
 
@@ -191,6 +195,13 @@ export function PlayerControls({
                 <ChevronIcon className={styles.chevronDown} />
               </ControlButton>
             </>
+            {isPlayable && (
+              <MoreMenu
+                captions={captions.options}
+                selectedCaption={captions.selected}
+                onChooseCaption={captions.choose}
+              />
+            )}
             {isPlayable && CAN_PICTURE_IN_PICTURE && (
               <ControlButton
                 className={styles.pip}

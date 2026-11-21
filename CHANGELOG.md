@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- Captions on channels that carry them (DW, NBC News, Reuters, NHK World and others), from a "⋮" menu in the player's bar.
+
 ### Changed
 - The theatre-mode button moved into the player's bar, beside full screen.
 

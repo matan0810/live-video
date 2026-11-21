@@ -16,6 +16,7 @@ import { SkipIndicator } from './SkipIndicator';
 import { useDvr } from './useDvr';
 import { useFullscreen } from './useFullscreen';
 import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
+import { useCaptions } from './useCaptions';
 import { useMediaSession } from './useMediaSession';
 import { usePlayerControls } from './usePlayerControls';
 import styles from './Player.module.css';
@@ -54,13 +55,13 @@ export function Player({
   isTheaterMode,
   onToggleTheater,
 }: PlayerProps) {
-  const { videoRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow } = useHlsPlayer(
-    channel.sources,
-  );
+  const { videoRef, hlsRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow } =
+    useHlsPlayer(channel.sources);
   const dvr = useDvr(videoRef, getLiveWindow);
   const { t, language } = useI18n();
   const name = displayName(channel, language);
   useMediaSession(videoRef, { title: name, logo: channel.logo, onStep });
+  const captions = useCaptions(videoRef, hlsRef, channel.id);
 
   const { seekBy, canRewind } = dvr;
   const frameRef = useRef<HTMLDivElement>(null);
@@ -172,6 +173,7 @@ export function Player({
               onStep={onStep}
               isTheaterMode={isTheaterMode}
               onToggleTheater={onToggleTheater}
+              captions={captions}
               isPlayable={status !== 'error'}
             />
 
