@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.10.0] - 2026-11-21
+
 ### Fixed
 - On a channel without rewind (such as Channel 14), the arrow keys no longer move playback back with no way to return; and the "back to live" button now works on every channel whenever you are behind.
 - The channel bar over the video scrolls with the mouse wheel and has arrows at its ends, so every channel can be reached; before, a mouse could not move it.
