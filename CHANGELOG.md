@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Changed
+- The theatre-mode button moved into the player's bar, beside full screen.
+
 ## [2.10.0] - 2026-11-21
 
 ### Fixed

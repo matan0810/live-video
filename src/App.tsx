@@ -8,8 +8,6 @@ import { AddChannelForm } from './components/AddChannelForm';
 import { ChannelList, type ChannelSection } from './components/ChannelList';
 import { EmptyStage } from './components/EmptyStage';
 import { ReportButton } from './components/ReportButton';
-import { IconButton } from './components/IconButton';
-import { TheaterIcon } from './components/icons';
 import { ShareButton } from './components/ShareButton';
 import { useActiveChannel } from './hooks/useActiveChannel';
 import { useCatalog } from './hooks/useCatalog';
@@ -158,6 +156,8 @@ export function App() {
               onStatusChange={handleStatusChange}
               isOverlayEnabled={isTheaterMode}
               onStep={selectByOffset}
+              isTheaterMode={isTheaterMode}
+              onToggleTheater={() => setIsTheaterMode((current) => !current)}
               overlay={
                 <ChannelStrip
                   channels={orderedChannels}
@@ -177,14 +177,6 @@ export function App() {
                       />
                     </>
                   )}
-                  <IconButton
-                    className={styles.theaterToggle}
-                    label={isTheaterMode ? t.theaterOff : t.theaterOn}
-                    isPressed={isTheaterMode}
-                    onClick={() => setIsTheaterMode((current) => !current)}
-                  >
-                    <TheaterIcon />
-                  </IconButton>
                 </>
               }
             />

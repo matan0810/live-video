@@ -351,3 +351,10 @@
     display: none;
   }
 }
+
+/* Theatre mode widens the player over the channel list, which exists only side by side. */
+@media (max-width: 959px) {
+  .theater {
+    display: none;
+  }
+}

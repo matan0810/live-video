@@ -40,6 +40,8 @@ interface PlayerProps {
   isOverlayEnabled?: boolean;
   /** Switches to the next (1) or previous (-1) channel, from the system's media controls. */
   onStep: (offset: 1 | -1) => void;
+  isTheaterMode: boolean;
+  onToggleTheater: () => void;
 }
 
 export function Player({
@@ -49,6 +51,8 @@ export function Player({
   overlay,
   isOverlayEnabled = false,
   onStep,
+  isTheaterMode,
+  onToggleTheater,
 }: PlayerProps) {
   const { videoRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow } = useHlsPlayer(
     channel.sources,
@@ -166,6 +170,8 @@ export function Player({
               onToggleFullscreen={fullscreen.toggle}
               onTogglePictureInPicture={controls.togglePictureInPicture}
               onStep={onStep}
+              isTheaterMode={isTheaterMode}
+              onToggleTheater={onToggleTheater}
               isPlayable={status !== 'error'}
             />
 

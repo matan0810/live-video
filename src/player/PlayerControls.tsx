@@ -11,6 +11,7 @@ import {
   VolumeOffIcon,
 } from '@videojs/react/icons';
 import type { ReactNode } from 'react';
+import { TheaterIcon } from '../components/icons';
 import { useI18n } from '../i18n/context';
 import { DvrSlider } from './DvrSlider';
 import { formatDuration } from './formatDuration';
@@ -32,6 +33,9 @@ interface PlayerControlsProps {
    * remain, so a broken channel never leaves the viewer stuck in full screen.
    */
   isPlayable: boolean;
+  /** Wide screens only, where the channel list sits beside the player. */
+  isTheaterMode: boolean;
+  onToggleTheater: () => void;
 }
 
 function ControlButton({
@@ -73,6 +77,8 @@ export function PlayerControls({
   onTogglePictureInPicture,
   onStep,
   isPlayable,
+  isTheaterMode,
+  onToggleTheater,
 }: PlayerControlsProps) {
   const { t } = useI18n();
 
@@ -192,6 +198,15 @@ export function PlayerControls({
                 onClick={onTogglePictureInPicture}
               >
                 <PipEnterIcon />
+              </ControlButton>
+            )}
+            {!isFullscreen && (
+              <ControlButton
+                className={styles.theater}
+                label={isTheaterMode ? t.theaterOff : t.theaterOn}
+                onClick={onToggleTheater}
+              >
+                <TheaterIcon />
               </ControlButton>
             )}
             <ControlButton label={t.fullscreen} onClick={onToggleFullscreen}>

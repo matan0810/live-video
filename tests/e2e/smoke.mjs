@@ -110,7 +110,11 @@ async function main() {
   await strip.waitFor();
   await strip.getByRole('button', { name: 'רשת 13' }).click();
   await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
-  await desktop.keyboard.press('KeyT');
+  // The theatre button sits in the player's bar.
+  await desktop.mouse.move(video.x + video.width / 2, video.y + video.height * 0.8);
+  await desktop.mouse.move(video.x + video.width / 2 + 20, video.y + video.height * 0.8);
+  await desktop.getByRole('button', { name: 'הצגת רשימת הערוצים (T)' }).click();
+  await desktop.getByRole('button', { name: 'מצב קולנוע (T)' }).waitFor({ state: 'attached' });
   step('desktop: theatre mode shows a channel bar over the video that switches channels');
 
   await desktop.keyboard.press('KeyF');

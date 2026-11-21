@@ -94,7 +94,8 @@ their auto-hiding, gestures and translated labels.
   the controls instead.
 - **Bottom bar**, left to right: play/pause, mute (with a volume slider on hover), the live
   button, skip −10 / +10 (on rewindable channels), previous / next channel, picture in
-  picture, full screen. When a channel cannot play, only previous / next channel and full
+  picture, theatre mode (wide screens, where the list sits beside the player), full screen.
+  Under the video only the channel's name, share and report remain. When a channel cannot play, only previous / next channel and full
   screen remain. On phones (≤ 480 px) the skip buttons give way to the double tap, and on
   the smallest (≤ 360 px) picture in picture too, so the row never runs off the screen.
 - **Live button**: "Live" at the live edge (within **15 seconds** counts as live);
