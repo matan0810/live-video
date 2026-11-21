@@ -46,10 +46,13 @@ If `master` has commits that `dev` lacks, stop and tell the owner; that should n
 ## 3. Doing a task
 
 1. **Understand.** Restate the request in one or two lines. If something is genuinely the
-   owner's decision (look, scope, which channels), ask before building.
-2. **Build** on `dev` (or a working branch based on it), in small commits that each leave
+   owner's decision (look, scope, which channels), ask before building. Read the part of
+   `DESIGN.md` the task touches: it holds the rules decided so far.
+2. **Plan.** For anything bigger than a small fix, outline the change and the files it
+   touches. Update `DESIGN.md` when a rule, number or behaviour changes.
+3. **Build** on `dev` (or a working branch based on it), in small commits that each leave
    the checks green.
-3. **Test.** All of these, every time:
+4. **Test.** All of these, every time:
    - `npm run check` passes (types, ESLint, Prettier, unit tests).
    - New logic gets a unit test next to it (`*.test.ts`).
    - Any UI change is checked in a real browser: `npm run build && npm run e2e` (extend
@@ -59,12 +62,12 @@ If `master` has commits that `dev` lacks, stop and tell the owner; that should n
      back to live, a failing source. Cloud sessions cannot reach the real channels; say so.
    - Worker changes are covered in `worker/src/index.test.ts` and, when they touch the
      site, tried against `npm run worker:dev`.
-4. **Record.** Add a line under `## [Unreleased]` in `CHANGELOG.md` for every change a
+5. **Record.** Add a line under `## [Unreleased]` in `CHANGELOG.md` for every change a
    viewer or the owner would notice. Update `SECURITY.md` when what is stored or protected
    changes, and `README.md` when setup, commands or layout change.
-5. **Commit and push to `dev`.** From a working branch: push it, then
+6. **Commit and push to `dev`.** From a working branch: push it, then
    `git push origin HEAD:dev` (a fast-forward; if `dev` moved, merge `origin/dev` first).
-6. **Report** to the owner in Hebrew: what changed, what was tested and how, what was not
+7. **Report** to the owner in Hebrew: what changed, what was tested and how, what was not
    tested, and anything they need to do by hand. Say plainly that it is on `dev` and not live.
 
 ### Deferred work and ideas
@@ -75,8 +78,8 @@ can pick it up. Close the issue when the work ships, with the version it shipped
 
 ### Definition of done
 
-Checks green, browser checked when the UI changed, CHANGELOG updated, pushed to `dev`,
-CI on `dev` green, owner told.
+Checks green, browser checked when the UI changed, CHANGELOG updated, `DESIGN.md` updated
+when behaviour changed, pushed to `dev`, CI on `dev` green, owner told.
 
 ### Commits
 

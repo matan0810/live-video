@@ -1,0 +1,168 @@
+# OnAir: design
+
+What the site is, how it looks and the rules each part follows. Code, tests and this file
+change together: a change to a rule, a number or a behaviour updates the section here.
+
+## 1. Scope
+
+| In                                                           | Out                                                   |
+| ------------------------------------------------------------ | ----------------------------------------------------- |
+| Live news channels on one page, Israeli and international    | Recordings, programme guides, on-demand video         |
+| Rewind on channels whose stream keeps past minutes           | Recording or downloading video                        |
+| Hebrew (right to left) and English                           | Other interface languages                             |
+| Favourites and the viewer's own channels, kept on the device | Accounts, comments, anything shared between viewers   |
+| One owner who edits channels in an admin area                | More than one admin, roles                            |
+| Viewer reports of broken channels                            | Replies to viewers                                    |
+| Official free streams only                                   | Pirate re-broadcasts, getting around a host's refusal |
+| A personal site (`noindex`)                                  | Search engines, analytics, ads                        |
+
+## 2. Look
+
+Dark, quiet and made for watching: the video is the brightest thing on the page.
+
+- **Colour.** Near-black surfaces, light text, and one accent, red `#ff4654`
+  (`--color-accent` in `src/styles/global.css`), used for "live", the active channel, the
+  timeline's fill and primary buttons. Nothing else is red.
+- **Type.** Heebo (variable), bundled with the site: no font host.
+- **Channel tiles.** A logo sits on a light card tinted with the logo's own main colour
+  (`src/channels/logoTint.ts`), so the list is not a column of white squares; a channel
+  without a logo shows its short label on a colour derived from its id. A small language
+  tag (AR, RU, FR…) appears only when the channel's language differs from its section's.
+- **Direction.** Layout follows the reading direction through logical CSS properties. The
+  player's control bar and timeline are the exception: they run left to right in both
+  languages, as in nearly every video player, so the skip buttons agree with the timeline;
+  their labels stay in the site's language.
+- **Restraint.** A control earns its place only if it cannot be a default (CLAUDE.md).
+
+## 3. Channel list
+
+- **Sections**, in this order: favourites (when there are any), the viewer's own channels,
+  Israel, World in English, In Arabic, Other languages. A section folds from its heading,
+  and the choice is remembered; a folded section shows how many channels it holds.
+- **Order within a section** is by importance, as the owner sets it in the list.
+  Al Jazeera (English and Arabic) is at the bottom of its section by the owner's choice.
+- **Unavailable.** A channel is marked "unavailable" when it failed to play in this visit,
+  and from the start when it has no link at all.
+- **Important channels are never deleted for lack of a link.** They stay listed with an
+  empty `sources` list (N12, Fox News, Kan Educational, Sky News), so a link can be added in
+  the admin area. A channel the owner no longer wants is removed (Walla, TRT World).
+
+## 4. Where the channel list comes from
+
+- **Two lists.** `src/channels/channels.json` is built into each release. The admin area
+  saves a list in the Worker's storage (KV), which reaches viewers within a minute.
+- **Which one viewers get** (`shared/channels/listVersion.ts`): a saved list records the
+  site version it was saved on. It wins until a newer release ships; that release's own
+  list takes over at once, and the next save in the admin area wins again.
+- **Nothing saved is lost:** the admin's list is copied into the code before every release
+  (CLAUDE.md, section 8) and weekly by the Sync channels workflow, which copies only a list
+  saved on the code's version or later.
+- **Logos are stored with the site** (`public/logos`), since Wikimedia refuses hotlinked
+  images. A logo added with an outside address is copied in by the Sync channels workflow
+  (`scripts/copy-logos.ts`): a real image by its content, at most 300 KB, an SVG with no
+  scripts or outside references.
+- **Versions.** A change to channels, links or logos is a patch; a change to the site's
+  behaviour that viewers notice is a minor version (CLAUDE.md, section 7).
+
+## 5. Player
+
+Playback is ours (`src/player/useHlsPlayer.ts`); Video.js 10 supplies the controls' state,
+their auto-hiding, gestures and translated labels.
+
+### Playing a channel
+
+- Links are tried in order; a link that fails before playing gives way to the next, and
+  only when all have failed is the channel unavailable. A `mako:` link first asks mako for
+  a playback ticket.
+- A link that has not started within **20 seconds** counts as failed.
+- hls.js loads after the page shows. Quality never exceeds what the player's size can
+  show, with very dense phone screens counted as double density.
+- **A link that has played** is kept through trouble: after a network drop it is retried
+  after 1, 2, 4, 8, 15, 15 and 15 seconds, and at once when the device is back online.
+  Video that does not move for **15 seconds** while it should is restarted; more than
+  **two restarts in five minutes** and the link counts as broken.
+- An unavailable channel is retried automatically every **15 seconds**, except a channel
+  with no link and one whose format the browser cannot play (HEVC in most desktop
+  browsers): those say so and wait.
+
+### Controls
+
+- Over the video, fading after a moment without movement and back on any movement or tap.
+  On touch screens one tap shows them; a tap on the video while they show hides them.
+- **Big button in the middle**: shown with the controls on touch screens, and while paused
+  on any screen. 76 px, answering to a ring of 24 px around it, since a near miss would hide
+  the controls instead.
+- **Bottom bar**, left to right: play/pause, mute (with a volume slider on hover), the live
+  button, then skip −10 / +10 (on rewindable channels), previous / next channel (in full
+  screen), picture in picture, full screen. When a channel cannot play, only previous /
+  next channel and full screen remain.
+- **Live button**: "Live" at the live edge (within **15 seconds** counts as live);
+  otherwise "Back to live −1:23" and a tap returns. Phones show the time alone; on the
+  smallest phones (≤ 360 px) the skip buttons give way, and the row never pushes buttons
+  off the screen.
+- **Rewind** is offered when the stream keeps at least **60 seconds**. The timeline follows
+  the stream's moving window (Video.js's own slider assumes history from zero) and seeks
+  when the finger or mouse lets go.
+- **Skips show on the video**, YouTube style: arrows and the seconds on that side, rounded
+  to five, adding up when repeated within 1.2 seconds. Jumps under 3 or over 65 seconds
+  (the timeline, back to live) are not skips.
+- **Gestures**: a click pauses, a double click is full screen; on touch, a double tap on
+  the left or right half skips 10 seconds.
+- **Keyboard**: Space play/pause, M mute, F full screen, P picture in picture, ← / → 10
+  seconds, ↑ / ↓ previous / next channel, 1–9 the first nine channels, T theatre mode.
+- **Full screen** is the player's frame, so the site's overlays stay. With a mouse, a
+  channel bar shows over the top; on touch screens it does not (too easy to tap by
+  mistake). On phones full screen turns the picture sideways where the browser allows.
+- **Stepping channels** (keys, full-screen buttons, lock screen) follows the list order,
+  wraps around, and skips channels with no link.
+- **Lock screen and media keys** show the channel and its logo; previous / next switch
+  channel.
+
+## 6. Admin area
+
+At `#/admin`, a separate chunk viewers never download. One password, a Cloudflare secret.
+
+- **Editor**: every field of a channel, links one per line (first is primary), a logo
+  preview showing the tile as viewers will see it, and a check of each link from the
+  owner's own browser.
+- **Link finder**, in stages, stopping at the first that finds something: the page's
+  source, the players it embeds, a real browser in the cloud (Cloudflare Browser Run,
+  up to 15 times a day), then the iptv-org directory for the same website.
+- **Bookmark**: run on a channel's own site while it plays, it sends the stream links that
+  page loaded to the admin area (`#/admin?add=…`), for sites that hide them from the cloud.
+- **Reports** from viewers, newest first, each with a suggested link when one was given.
+
+## 7. Checks that run on their own
+
+- **Daily link check** (`scripts/check-links.ts`) tests the list viewers get. A link can
+  answer and still be useless: no sound, below 360p, a recording, or a server that refuses
+  the site, which open an issue; HEVC only is a limitation, listed without an issue. Kan's
+  hosts refuse anyone abroad and are listed as not checkable. Channels with no link are
+  listed apart.
+- **Weekly Sync channels**: the admin's list and outside logos into the code (section 4).
+
+## 8. Addresses
+
+`?ch=<id>` opens a channel (and is what Share sends), `#/admin` the admin area, and
+`#/admin?add=<links>` the admin area with links from the bookmark.
+
+## 9. Offline copy
+
+`public/sw.js` keeps the site's own files on the device: the page comes from the network
+when it answers within 2.5 seconds, so a release shows on the next visit, and from the
+saved copy otherwise. Scripts, styles and logos are saved when first used, and an old
+release's files are dropped when the page's change. Streams and the Worker are other hosts
+and are never touched.
+
+## 10. Worker
+
+A Cloudflare Worker (`worker/`) holds the saved channel list, reports and the admin API.
+
+- Per-minute limits by Cloudflare's rate limiter, which stores nothing: logins 5, reports
+  3, link searches 10; logins also 5 per 15 minutes in KV. If the limiter is slow or down,
+  requests go through rather than hang.
+- Each report is its own entry and expires after 90 days.
+- One log line per request (method, path, status, duration) and errors; never addresses,
+  tokens or bodies.
+- Some browsers' tracker blocking refuses `workers.dev` addresses: on those, reports and
+  the admin area fail while the site itself works (the owner's regular phone browser).

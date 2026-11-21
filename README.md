@@ -159,6 +159,7 @@ check runs from your own browser and covers them.
 ## Layout
 
 ```
+DESIGN.md                    what the site is and the rules each part follows
 index.html, vite.config.ts   Vite entry page and build settings
 public/                      favicon, icons, manifest.webmanifest, logos, sw.js (the
                              saved copy that opens the site at once and offline)
