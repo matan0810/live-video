@@ -207,6 +207,30 @@ async function main() {
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'rtl');
   step('desktop: English and Hebrew, remembered across reloads');
 
+  // ---------- Offline ----------
+  // A context of its own: request interception would bypass the service worker.
+  const offline = await browser.newContext({ locale: 'he-IL' });
+  const off = await offline.newPage();
+  off.on('pageerror', (error) => problems.push(`offline: ${error.message}`));
+  await off.goto(url);
+  await off.evaluate(() => navigator.serviceWorker.ready);
+  await off.reload();
+  await off.waitForFunction(() => navigator.serviceWorker.controller !== null);
+  // Let the logos on screen load once, so they are saved.
+  await off.waitForFunction(() =>
+    [...document.images].some((image) => image.complete && image.naturalWidth > 0),
+  );
+  await offline.setOffline(true);
+  await off.reload();
+  await off.getByRole('button', { name: 'כאן 11', exact: true }).waitFor();
+  const shown = await off.evaluate(() => ({
+    logos: [...document.images].filter((image) => image.complete && image.naturalWidth > 0).length,
+    font: document.fonts.check('16px "Heebo Variable"', 'שלום'),
+  }));
+  assert.ok(shown.logos > 0, `logos show offline: ${JSON.stringify(shown)}`);
+  await offline.close();
+  step('offline: the site opens from the saved copy, with its logos');
+
   // ---------- Phone ----------
   const phone = await open({ ...devices['iPhone 13'], locale: 'he-IL' }, 'phone');
   await phone.goto(`${url}?ch=cnn-international`);

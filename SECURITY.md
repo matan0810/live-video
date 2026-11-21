@@ -3,7 +3,10 @@
 ## What is stored
 
 - **In each viewer's browser:** the last channel, favourites, their own channels and a copy
-  of the channel list. Nothing about a viewer is sent anywhere unless they file a report.
+  of the channel list, and a saved copy of the site's own files (`public/sw.js`: the page,
+  its scripts, styles, fonts, icons and logos), so it opens at once. The saved copy holds
+  nothing from other hosts: no video, nothing from the Worker. Nothing about a viewer is
+  sent anywhere unless they file a report.
 - **In the Worker's storage (Cloudflare KV):** the channel list and its previous version,
   and viewer reports: channel, reason, optional note, optional suggested link and the time.
   Each report is its own entry and deletes itself after 90 days; the admin sees the newest 200. There are no accounts and no viewer identifiers.

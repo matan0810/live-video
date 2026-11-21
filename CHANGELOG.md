@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- The site keeps a copy of itself on the device, so it opens at once, and on a weak or missing connection (the videos themselves still need one). A new release shows on the next visit.
+
 ## [2.9.2] - 2026-11-21
 
 ### Fixed

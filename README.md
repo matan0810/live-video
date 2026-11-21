@@ -160,7 +160,8 @@ check runs from your own browser and covers them.
 
 ```
 index.html, vite.config.ts   Vite entry page and build settings
-public/                      favicon, icons, manifest.webmanifest
+public/                      favicon, icons, manifest.webmanifest, logos, sw.js (the
+                             saved copy that opens the site at once and offline)
 shared/                      code used by both the site and the Worker: channel and
                              report validation
 src/channels/                channels.json, custom channels, share links
