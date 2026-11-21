@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Fixed
+- The play/pause button in the middle of the video is bigger and answers to taps that land just beside it; before, a near miss counted as a tap on the video and hid the controls. It also shrinks slightly when pressed.
 - Stepping through channels (the full-screen buttons, the arrow keys, the lock screen) skips channels that have no link, such as N12, instead of stopping on them.
 - On a channel that fails to play, the previous and next channel buttons and the full-screen button stay, so a broken channel no longer leaves you stuck in full screen.
 - A channel in a format the browser cannot play (ABC News and Bloomberg use HEVC, which most desktop browsers lack) says so within seconds and stops retrying, instead of loading for 20 seconds and retrying forever.

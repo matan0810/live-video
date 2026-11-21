@@ -24,28 +24,46 @@
 }
 
 /* The big button in the middle: with the controls on touch screens, and on any screen
-   while paused. */
+   while paused. A tap that misses it would count as a tap on the video and hide the
+   controls, so it answers to a wide ring around the visible circle. */
 .center {
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: 50%;
   display: grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
-  margin: -32px 0 0 -32px;
+  width: 76px;
+  height: 76px;
+  margin: -38px 0 0 -38px;
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: rgb(0 0 0 / 50%);
+  background: rgb(0 0 0 / 55%);
   color: #fff;
   cursor: pointer;
   pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease;
+}
+
+.center::before {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  border-radius: 50%;
+}
+
+.center:active {
+  transform: scale(0.9);
+  background: rgb(0 0 0 / 70%);
 }
 
 .center svg {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
 }
 
 @media (hover: hover) and (pointer: fine) {
