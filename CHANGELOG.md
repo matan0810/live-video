@@ -12,6 +12,7 @@ breaking changes are major.
 - The channel bar over the video scrolls with the mouse wheel and has arrows at its ends, so every channel can be reached; before, a mouse could not move it.
 
 ### Changed
+- The channel bar over the video no longer covers the picture whenever the mouse moves: it opens only when the pointer comes to the top of the video, is smaller, and closes sooner.
 - Previous and next channel buttons are in the player's bar in every view, not only in full screen. On phones they take the place of the ±10 buttons (a double tap skips).
 
 ### Added

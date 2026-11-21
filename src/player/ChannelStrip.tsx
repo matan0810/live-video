@@ -1,3 +1,4 @@
+import { ChevronIcon } from '@videojs/react/icons';
 import { useEffect, useRef } from 'react';
 import type { Channel } from '../channels';
 import { displayName } from '../channels/displayName';
@@ -40,7 +41,7 @@ export function ChannelStrip({
           aria-label={t.stripBack}
           onClick={() => scroll.page('before')}
         >
-          {t.dir === 'rtl' ? '›' : '‹'}
+          <ChevronIcon data-point={t.dir === 'rtl' ? 'right' : 'left'} />
         </button>
       )}
       <ul ref={listRef} className={styles.list}>
@@ -78,7 +79,7 @@ export function ChannelStrip({
           aria-label={t.stripForward}
           onClick={() => scroll.page('after')}
         >
-          {t.dir === 'rtl' ? '‹' : '›'}
+          <ChevronIcon data-point={t.dir === 'rtl' ? 'left' : 'right'} />
         </button>
       )}
     </nav>

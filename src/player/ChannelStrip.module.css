@@ -1,7 +1,7 @@
 .strip {
   position: relative;
-  padding: 14px 0 28px;
-  background: linear-gradient(to bottom, rgb(0 0 0 / 82%), rgb(0 0 0 / 0%));
+  padding: 8px 0 18px;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 70%), rgb(0 0 0 / 0%));
 }
 
 .list {
@@ -23,9 +23,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  width: 84px;
-  padding: 8px 4px;
+  gap: 4px;
+  width: 68px;
+  padding: 6px 4px;
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   background: rgb(20 23 28 / 70%);
@@ -52,14 +52,14 @@
 }
 
 .tile {
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
 }
 
 .name {
   width: 100%;
   overflow: hidden;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -67,15 +67,26 @@
 /* Arrows at the strip's ends, shown only when more channels lie that way. */
 .edge {
   position: absolute;
-  inset-block: 14px 28px;
+  inset-block: 8px 18px;
   z-index: 1;
   width: 44px;
   border: none;
   background: rgb(0 0 0 / 70%);
   color: #fff;
-  font-size: 1.75rem;
-  line-height: 1;
+  display: grid;
+  place-items: center;
   cursor: pointer;
+}
+
+/* An icon, not a character: the browser would mirror ‹ › in right-to-left text. The
+   arrow points the way more channels lie: outward, at either end. */
+.edge svg {
+  width: 22px;
+  height: 22px;
+}
+
+.edge svg[data-point='left'] {
+  transform: rotate(180deg);
 }
 
 .edge:hover {

@@ -24,7 +24,9 @@ const AUTO_RETRY_DELAY_MS = 15_000;
 const KEYBOARD_SEEK_SECONDS = 10;
 /** Video.js supplies the controls' state, auto-hiding, gestures and labels; playback stays ours. */
 const { Player: MediaPlayer } = createPlayer({ features: videoFeatures });
-const OVERLAY_HIDE_DELAY_MS = 3000;
+const OVERLAY_HIDE_DELAY_MS = 2000;
+/** The channel bar opens only when the pointer comes near the top of the video. */
+const STRIP_ZONE_SHARE = 0.3;
 /** The channel bar is for mouse users; on touch screens it is too easy to tap by accident. */
 const MOUSE_QUERY = '(hover: hover) and (pointer: fine)';
 
@@ -73,7 +75,10 @@ export function Player({
     const { clientX: x, clientY: y } = event;
     if (x === lastPointer.current.x && y === lastPointer.current.y) return;
     lastPointer.current = { x, y };
-    reveal();
+    // Moving over the picture should not cover it: only the top of the video, where the
+    // bar opens, brings it.
+    const frame = event.currentTarget.getBoundingClientRect();
+    if (y - frame.top <= frame.height * STRIP_ZONE_SHARE) reveal();
   };
 
   useKeyboardShortcuts(
@@ -124,7 +129,6 @@ export function Player({
             className={styles.frame}
             data-idle={isOverlayShown && !overlayVisibility.isVisible}
             onPointerMove={handlePointerMove}
-            onPointerDown={reveal}
           >
             <Video ref={videoRef} className={styles.video} playsInline />
             <SkipIndicator videoRef={videoRef} />

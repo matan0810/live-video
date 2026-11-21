@@ -97,7 +97,16 @@ async function main() {
   const strip = desktop.getByRole('navigation', { name: 'החלפת ערוץ' });
   assert.equal(await strip.count(), 0, 'no channel bar over the video in the normal layout');
   await desktop.keyboard.press('KeyT');
-  await desktop.locator('video').hover({ force: true });
+  // Moving over the picture leaves it clear; the top of the video brings the bar.
+  const video = await desktop.locator('video').boundingBox();
+  await desktop.mouse.move(video.x + video.width / 2, video.y + video.height * 0.7);
+  await desktop.mouse.move(video.x + video.width / 2 + 20, video.y + video.height * 0.7);
+  await desktop.waitForTimeout(2500);
+  await desktop.mouse.move(video.x + video.width / 2 + 40, video.y + video.height * 0.6);
+  await desktop.waitForTimeout(300);
+  assert.equal(await strip.isVisible(), false, 'the middle of the video does not open the bar');
+  await desktop.mouse.move(video.x + video.width / 2, video.y + 20);
+  await desktop.mouse.move(video.x + video.width / 2 + 20, video.y + 30);
   await strip.waitFor();
   await strip.getByRole('button', { name: 'רשת 13' }).click();
   await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
@@ -216,10 +225,11 @@ async function main() {
   await off.evaluate(() => navigator.serviceWorker.ready);
   await off.reload();
   await off.waitForFunction(() => navigator.serviceWorker.controller !== null);
-  // Let the logos on screen load once, so they are saved.
-  await off.waitForFunction(() =>
-    [...document.images].some((image) => image.complete && image.naturalWidth > 0),
-  );
+  // Let the logos on screen load once and be saved before going offline.
+  await off.waitForFunction(async () => {
+    const saved = await (await caches.open('onair-v1')).keys();
+    return saved.some((request) => request.url.includes('/logos/'));
+  });
   await offline.setOffline(true);
   await off.reload();
   await off.getByRole('button', { name: 'כאן 11', exact: true }).waitFor();

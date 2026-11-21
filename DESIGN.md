@@ -112,8 +112,10 @@ their auto-hiding, gestures and translated labels.
   seconds (on rewindable channels only), ↑ / ↓ previous / next channel, 1–9 the first nine channels, T theatre mode.
 - **Full screen** is the player's frame, so the site's overlays stay. With a mouse, a
   channel bar shows over the top; on touch screens it does not (too easy to tap by
-  mistake). The bar scrolls with the mouse wheel and has arrows at its ends while more
-  channels lie that way, and it keeps the playing channel in view. On phones full screen turns the picture sideways where the browser allows.
+  mistake). It opens only when the pointer comes to the top 30% of the video (moving over
+  the picture leaves it clear) and on a channel switch, and closes 2 seconds after the
+  pointer leaves. It is compact, scrolls with the mouse wheel, has arrows at its ends while
+  more channels lie that way, and keeps the playing channel in view. On phones full screen turns the picture sideways where the browser allows.
 - **Stepping channels** (keys, full-screen buttons, lock screen) follows the list order,
   wraps around, and skips channels with no link.
 - **Lock screen and media keys** show the channel and its logo; previous / next switch
