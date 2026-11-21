@@ -90,7 +90,8 @@
 }
 
 .spacer {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .button {
@@ -197,7 +198,9 @@
 
 .live {
   display: inline-flex;
-  flex: none;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
   align-items: center;
   gap: 8px;
   height: 36px;
@@ -299,7 +302,27 @@
 }
 
 /* Narrow players (phones held upright): smaller buttons so the row fits. */
+/* The row must never push the full-screen button off the edge, however far behind. */
+.row > * {
+  flex-shrink: 0;
+}
+
+.row > .live {
+  flex-shrink: 1;
+  overflow: hidden;
+}
+
 @media (max-width: 480px) {
+  /* On a narrow player the time alone says it: "● −2:22:53". */
+  .liveText {
+    display: none;
+  }
+
+  .live {
+    margin-inline-start: 2px;
+    padding: 0 10px;
+  }
+
   .bottom {
     padding: 24px 6px 6px;
   }
@@ -312,5 +335,13 @@
   .button svg {
     width: 22px;
     height: 22px;
+  }
+}
+
+/* The smallest phones: the skip buttons give way (a double tap on either side does the
+   same), so the time behind live is never cut off. */
+@media (max-width: 360px) {
+  .skip {
+    display: none;
   }
 }

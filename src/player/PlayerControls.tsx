@@ -39,16 +39,18 @@ function ControlButton({
   onClick,
   children,
   disabled,
+  className,
 }: {
   label: string;
   onClick: () => void;
   children: ReactNode;
   disabled?: boolean;
+  className?: string;
 }) {
   return (
     <button
       type="button"
-      className={styles.button}
+      className={[styles.button, className].filter(Boolean).join(' ')}
       aria-label={label}
       title={label}
       onClick={onClick}
@@ -136,13 +138,15 @@ export function PlayerControls({
                   onClick={dvr.goLive}
                   disabled={dvr.isLive || !dvr.canRewind}
                   title={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
+                  aria-label={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
                 >
                   <span className={styles.dot} aria-hidden="true" />
                   {dvr.isLive ? (
                     t.live
                   ) : (
                     <>
-                      {t.backToLive} <bdi>−{formatDuration(dvr.secondsBehindLive)}</bdi>
+                      <span className={styles.liveText}>{t.backToLive} </span>
+                      <bdi>−{formatDuration(dvr.secondsBehindLive)}</bdi>
                     </>
                   )}
                 </button>
@@ -154,6 +158,7 @@ export function PlayerControls({
             {isPlayable && dvr.canRewind && (
               <>
                 <ControlButton
+                  className={styles.skip}
                   label={t.seekBack(SEEK_STEP_SECONDS)}
                   onClick={() => dvr.seekBy(-SEEK_STEP_SECONDS)}
                   disabled={dvr.secondsBehindLive >= dvr.windowSeconds}
@@ -161,6 +166,7 @@ export function PlayerControls({
                   <bdi className={styles.stepText}>−{SEEK_STEP_SECONDS}</bdi>
                 </ControlButton>
                 <ControlButton
+                  className={styles.skip}
                   label={t.seekForward(SEEK_STEP_SECONDS)}
                   onClick={() => dvr.seekBy(SEEK_STEP_SECONDS)}
                   disabled={dvr.isLive}
