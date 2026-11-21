@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.9.2] - 2026-11-21
+
 ### Fixed
 - Far behind live, the "back to live" button grew wide enough to push the full-screen and picture-in-picture buttons off a phone's screen. On phones it now shows just the time behind ("● −2:22:53"), and on the smallest phones the ±10 buttons give way to the double tap.
 
