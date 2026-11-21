@@ -7,6 +7,13 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- On a channel without rewind (such as Channel 14), the arrow keys no longer move playback back with no way to return; and the "back to live" button now works on every channel whenever you are behind.
+- The channel bar over the video scrolls with the mouse wheel and has arrows at its ends, so every channel can be reached; before, a mouse could not move it.
+
+### Changed
+- Previous and next channel buttons are in the player's bar in every view, not only in full screen. On phones they take the place of the ±10 buttons (a double tap skips).
+
 ### Added
 - The site keeps a copy of itself on the device, so it opens at once, and on a weak or missing connection (the videos themselves still need one). A new release shows on the next visit.
 

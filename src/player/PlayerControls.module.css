@@ -338,10 +338,16 @@
   }
 }
 
-/* The smallest phones: the skip buttons give way (a double tap on either side does the
-   same), so the time behind live is never cut off. */
-@media (max-width: 360px) {
+/* Phones: the skip buttons give way to the channel buttons (a double tap on either side
+   skips), and on the smallest picture in picture too, so the row always fits. */
+@media (max-width: 480px) {
   .skip {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .pip {
     display: none;
   }
 }

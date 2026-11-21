@@ -56,7 +56,7 @@ export function Player({
   const name = displayName(channel, language);
   useMediaSession(videoRef, { title: name, logo: channel.logo, onStep });
 
-  const { seekBy } = dvr;
+  const { seekBy, canRewind } = dvr;
   const frameRef = useRef<HTMLDivElement>(null);
   const controls = usePlayerControls(videoRef);
   const fullscreen = useFullscreen(frameRef, videoRef);
@@ -83,10 +83,14 @@ export function Player({
         KeyM: controls.toggleMute,
         KeyP: controls.togglePictureInPicture,
         Space: controls.togglePlay,
-        ArrowLeft: () => seekBy(-KEYBOARD_SEEK_SECONDS),
-        ArrowRight: () => seekBy(KEYBOARD_SEEK_SECONDS),
+        // Only where rewind is offered: elsewhere the keys would leave the viewer behind
+        // live on a channel with no timeline.
+        ...(canRewind && {
+          ArrowLeft: () => seekBy(-KEYBOARD_SEEK_SECONDS),
+          ArrowRight: () => seekBy(KEYBOARD_SEEK_SECONDS),
+        }),
       }),
-      [controls, fullscreen.toggle, seekBy],
+      [controls, fullscreen.toggle, seekBy, canRewind],
     ),
   );
 

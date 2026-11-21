@@ -93,13 +93,13 @@ their auto-hiding, gestures and translated labels.
   on any screen. 76 px, answering to a ring of 24 px around it, since a near miss would hide
   the controls instead.
 - **Bottom bar**, left to right: play/pause, mute (with a volume slider on hover), the live
-  button, then skip −10 / +10 (on rewindable channels), previous / next channel (in full
-  screen), picture in picture, full screen. When a channel cannot play, only previous /
-  next channel and full screen remain.
+  button, skip −10 / +10 (on rewindable channels), previous / next channel, picture in
+  picture, full screen. When a channel cannot play, only previous / next channel and full
+  screen remain. On phones (≤ 480 px) the skip buttons give way to the double tap, and on
+  the smallest (≤ 360 px) picture in picture too, so the row never runs off the screen.
 - **Live button**: "Live" at the live edge (within **15 seconds** counts as live);
-  otherwise "Back to live −1:23" and a tap returns. Phones show the time alone; on the
-  smallest phones (≤ 360 px) the skip buttons give way, and the row never pushes buttons
-  off the screen.
+  otherwise "Back to live −1:23", and a tap returns, on any channel, rewindable or not.
+  Phones show the time alone.
 - **Rewind** is offered when the stream keeps at least **60 seconds**. The timeline follows
   the stream's moving window (Video.js's own slider assumes history from zero) and seeks
   when the finger or mouse lets go.
@@ -109,10 +109,11 @@ their auto-hiding, gestures and translated labels.
 - **Gestures**: a click pauses, a double click is full screen; on touch, a double tap on
   the left or right half skips 10 seconds.
 - **Keyboard**: Space play/pause, M mute, F full screen, P picture in picture, ← / → 10
-  seconds, ↑ / ↓ previous / next channel, 1–9 the first nine channels, T theatre mode.
+  seconds (on rewindable channels only), ↑ / ↓ previous / next channel, 1–9 the first nine channels, T theatre mode.
 - **Full screen** is the player's frame, so the site's overlays stay. With a mouse, a
   channel bar shows over the top; on touch screens it does not (too easy to tap by
-  mistake). On phones full screen turns the picture sideways where the browser allows.
+  mistake). The bar scrolls with the mouse wheel and has arrows at its ends while more
+  channels lie that way, and it keeps the playing channel in view. On phones full screen turns the picture sideways where the browser allows.
 - **Stepping channels** (keys, full-screen buttons, lock screen) follows the list order,
   wraps around, and skips channels with no link.
 - **Lock screen and media keys** show the channel and its logo; previous / next switch

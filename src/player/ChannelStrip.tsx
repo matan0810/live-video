@@ -4,6 +4,7 @@ import { displayName } from '../channels/displayName';
 import { languageBadge } from '../channels/languageBadge';
 import { ChannelTile } from '../components/ChannelTile';
 import { useI18n } from '../i18n/context';
+import { useStripScroll } from './useStripScroll';
 import styles from './ChannelStrip.module.css';
 
 interface ChannelStripProps {
@@ -22,6 +23,8 @@ export function ChannelStrip({
 }: ChannelStripProps) {
   const { t, language } = useI18n();
   const activeRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const scroll = useStripScroll(listRef);
 
   useEffect(() => {
     activeRef.current?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
@@ -29,7 +32,18 @@ export function ChannelStrip({
 
   return (
     <nav className={styles.strip} aria-label={t.channelBar}>
-      <ul className={styles.list}>
+      {scroll.hasBefore && (
+        <button
+          type="button"
+          className={styles.edge}
+          data-side="before"
+          aria-label={t.stripBack}
+          onClick={() => scroll.page('before')}
+        >
+          {t.dir === 'rtl' ? '›' : '‹'}
+        </button>
+      )}
+      <ul ref={listRef} className={styles.list}>
         {channels.map((channel) => {
           const isActive = channel.id === activeChannelId;
           return (
@@ -56,6 +70,17 @@ export function ChannelStrip({
           );
         })}
       </ul>
+      {scroll.hasAfter && (
+        <button
+          type="button"
+          className={styles.edge}
+          data-side="after"
+          aria-label={t.stripForward}
+          onClick={() => scroll.page('after')}
+        >
+          {t.dir === 'rtl' ? '‹' : '›'}
+        </button>
+      )}
     </nav>
   );
 }

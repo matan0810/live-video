@@ -1,4 +1,5 @@
 .strip {
+  position: relative;
   padding: 14px 0 28px;
   background: linear-gradient(to bottom, rgb(0 0 0 / 82%), rgb(0 0 0 / 0%));
 }
@@ -61,4 +62,30 @@
   font-size: 0.75rem;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Arrows at the strip's ends, shown only when more channels lie that way. */
+.edge {
+  position: absolute;
+  inset-block: 14px 28px;
+  z-index: 1;
+  width: 44px;
+  border: none;
+  background: rgb(0 0 0 / 70%);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.edge:hover {
+  background: rgb(0 0 0 / 88%);
+}
+
+.edge[data-side='before'] {
+  inset-inline-start: 0;
+}
+
+.edge[data-side='after'] {
+  inset-inline-end: 0;
 }

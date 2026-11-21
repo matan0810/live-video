@@ -25,7 +25,7 @@ interface PlayerControlsProps {
   isFullscreen: boolean;
   onToggleFullscreen: () => void;
   onTogglePictureInPicture: () => void;
-  /** Switches channel; offered in full screen, where the channel list is out of reach. */
+  /** Switches channel, from the bar in any view. */
   onStep: (offset: 1 | -1) => void;
   /**
    * False while the channel cannot play: only switching channel and leaving full screen
@@ -136,7 +136,9 @@ export function PlayerControls({
                   dir={t.dir}
                   data-live={dvr.isLive}
                   onClick={dvr.goLive}
-                  disabled={dvr.isLive || !dvr.canRewind}
+                  // Enabled whenever behind, even on a channel without a timeline: there must
+                  // always be a way back to live.
+                  disabled={dvr.isLive}
                   title={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
                   aria-label={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
                 >
@@ -175,18 +177,20 @@ export function PlayerControls({
                 </ControlButton>
               </>
             )}
-            {isFullscreen && (
-              <>
-                <ControlButton label={t.previousChannel} onClick={() => onStep(-1)}>
-                  <ChevronIcon className={styles.chevronUp} />
-                </ControlButton>
-                <ControlButton label={t.nextChannel} onClick={() => onStep(1)}>
-                  <ChevronIcon className={styles.chevronDown} />
-                </ControlButton>
-              </>
-            )}
+            <>
+              <ControlButton label={t.previousChannel} onClick={() => onStep(-1)}>
+                <ChevronIcon className={styles.chevronUp} />
+              </ControlButton>
+              <ControlButton label={t.nextChannel} onClick={() => onStep(1)}>
+                <ChevronIcon className={styles.chevronDown} />
+              </ControlButton>
+            </>
             {isPlayable && CAN_PICTURE_IN_PICTURE && (
-              <ControlButton label={t.pictureInPicture} onClick={onTogglePictureInPicture}>
+              <ControlButton
+                className={styles.pip}
+                label={t.pictureInPicture}
+                onClick={onTogglePictureInPicture}
+              >
                 <PipEnterIcon />
               </ControlButton>
             )}
