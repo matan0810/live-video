@@ -7,10 +7,12 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- Far behind live, the "back to live" button grew wide enough to push the full-screen and picture-in-picture buttons off a phone's screen. On phones it now shows just the time behind ("● −2:22:53"), and on the smallest phones the ±10 buttons give way to the double tap.
+
 ## [2.9.1] - 2026-11-21
 
 ### Fixed
-- Far behind live, the "back to live" button grew wide enough to push the full-screen and picture-in-picture buttons off a phone's screen. On phones it now shows just the time behind ("● −2:22:53"), and on the smallest phones the ±10 buttons give way to the double tap.
 - The play/pause button in the middle of the video is bigger and answers to taps that land just beside it; before, a near miss counted as a tap on the video and hid the controls. It also shrinks slightly when pressed.
 - Stepping through channels (the full-screen buttons, the arrow keys, the lock screen) skips channels that have no link, such as N12, instead of stopping on them.
 - On a channel that fails to play, the previous and next channel buttons and the full-screen button stay, so a broken channel no longer leaves you stuck in full screen.
