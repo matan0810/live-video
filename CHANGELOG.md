@@ -14,6 +14,7 @@ breaking changes are major.
 - Captions on channels that carry them (DW, NBC News, Reuters, NHK World and others), from a "⋮" menu in the player's bar.
 
 ### Changed
+- The "⋮" menu is always in the same place in the player's bar; on phones it opens as a large panel across the video, and on the smallest screens it also holds picture in picture.
 - The theatre-mode button moved into the player's bar, beside full screen.
 
 ## [2.10.0] - 2026-11-21

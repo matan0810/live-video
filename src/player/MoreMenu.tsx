@@ -11,13 +11,22 @@ interface MoreMenuProps {
   onChooseCaption: (id: string | null) => void;
   /** Offered only on channels that keep past minutes; null hides it. */
   speed: { value: Speed; isLive: boolean; onChoose: (speed: Speed) => void } | null;
+  /** Shown in the menu only on the smallest screens, where the bar has no room for it. */
+  onPictureInPicture: (() => void) | null;
 }
 
 /**
  * The "⋮" menu for settings few viewers need, so they take no room in the bar: captions on
- * channels that carry them, speed on channels with rewind. Hidden when it would be empty.
+ * channels that carry them, speed on channels with rewind. Always in the same place, so the
+ * bar does not shift between channels; on a channel with neither it says so.
  */
-export function MoreMenu({ captions, selectedCaption, onChooseCaption, speed }: MoreMenuProps) {
+export function MoreMenu({
+  captions,
+  selectedCaption,
+  onChooseCaption,
+  speed,
+  onPictureInPicture,
+}: MoreMenuProps) {
   const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -39,8 +48,6 @@ export function MoreMenu({ captions, selectedCaption, onChooseCaption, speed }: 
       document.removeEventListener('keydown', close);
     };
   }, [isOpen]);
-
-  if (captions.length === 0 && !speed) return null;
 
   const item = (
     key: string,
@@ -81,7 +88,7 @@ export function MoreMenu({ captions, selectedCaption, onChooseCaption, speed }: 
       {isOpen && (
         <div role="menu" aria-label={t.moreOptions} className={styles.menu} dir={t.dir}>
           {captions.length > 0 && (
-            <div role="group" aria-label={t.captions}>
+            <div role="group" aria-label={t.captions} className={styles.menuGroup}>
               <div className={styles.menuTitle}>{t.captions}</div>
               {item('off', t.captionsOff, selectedCaption === null, () => onChooseCaption(null))}
               {captions.map((option) =>
@@ -92,18 +99,34 @@ export function MoreMenu({ captions, selectedCaption, onChooseCaption, speed }: 
             </div>
           )}
           {speed && (
-            <div role="group" aria-label={t.speed}>
+            <div role="group" aria-label={t.speed} className={styles.menuGroup}>
               <div className={styles.menuTitle}>{t.speed}</div>
-              {SPEEDS.map((value) =>
-                item(
-                  String(value),
-                  value === 1 ? t.speedNormal : `×${value}`,
-                  speed.value === value,
-                  () => speed.onChoose(value),
-                  !isSpeedAllowed(value, speed.isLive),
-                ),
-              )}
+              <div className={styles.speedGrid}>
+                {SPEEDS.map((value) =>
+                  item(
+                    String(value),
+                    value === 1 ? t.speedNormal : `×${value}`,
+                    speed.value === value,
+                    () => speed.onChoose(value),
+                    !isSpeedAllowed(value, speed.isLive),
+                  ),
+                )}
+              </div>
             </div>
+          )}
+          {captions.length === 0 && !speed && <p className={styles.menuEmpty}>{t.moreNothing}</p>}
+          {onPictureInPicture && (
+            <button
+              type="button"
+              role="menuitem"
+              className={`${styles.menuItem} ${styles.pipItem}`}
+              onClick={() => {
+                onPictureInPicture();
+                setIsOpen(false);
+              }}
+            >
+              {t.pictureInPicture}
+            </button>
           )}
         </div>
       )}

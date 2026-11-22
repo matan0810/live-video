@@ -208,6 +208,7 @@ export function PlayerControls({
                     ? { value: speed.speed, isLive: dvr.isLive, onChoose: speed.setSpeed }
                     : null
                 }
+                onPictureInPicture={CAN_PICTURE_IN_PICTURE ? onTogglePictureInPicture : null}
               />
             )}
             {isPlayable && CAN_PICTURE_IN_PICTURE && (
