@@ -12,7 +12,7 @@ const { version } = JSON.parse(readFileSync(new URL('./package.json', import.met
  * (src/trustedTypes.ts). Video, playlists and logos may come from any https host, because
  * viewers add their own channels and the admin can point a logo anywhere until it is copied
  * in; the Worker and mako are https hosts too (SECURITY.md lists them). hls.js plays through
- * blob: media and runs a blob: worker. Only in the build: the dev server injects inline
+ * blob: media, runs a blob: worker, and gives each caption track an empty data: address. Only in the build: the dev server injects inline
  * scripts of its own.
  */
 export const CONTENT_SECURITY_POLICY = [
@@ -21,7 +21,7 @@ export const CONTENT_SECURITY_POLICY = [
   "style-src 'self'",
   "font-src 'self' data:",
   "img-src 'self' data: https:",
-  "media-src 'self' blob: https:",
+  "media-src 'self' blob: data: https:",
   "connect-src 'self' https:",
   "worker-src 'self' blob:",
   "manifest-src 'self'",
