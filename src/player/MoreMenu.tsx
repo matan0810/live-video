@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { MoreIcon } from '../components/icons';
 import { useI18n } from '../i18n/context';
 import type { CaptionOption } from './captionOptions';
 import { isSpeedAllowed, SPEEDS, type Speed } from './playbackSpeed';
-import styles from './PlayerControls.module.css';
+import styles from './MoreMenu.module.css';
 
 interface MoreMenuProps {
   captions: readonly CaptionOption[];
@@ -15,10 +15,20 @@ interface MoreMenuProps {
   onPictureInPicture: (() => void) | null;
 }
 
+type Page = 'main' | 'captions' | 'speed';
+
+function Chevron() {
+  return (
+    <svg className={styles.chevron} viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 6l6 6-6 6" />
+    </svg>
+  );
+}
+
 /**
- * The "⋮" menu for settings few viewers need, so they take no room in the bar: captions on
- * channels that carry them, speed on channels with rewind. Always in the same place, so the
- * bar does not shift between channels; on a channel with neither it says so.
+ * The "⋮" menu, as in YouTube: one short row per setting with its current value, opening a
+ * list of choices. A small pop-up by the button with a mouse; a sheet from the bottom of the
+ * screen on touch screens. Always in the bar, so it does not shift between channels.
  */
 export function MoreMenu({
   captions,
@@ -28,28 +38,43 @@ export function MoreMenu({
   onPictureInPicture,
 }: MoreMenuProps) {
   const { t } = useI18n();
-  const [isOpen, setIsOpen] = useState(false);
+  const [page, setPage] = useState<Page | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const close = () => setPage(null);
 
   useEffect(() => {
-    if (!isOpen) return;
-    const close = (event: Event) => {
+    if (page === null) return;
+    const onEvent = (event: Event) => {
       const isEscape = event instanceof KeyboardEvent && event.key === 'Escape';
       const isOutside =
         event instanceof PointerEvent &&
         event.target instanceof Node &&
         !rootRef.current?.contains(event.target);
-      if (isEscape || isOutside) setIsOpen(false);
+      if (isEscape || isOutside) setPage(null);
     };
-    document.addEventListener('pointerdown', close);
-    document.addEventListener('keydown', close);
+    document.addEventListener('pointerdown', onEvent);
+    document.addEventListener('keydown', onEvent);
     return () => {
-      document.removeEventListener('pointerdown', close);
-      document.removeEventListener('keydown', close);
+      document.removeEventListener('pointerdown', onEvent);
+      document.removeEventListener('keydown', onEvent);
     };
-  }, [isOpen]);
+  }, [page]);
 
-  const item = (
+  const speedLabel = (value: Speed) => (value === 1 ? t.speedNormal : `×${value}`);
+  const captionLabel =
+    captions.find((option) => option.id === selectedCaption)?.label ?? t.captionsOff;
+
+  const row = (label: string, value: string, target: Page) => (
+    <button type="button" role="menuitem" className={styles.row} onClick={() => setPage(target)}>
+      <span>{label}</span>
+      <span className={styles.value}>
+        <bdi>{value}</bdi>
+        <Chevron />
+      </span>
+    </button>
+  );
+
+  const choice = (
     key: string,
     label: string,
     isChecked: boolean,
@@ -62,73 +87,90 @@ export function MoreMenu({
       role="menuitemradio"
       aria-checked={isChecked}
       disabled={isDisabled}
-      className={styles.menuItem}
+      className={styles.choice}
       onClick={() => {
         onChoose();
-        setIsOpen(false);
+        close();
       }}
     >
-      {label}
+      <bdi>{label}</bdi>
     </button>
   );
 
+  const subPage = (title: string, choices: ReactNode) => (
+    <>
+      <button type="button" className={styles.back} onClick={() => setPage('main')}>
+        <Chevron />
+        {title}
+      </button>
+      <div role="group" aria-label={title}>
+        {choices}
+      </div>
+    </>
+  );
+
   return (
-    <div ref={rootRef} className={styles.more} data-open={isOpen}>
+    <div ref={rootRef} className={styles.more} data-open={page !== null}>
       <button
         type="button"
-        className={styles.button}
+        className={styles.trigger}
         aria-label={t.moreOptions}
         title={t.moreOptions}
         aria-haspopup="menu"
-        aria-expanded={isOpen}
-        onClick={() => setIsOpen((current) => !current)}
+        aria-expanded={page !== null}
+        onClick={() => setPage((current) => (current === null ? 'main' : null))}
       >
         <MoreIcon />
       </button>
-      {isOpen && (
-        <div role="menu" aria-label={t.moreOptions} className={styles.menu} dir={t.dir}>
-          {captions.length > 0 && (
-            <div role="group" aria-label={t.captions} className={styles.menuGroup}>
-              <div className={styles.menuTitle}>{t.captions}</div>
-              {item('off', t.captionsOff, selectedCaption === null, () => onChooseCaption(null))}
-              {captions.map((option) =>
-                item(option.id, option.label, selectedCaption === option.id, () =>
-                  onChooseCaption(option.id),
+      {page !== null && (
+        <>
+          <button type="button" className={styles.backdrop} aria-label={t.close} onClick={close} />
+          <div role="menu" aria-label={t.moreOptions} className={styles.menu} dir={t.dir}>
+            {page === 'main' && (
+              <>
+                {captions.length > 0 && row(t.captions, captionLabel, 'captions')}
+                {speed && row(t.speed, speedLabel(speed.value), 'speed')}
+                {captions.length === 0 && !speed && <p className={styles.empty}>{t.moreNothing}</p>}
+                {onPictureInPicture && (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className={`${styles.row} ${styles.pip}`}
+                    onClick={() => {
+                      onPictureInPicture();
+                      close();
+                    }}
+                  >
+                    {t.pictureInPicture}
+                  </button>
+                )}
+              </>
+            )}
+            {page === 'captions' &&
+              subPage(t.captions, [
+                choice('off', t.captionsOff, selectedCaption === null, () => onChooseCaption(null)),
+                ...captions.map((option) =>
+                  choice(option.id, option.label, selectedCaption === option.id, () =>
+                    onChooseCaption(option.id),
+                  ),
                 ),
-              )}
-            </div>
-          )}
-          {speed && (
-            <div role="group" aria-label={t.speed} className={styles.menuGroup}>
-              <div className={styles.menuTitle}>{t.speed}</div>
-              <div className={styles.speedGrid}>
-                {SPEEDS.map((value) =>
-                  item(
+              ])}
+            {page === 'speed' &&
+              speed &&
+              subPage(
+                t.speed,
+                SPEEDS.map((value) =>
+                  choice(
                     String(value),
-                    value === 1 ? t.speedNormal : `×${value}`,
+                    speedLabel(value),
                     speed.value === value,
                     () => speed.onChoose(value),
                     !isSpeedAllowed(value, speed.isLive),
                   ),
-                )}
-              </div>
-            </div>
-          )}
-          {captions.length === 0 && !speed && <p className={styles.menuEmpty}>{t.moreNothing}</p>}
-          {onPictureInPicture && (
-            <button
-              type="button"
-              role="menuitem"
-              className={`${styles.menuItem} ${styles.pipItem}`}
-              onClick={() => {
-                onPictureInPicture();
-                setIsOpen(false);
-              }}
-            >
-              {t.pictureInPicture}
-            </button>
-          )}
-        </div>
+                ),
+              )}
+          </div>
+        </>
       )}
     </div>
   );

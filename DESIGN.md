@@ -103,15 +103,18 @@ their auto-hiding, gestures and translated labels.
   button, skip −10 / +10 (on rewindable channels), previous / next channel, picture in
   picture, theatre mode (wide screens, where the list sits beside the player), full screen.
   Under the video only the channel's name, share and report remain.
-- **"⋮" menu**, in the bar before picture in picture, for settings few viewers need. It is
-  always there on a playing channel, so the bar does not shift between channels, and says so
-  when the channel offers nothing. It holds the captions (off by default, and back off on
-  every channel switch) on channels that carry them: subtitle tracks loaded by hls.js, or
-  captions inside the video, with track languages shown as names in the site's language.
-  Speed (×0.5 to ×2, as a grid) is offered on channels with rewind: faster speeds only while
-  behind live, back to normal on catching up with live and on every channel switch. On the
-  smallest screens (≤ 360 px) picture in picture moves into it. On touch screens it opens as
-  a panel across the video with finger-sized rows, captions and speed side by side.
+- **"⋮" menu**, in the bar before picture in picture, for settings few viewers need, laid out
+  as in YouTube: one row per setting with its current value ("Captions · Off ›",
+  "Playback speed · Normal ›"), each opening its list of choices with a way back. With a
+  mouse it is a small pop-up inside the player; on touch screens a sheet rises from the
+  bottom of the screen over a dark backdrop, in full screen too. It is always there on a
+  playing channel, so the bar does not shift, and says so when the channel offers nothing.
+  Captions (off by default, and back off on every channel switch) appear on channels that
+  carry them: subtitle tracks loaded by hls.js, or captions inside the video, with track
+  languages shown as names in the site's language. Speed (×0.5 to ×2) is offered on
+  channels with rewind: faster speeds only while behind live, back to normal on catching up
+  with live and on every channel switch. On the smallest screens (≤ 360 px) picture in
+  picture moves into it.
   When a channel cannot play, only previous / next channel and full
   screen remain. On phones (≤ 480 px) the skip buttons give way to the double tap, and on
   the smallest (≤ 360 px) picture in picture too, so the row never runs off the screen.
