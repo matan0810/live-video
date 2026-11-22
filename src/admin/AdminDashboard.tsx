@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import type { LinkStatus } from '../../shared/linkStatus';
 import type { Report } from '../../shared/reports';
 import {
   ApiError,
   deleteReport,
+  fetchLinkStatus,
   fetchRemoteChannels,
   fetchReports,
   saveChannels,
@@ -22,6 +24,7 @@ import { BookmarkletPanel } from './BookmarkletPanel';
 import { IncomingLinks } from './IncomingLinks';
 import { LinkFinder } from './LinkFinder';
 import { ReportsPanel } from './ReportsPanel';
+import { StatusBoard } from './StatusBoard';
 import { StreamSearch } from './StreamSearch';
 import styles from './Admin.module.css';
 
@@ -49,6 +52,7 @@ export function AdminDashboard({
   const [reports, setReports] = useState<Report[]>([]);
   const [saveState, setSaveState] = useState<SaveState>('clean');
   const [error, setError] = useState<string | null>(null);
+  const [linkStatus, setLinkStatus] = useState<LinkStatus | null | 'unavailable'>();
 
   /** An expired or revoked session sends the admin back to the login form. */
   const handleFailure = (caught: unknown) => {
@@ -73,6 +77,23 @@ export function AdminDashboard({
       isCancelled = true;
     };
   }, [token, onSignOut]);
+
+  // Apart from the rest: an older Worker without the endpoint must not block the editor.
+  useEffect(() => {
+    let isCancelled = false;
+    fetchLinkStatus(token)
+      .then((status) => {
+        if (!isCancelled) setLinkStatus(status);
+      })
+      .catch((caught: unknown) => {
+        if (isCancelled) return;
+        if (caught instanceof ApiError && caught.status === 404) setLinkStatus(null);
+        else setLinkStatus('unavailable');
+      });
+    return () => {
+      isCancelled = true;
+    };
+  }, [token]);
 
   const handleChange = (next: DraftChannel[]) => {
     setDrafts(next);
@@ -131,6 +152,7 @@ export function AdminDashboard({
               }}
             />
           )}
+          <StatusBoard status={linkStatus} />
           <ReportsPanel
             reports={reports}
             hasChannel={(channelId) => drafts.some((draft) => draft.id === channelId)}

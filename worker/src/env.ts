@@ -21,4 +21,6 @@ export const KV_KEYS = {
   previousChannels: 'channels:previous',
   /** The site version the list was saved on. */
   channelsVersion: 'channels:version',
+  /** The latest daily link check, written by the Check links workflow (shared/linkStatus.ts). */
+  linkStatus: 'links:status',
 } as const;

@@ -1,4 +1,5 @@
 import type { CatalogChannel } from '../../shared/channels/types';
+import { parseLinkStatus } from '../../shared/linkStatus';
 import type { Report, ReportInput } from '../../shared/reports';
 import type { FoundLink } from '../../shared/streamLinks';
 
@@ -110,4 +111,10 @@ export interface ExtractedLinks {
 /** Asks the Worker to find stream links on a web page (and the players it embeds). */
 export async function extractStreamLinks(token: string, url: string) {
   return request<ExtractedLinks>('/admin/extract', { method: 'POST', body: { url }, token });
+}
+
+/** The latest daily link check, validated; null before the first run or if malformed. */
+export async function fetchLinkStatus(token: string) {
+  const data = await request<{ status: unknown }>('/admin/link-status', { token });
+  return parseLinkStatus(data.status);
 }

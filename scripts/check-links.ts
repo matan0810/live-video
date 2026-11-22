@@ -3,15 +3,17 @@
  * actually watch (sound, quality, a format browsers play, a server that allows the site):
  * the list saved in the admin area when API_URL is set and one was saved, else channels.json.
  *
- * Usage: [API_URL=https://…] node scripts/check-links.ts
+ * Usage: [API_URL=https://…] [STATUS_FILE=status.json] node scripts/check-links.ts
  * Prints a Markdown report (in Hebrew, for the owner) and exits with code 1 when a channel
- * cannot be watched.
+ * cannot be watched. With STATUS_FILE it also writes the results as JSON (shared/linkStatus.ts),
+ * which the workflow stores for the admin area's status board.
  */
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { isSavedListCurrent, isVersion } from '../shared/channels/listVersion.ts';
 import { parseChannels } from '../shared/channels/parseChannels.ts';
 import { resolveStreamUrl } from '../shared/channels/sources.ts';
 import type { CatalogChannel } from '../shared/channels/types.ts';
+import type { LinkStatus } from '../shared/linkStatus.ts';
 import { findStreamProblems } from '../shared/streamProblems.ts';
 import { formatReport, LIMITATIONS, needsAttention, type SourceResult } from './linkReport.ts';
 
@@ -95,4 +97,8 @@ const results = await Promise.all(
 );
 
 console.log(formatReport(results, from));
+if (process.env.STATUS_FILE) {
+  const status: LinkStatus = { checkedAt: new Date().toISOString(), from, channels: results };
+  await writeFile(process.env.STATUS_FILE, JSON.stringify(status));
+}
 process.exitCode = needsAttention(results) ? 1 : 0;

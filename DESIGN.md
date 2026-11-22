@@ -155,6 +155,10 @@ At `#/admin`, a separate chunk viewers never download. One password, a Cloudflar
   up to 15 times a day), then the iptv-org directory for the same website.
 - **Bookmark**: run on a channel's own site while it plays, it sends the stream links that
   page loaded to the admin area (`#/admin?add=…`), for sites that hide them from the cloud.
+- **Channel status**, at the top: the latest daily link check, channels grouped by what
+  was found, worst first. What the owner can act on (not working, not watchable, a broken
+  link) is open; the other groups open from their counts. A run older than 36 hours is
+  flagged, since the check should run daily.
 - **Reports** from viewers, newest first, each with a suggested link when one was given.
 
 ## 7. Checks that run on their own
@@ -163,7 +167,7 @@ At `#/admin`, a separate chunk viewers never download. One password, a Cloudflar
   answer and still be useless: no sound, below 360p, a recording, or a server that refuses
   the site, which open an issue; HEVC only is a limitation, listed without an issue. Kan's
   hosts refuse anyone abroad and are listed as not checkable. Channels with no link are
-  listed apart.
+  listed apart. Each run is also saved to the Worker for the admin's status board.
 - **Weekly Sync channels**: the admin's list and outside logos into the code (section 4).
 
 ## 8. Addresses

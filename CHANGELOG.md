@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- A channel status board at the top of the admin area: what the daily link check found, per channel, worst first.
 - An "About" window, from a small "i" in the header: what the site is, a few tips and the keyboard shortcuts.
 - Rewinding is remembered: after a refresh, or on coming back to a channel, playback picks up at the moment you were watching (within the last 12 hours, while the channel still keeps it).
 - Playback speed (×0.5 to ×2) in the "⋮" menu on channels with rewind; faster speeds work while behind live and return to normal on catching up.

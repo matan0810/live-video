@@ -1,0 +1,131 @@
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.muted {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.stale {
+  color: var(--color-accent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  --tone: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--tone) 12%, transparent);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+}
+
+.chip[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--tone) 30%, transparent);
+}
+
+.count {
+  color: var(--tone);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-verdict='down'],
+[data-verdict='problems'] {
+  --tone: var(--color-accent);
+}
+
+[data-verdict='partial'],
+[data-verdict='limited'] {
+  --tone: #f0a43a;
+}
+
+[data-verdict='ok'] {
+  --tone: #4cc38a;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.groupTitle {
+  margin: 0;
+  color: var(--tone, var(--color-text));
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.channels,
+.sources {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.channel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--color-bg);
+}
+
+.sources {
+  gap: 6px;
+  font-size: 0.8125rem;
+}
+
+.sourceLabel {
+  color: var(--color-text-muted);
+}
+
+.state[data-state='down'],
+.state[data-state='problems'] {
+  color: var(--color-accent);
+}
+
+.state[data-state='limited'] {
+  color: #f0a43a;
+}
+
+.state[data-state='ok'] {
+  color: #4cc38a;
+}
+
+.url {
+  color: var(--color-text-muted);
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+  text-align: start;
+}

@@ -126,6 +126,7 @@ describe('admin endpoints', () => {
   it.each([
     ['PUT', '/admin/channels'],
     ['GET', '/admin/reports'],
+    ['GET', '/admin/link-status'],
     ['POST', '/admin/extract'],
     ['DELETE', '/admin/reports/some-id'],
   ])('%s %s requires a session', async (method, path) => {
@@ -139,6 +140,26 @@ describe('admin endpoints', () => {
     const token = await signIn();
     env.ADMIN_PASSWORD = 'a new password';
     expect((await call('GET', '/admin/reports', { token })).status).toBe(401);
+  });
+});
+
+describe('link status', () => {
+  it('is null before the first daily check', async () => {
+    const response = await call('GET', '/admin/link-status', { token: await signIn() });
+    expect(await response.json()).toEqual({ status: null });
+  });
+
+  it('returns the latest daily check, and nothing that is not one', async () => {
+    const run = { checkedAt: '2026-11-22T04:17:00.000Z', from: 'הקוד', channels: [] };
+    kv.store.set('links:status', JSON.stringify(run));
+    const token = await signIn();
+    expect(await (await call('GET', '/admin/link-status', { token })).json()).toEqual({
+      status: run,
+    });
+    kv.store.set('links:status', JSON.stringify({ hello: 'world' }));
+    expect(await (await call('GET', '/admin/link-status', { token })).json()).toEqual({
+      status: null,
+    });
   });
 });
 

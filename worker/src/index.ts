@@ -1,6 +1,7 @@
 import { isVersion } from '../../shared/channels/listVersion';
 import { parseChannels } from '../../shared/channels/parseChannels';
 import { isHttpsUrl } from '../../shared/channels/url';
+import { parseLinkStatus } from '../../shared/linkStatus';
 import { parseReportInput } from '../../shared/reports';
 import { findIframes, findStreamLinks, type FoundLink } from '../../shared/streamLinks';
 import { captureStreamRequests } from './browserCapture';
@@ -80,6 +81,12 @@ async function createReport(request: Request, env: Env) {
 async function listReports(request: Request, env: Env) {
   await requireAdmin(request, env);
   return json({ reports: await readReports(env) });
+}
+
+/** The latest daily link check, for the admin's status board; null before the first run. */
+async function getLinkStatus(request: Request, env: Env) {
+  await requireAdmin(request, env);
+  return json({ status: parseLinkStatus(await env.KV.get(KV_KEYS.linkStatus, 'json')) });
 }
 
 async function deleteReport(request: Request, env: Env, reportId: string) {
@@ -183,6 +190,8 @@ function route(request: Request, env: Env): Promise<Response> {
         return saveChannels(request, env);
       case 'GET /admin/reports':
         return listReports(request, env);
+      case 'GET /admin/link-status':
+        return getLinkStatus(request, env);
       case 'POST /admin/extract':
         return extractStreams(request, env);
     }

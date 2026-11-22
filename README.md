@@ -154,7 +154,9 @@ only, a recording instead of live, or a server that refuses to serve the site
 Hebrew report, and closes it once everything works again. Channels on hosts that refuse
 anyone outside Israel (`ISRAEL_ONLY_HOSTS` in `scripts/check-links.ts`) are listed
 separately rather than as failures, since the check runs abroad; the admin area's link
-check runs from your own browser and covers them.
+check runs from your own browser and covers them. With the Cloudflare secrets set (the
+same ones the Worker's deploy uses), each run is also saved to the Worker's KV and shown
+on the admin area's status board.
 
 ## Layout
 

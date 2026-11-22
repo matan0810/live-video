@@ -13,6 +13,7 @@ env:
   ISSUE_TITLE: 'ערוצים שלא עובדים'
   GH_TOKEN: ${{ github.token }}
   GH_REPO: ${{ github.repository }}
+  KV_TITLE: live-video
 
 jobs:
   check:
@@ -22,16 +23,45 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
+          cache: npm
 
       - name: Check every stream
         id: check
         env:
           API_URL: ${{ vars.API_URL || secrets.API_URL }}
+          STATUS_FILE: ${{ runner.temp }}/status.json
         run: |
           set +e
           node scripts/check-links.ts > report.md
           echo "failed=$?" >> "$GITHUB_OUTPUT"
           cat report.md >> "$GITHUB_STEP_SUMMARY"
+
+      # The results go to the Worker's storage for the admin area's status board, with the
+      # secrets the Deploy Worker workflow uses, given to these steps only. Without them the
+      # board stays empty; a failure loses only today's board, the issue below still reports.
+      - name: Check for the Cloudflare secrets
+        id: cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Cloudflare secrets are not set; the admin status board is not updated."
+          fi
+
+      - name: Save the results for the admin area
+        if: steps.cloudflare.outputs.ok == 'true'
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm ci
+          node scripts/ensure-kv.mjs "$KV_TITLE" worker/wrangler.jsonc
+          npx wrangler kv key put links:status --path "$RUNNER_TEMP/status.json" \
+            --binding KV --config worker/wrangler.jsonc --remote
 
       - name: Find the open report issue
         id: issue

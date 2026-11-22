@@ -11,6 +11,10 @@
 - **In the Worker's storage (Cloudflare KV):** the channel list and its previous version,
   and viewer reports: channel, reason, optional note, optional suggested link and the time.
   Each report is its own entry and deletes itself after 90 days; the admin sees the newest 200. There are no accounts and no viewer identifiers.
+  The latest daily link check (channels, their public stream links and what was found),
+  written by the Check links workflow and readable only through the admin API. The
+  workflow gets the Cloudflare secrets in its saving steps only, not in the step that
+  fetches streams, and the admin area validates what it reads before showing it.
 - **Addresses:** a login attempt stores a salted hash of the sender's address as a
   rate-limit counter, which expires after 15 minutes. Per-minute limits (logins, reports,
   link searches) use Cloudflare's rate limiter, which keeps a salted hash in memory and
