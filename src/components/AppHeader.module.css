@@ -1,0 +1,54 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--header-height);
+  padding: 0 24px;
+}
+
+.brandDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px var(--color-accent-soft);
+}
+
+.brand {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.version {
+  margin-inline-start: auto;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.language {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition:
+    color var(--transition),
+    border-color var(--transition);
+}
+
+.language:hover {
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+@media (max-width: 959px) {
+  .header {
+    height: 48px;
+    padding: 0 16px;
+  }
+}

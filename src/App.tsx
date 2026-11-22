@@ -1,70 +1,32 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { filterSections } from './channels/searchChannels';
-import { ChannelSearch } from './components/ChannelSearch';
-import { stepChannel } from './channels/stepChannel';
-import { API_URL } from './api/client';
-import { CHANNEL_GROUPS, type CatalogChannel, type Channel } from './channels';
-import { withChannelParam } from './channels/channelLink';
+import { buildSections } from './channels/buildSections';
 import { isCustomChannelId } from './channels/customChannels';
+import { filterSections } from './channels/searchChannels';
+import { stepChannel } from './channels/stepChannel';
+import type { Channel } from './channels';
 import { AddChannelForm } from './components/AddChannelForm';
-import { ChannelList, type ChannelSection } from './components/ChannelList';
+import { AppHeader } from './components/AppHeader';
+import { ChannelList } from './components/ChannelList';
+import { ChannelSearch } from './components/ChannelSearch';
 import { EmptyStage } from './components/EmptyStage';
-import { ReportButton } from './components/ReportButton';
-import { ShareButton } from './components/ShareButton';
+import { PlayerActions } from './components/PlayerActions';
 import { useActiveChannel } from './hooks/useActiveChannel';
 import { useCatalog } from './hooks/useCatalog';
+import { useChannelShortcuts } from './hooks/useChannelShortcuts';
 import { useCustomChannels } from './hooks/useCustomChannels';
 import { useFavorites } from './hooks/useFavorites';
-import { useKeyboardShortcuts, type KeyboardShortcuts } from './hooks/useKeyboardShortcuts';
-import { ChannelStrip } from './player/ChannelStrip';
-import { Player } from './player/Player';
-import { useI18n } from './i18n/context';
-import type { Strings } from './i18n/strings';
-import type { PlayerStatus } from './player/useHlsPlayer';
-import { AboutButton } from './components/AboutButton';
-import { IconButton } from './components/IconButton';
-import { GridIcon } from './components/icons';
 import { useMediaQuery } from './hooks/useMediaQuery';
+import { useUnavailableChannels } from './hooks/useUnavailableChannels';
+import { useI18n } from './i18n/context';
 import { MAX_CHANNELS_NARROW, MAX_CHANNELS_WIDE } from './multiview/multiView';
 import { MultiViewGrid } from './multiview/MultiViewGrid';
 import { useMultiView } from './multiview/useMultiView';
+import { ChannelStrip } from './player/ChannelStrip';
+import { Player } from './player/Player';
 import styles from './App.module.css';
 
-const DIGIT_SHORTCUT_COUNT = 9;
-
-/** Groups channels for display: favourites first, then the user's own, then the catalog. */
-function buildSections(
-  catalogChannels: readonly CatalogChannel[],
-  customChannels: readonly Channel[],
-  favoriteIds: readonly string[],
-  t: Strings,
-): ChannelSection[] {
-  const allChannels = [...customChannels, ...catalogChannels];
-  const isFavorite = (channel: Channel) => favoriteIds.includes(channel.id);
-  const favorites = favoriteIds.flatMap(
-    (id) => allChannels.find((channel) => channel.id === id) ?? [],
-  );
-
-  const sections: ChannelSection[] = [
-    { id: 'favorites', title: t.favorites, channels: favorites },
-    {
-      id: 'custom',
-      title: t.myChannels,
-      channels: customChannels.filter((channel) => !isFavorite(channel)),
-    },
-    ...CHANNEL_GROUPS.map((group) => ({
-      id: group,
-      title: t.groups[group],
-      channels: catalogChannels.filter(
-        (channel) => channel.group === group && !isFavorite(channel),
-      ),
-    })),
-  ];
-  return sections.filter((section) => section.channels.length > 0);
-}
-
 export function App() {
-  const { t, language, setLanguage } = useI18n();
+  const { t } = useI18n();
   const catalogChannels = useCatalog();
   const [activeChannelId, selectChannel] = useActiveChannel();
   const { favoriteIds, toggleFavorite } = useFavorites();
@@ -72,8 +34,6 @@ export function App() {
   const [isTheaterMode, setIsTheaterMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const searchRef = useRef<HTMLInputElement>(null);
-  /** Channels whose stream failed while trying to play them, in this visit. */
-  const [failedChannelIds, setFailedChannelIds] = useState<ReadonlySet<string>>(() => new Set());
 
   const sections = useMemo(
     () => buildSections(catalogChannels, customChannels, favoriteIds, t),
@@ -98,27 +58,7 @@ export function App() {
   const currentChannelId = multiView.view?.focusedId ?? activeChannelId;
   // While watching several, a channel picked anywhere joins the grid instead of replacing it.
   const chooseChannel = multiView.view ? multiView.pick : selectChannel;
-  /** Failed ones, and those kept on the list without any link, marked before anyone tries. */
-  const unavailableChannelIds = useMemo(
-    () =>
-      new Set([
-        ...failedChannelIds,
-        ...orderedChannels.filter((channel) => channel.sources.length === 0).map(({ id }) => id),
-      ]),
-    [failedChannelIds, orderedChannels],
-  );
-
-  const handleStatusChange = useCallback((channelId: string, status: PlayerStatus) => {
-    if (status === 'loading') return;
-    setFailedChannelIds((current) => {
-      const isUnavailable = status === 'error';
-      if (current.has(channelId) === isUnavailable) return current;
-      const next = new Set(current);
-      if (isUnavailable) next.add(channelId);
-      else next.delete(channelId);
-      return next;
-    });
-  }, []);
+  const { unavailableChannelIds, handleStatusChange } = useUnavailableChannels(orderedChannels);
 
   const handleAddChannel = (channel: Channel) => {
     addCustomChannel(channel);
@@ -139,40 +79,18 @@ export function App() {
     [orderedChannels, currentChannelId, chooseChannel],
   );
 
-  const shortcuts = useMemo<KeyboardShortcuts>(() => {
-    const digitShortcuts = Object.fromEntries(
-      orderedChannels
-        .slice(0, DIGIT_SHORTCUT_COUNT)
-        .map((channel, index) => [`Digit${index + 1}`, () => chooseChannel(channel.id)]),
-    );
-
-    return {
-      ...digitShortcuts,
-      ArrowDown: () => selectByOffset(1),
-      ArrowUp: () => selectByOffset(-1),
-      KeyT: () => setIsTheaterMode((current) => !current),
-      Slash: () => searchRef.current?.focus(),
-    };
-  }, [orderedChannels, chooseChannel, selectByOffset]);
-  useKeyboardShortcuts(shortcuts);
+  const toggleTheater = useCallback(() => setIsTheaterMode((current) => !current), []);
+  useChannelShortcuts({
+    channels: orderedChannels,
+    onChoose: chooseChannel,
+    onStep: selectByOffset,
+    onToggleTheater: toggleTheater,
+    searchRef,
+  });
 
   return (
     <div className={styles.app}>
-      <header className={styles.header}>
-        <span className={styles.brandDot} aria-hidden="true" />
-        <h1 className={styles.brand}>{t.brand}</h1>
-        <span className={styles.version}>v{__APP_VERSION__}</span>
-        <AboutButton />
-        <button
-          type="button"
-          className={styles.language}
-          lang={language === 'he' ? 'en' : 'he'}
-          aria-label={t.switchLanguageLabel}
-          onClick={() => setLanguage(language === 'he' ? 'en' : 'he')}
-        >
-          {t.switchLanguage}
-        </button>
-      </header>
+      <AppHeader />
 
       <main className={styles.main} data-theater={isTheaterMode}>
         <section className={styles.stage} aria-label={t.player}>
@@ -200,7 +118,7 @@ export function App() {
               isOverlayEnabled={isTheaterMode}
               onStep={selectByOffset}
               isTheaterMode={isTheaterMode}
-              onToggleTheater={() => setIsTheaterMode((current) => !current)}
+              onToggleTheater={toggleTheater}
               overlay={
                 <ChannelStrip
                   channels={orderedChannels}
@@ -210,20 +128,10 @@ export function App() {
                 />
               }
               actions={
-                <>
-                  <IconButton label={t.multiView} onClick={() => multiView.start(activeChannel.id)}>
-                    <GridIcon />
-                  </IconButton>
-                  {!isCustomChannelId(activeChannel.id) && (
-                    <>
-                      {API_URL && <ReportButton channel={activeChannel} />}
-                      <ShareButton
-                        title={activeChannel.name}
-                        url={withChannelParam(window.location.href, activeChannel.id)}
-                      />
-                    </>
-                  )}
-                </>
+                <PlayerActions
+                  channel={activeChannel}
+                  onStartMultiView={() => multiView.start(activeChannel.id)}
+                />
               }
             />
           ) : (
