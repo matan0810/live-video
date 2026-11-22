@@ -114,3 +114,30 @@ export function InfoIcon() {
     </Icon>
   );
 }
+
+export function GridIcon() {
+  return (
+    <Icon>
+      <rect x="3" y="4" width="8" height="7" rx="1.5" />
+      <rect x="13" y="4" width="8" height="7" rx="1.5" />
+      <rect x="3" y="13" width="8" height="7" rx="1.5" />
+      <rect x="13" y="13" width="8" height="7" rx="1.5" />
+    </Icon>
+  );
+}
+
+export function ExpandIcon() {
+  return (
+    <Icon>
+      <path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" />
+    </Icon>
+  );
+}
+
+export function SpeakerIcon() {
+  return (
+    <Icon isFilled>
+      <path d="M4 9h4l5-4v14l-5-4H4z" />
+    </Icon>
+  );
+}

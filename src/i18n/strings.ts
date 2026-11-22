@@ -89,6 +89,14 @@ const he = {
   sending: 'שולח…',
   cancel: 'ביטול',
   close: 'סגירה',
+  multiView: 'צפייה מרובה',
+  multiViewExit: 'חזרה לערוץ אחד',
+  multiViewHint: (max: number) =>
+    `בחרו ערוצים מהרשימה כדי להוסיף, עד ${max}. לחיצה על ערוץ במסך מעבירה אליו את הקול.`,
+  multiViewEmpty: 'בחרו ערוץ מהרשימה',
+  multiViewHear: (name: string) => `הקול מ${name}`,
+  multiViewExpand: (name: string) => `צפייה רק ב${name}`,
+  multiViewRemove: (name: string) => `הסרת ${name}`,
   about: 'על האתר',
   aboutTitle: 'ברוכים הבאים ל-OnAir',
   aboutIntro:
@@ -211,6 +219,14 @@ const en: Strings = {
   sending: 'Sending…',
   cancel: 'Cancel',
   close: 'Close',
+  multiView: 'Multi-view',
+  multiViewExit: 'Back to one channel',
+  multiViewHint: (max) =>
+    `Pick channels from the list to add them, up to ${max}. Tap a channel on screen to hear it.`,
+  multiViewEmpty: 'Pick a channel from the list',
+  multiViewHear: (name) => `Sound from ${name}`,
+  multiViewExpand: (name) => `Watch only ${name}`,
+  multiViewRemove: (name) => `Remove ${name}`,
   about: 'About the site',
   aboutTitle: 'Welcome to OnAir',
   aboutIntro:

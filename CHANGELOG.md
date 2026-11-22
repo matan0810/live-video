@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- Multi-view: up to four channels at once (two on a phone), from a button under the video; one is heard, and a tap on another moves the sound.
 - A channel status board at the top of the admin area: what the daily link check found, per channel, worst first.
 - An "About" window, from a small "i" in the header: what the site is, a few tips and the keyboard shortcuts.
 - Rewinding is remembered: after a refresh, or on coming back to a channel, playback picks up at the moment you were watching (within the last 12 hours, while the channel still keeps it).

@@ -22,6 +22,12 @@ import { useI18n } from './i18n/context';
 import type { Strings } from './i18n/strings';
 import type { PlayerStatus } from './player/useHlsPlayer';
 import { AboutButton } from './components/AboutButton';
+import { IconButton } from './components/IconButton';
+import { GridIcon } from './components/icons';
+import { useMediaQuery } from './hooks/useMediaQuery';
+import { MAX_CHANNELS_NARROW, MAX_CHANNELS_WIDE } from './multiview/multiView';
+import { MultiViewGrid } from './multiview/MultiViewGrid';
+import { useMultiView } from './multiview/useMultiView';
 import styles from './App.module.css';
 
 const DIGIT_SHORTCUT_COUNT = 9;
@@ -84,6 +90,14 @@ export function App() {
     [sections],
   );
   const activeChannel = orderedChannels.find((channel) => channel.id === activeChannelId) ?? null;
+  const maxTiles = useMediaQuery('(min-width: 600px)') ? MAX_CHANNELS_WIDE : MAX_CHANNELS_NARROW;
+  const multiView = useMultiView(maxTiles, (id) =>
+    orderedChannels.some((channel) => channel.id === id),
+  );
+  /** The channel the list marks and stepping starts from: the heard one while watching several. */
+  const currentChannelId = multiView.view?.focusedId ?? activeChannelId;
+  // While watching several, a channel picked anywhere joins the grid instead of replacing it.
+  const chooseChannel = multiView.view ? multiView.pick : selectChannel;
   /** Failed ones, and those kept on the list without any link, marked before anyone tries. */
   const unavailableChannelIds = useMemo(
     () =>
@@ -108,7 +122,7 @@ export function App() {
 
   const handleAddChannel = (channel: Channel) => {
     addCustomChannel(channel);
-    selectChannel(channel.id);
+    chooseChannel(channel.id);
   };
 
   const handleRemoveChannel = (channelId: string) => {
@@ -119,17 +133,17 @@ export function App() {
 
   const selectByOffset = useCallback(
     (offset: 1 | -1) => {
-      const next = stepChannel(orderedChannels, activeChannelId, offset);
-      if (next) selectChannel(next.id);
+      const next = stepChannel(orderedChannels, currentChannelId, offset);
+      if (next) chooseChannel(next.id);
     },
-    [orderedChannels, activeChannelId, selectChannel],
+    [orderedChannels, currentChannelId, chooseChannel],
   );
 
   const shortcuts = useMemo<KeyboardShortcuts>(() => {
     const digitShortcuts = Object.fromEntries(
       orderedChannels
         .slice(0, DIGIT_SHORTCUT_COUNT)
-        .map((channel, index) => [`Digit${index + 1}`, () => selectChannel(channel.id)]),
+        .map((channel, index) => [`Digit${index + 1}`, () => chooseChannel(channel.id)]),
     );
 
     return {
@@ -139,7 +153,7 @@ export function App() {
       KeyT: () => setIsTheaterMode((current) => !current),
       Slash: () => searchRef.current?.focus(),
     };
-  }, [orderedChannels, selectChannel, selectByOffset]);
+  }, [orderedChannels, chooseChannel, selectByOffset]);
   useKeyboardShortcuts(shortcuts);
 
   return (
@@ -162,7 +176,24 @@ export function App() {
 
       <main className={styles.main} data-theater={isTheaterMode}>
         <section className={styles.stage} aria-label={t.player}>
-          {activeChannel ? (
+          {multiView.view ? (
+            <MultiViewGrid
+              view={multiView.view}
+              channels={orderedChannels}
+              maxChannels={maxTiles}
+              onFocus={multiView.focus}
+              onExpand={(channelId) => {
+                multiView.exit();
+                selectChannel(channelId);
+              }}
+              onRemove={multiView.remove}
+              onExit={() => {
+                selectChannel(multiView.view?.focusedId ?? activeChannelId);
+                multiView.exit();
+              }}
+              onStatusChange={handleStatusChange}
+            />
+          ) : activeChannel ? (
             <Player
               channel={activeChannel}
               onStatusChange={handleStatusChange}
@@ -180,6 +211,9 @@ export function App() {
               }
               actions={
                 <>
+                  <IconButton label={t.multiView} onClick={() => multiView.start(activeChannel.id)}>
+                    <GridIcon />
+                  </IconButton>
                   {!isCustomChannelId(activeChannel.id) && (
                     <>
                       {API_URL && <ReportButton channel={activeChannel} />}
@@ -203,18 +237,18 @@ export function App() {
             onChange={setSearchQuery}
             onPickFirst={() => {
               const first = shownSections[0]?.channels[0];
-              if (first) selectChannel(first.id);
+              if (first) chooseChannel(first.id);
             }}
             inputRef={searchRef}
           />
           <ChannelList
             sections={shownSections}
             isSearching={searchQuery.trim() !== ''}
-            activeChannelId={activeChannelId}
+            activeChannelId={currentChannelId}
             unavailableChannelIds={unavailableChannelIds}
             favoriteIds={favoriteIds}
             isRemovable={isCustomChannelId}
-            onSelect={selectChannel}
+            onSelect={chooseChannel}
             onToggleFavorite={toggleFavorite}
             onRemove={handleRemoveChannel}
           />

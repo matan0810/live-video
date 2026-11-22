@@ -203,6 +203,22 @@ async function main() {
   await about.waitFor({ state: 'hidden' });
   step('desktop: the about window explains the site and lists the shortcuts');
 
+  // Several channels at once: picking from the list adds to the grid; one is heard.
+  await desktop
+    .getByRole('button', { name: /^כאן 11/ })
+    .first()
+    .click();
+  await desktop.getByRole('button', { name: 'צפייה מרובה' }).click();
+  await desktop.locator('aside').getByRole('button', { name: 'רשת 13', exact: true }).click();
+  await desktop.getByRole('button', { name: 'הקול מרשת 13', pressed: true }).waitFor();
+  await desktop.getByRole('button', { name: 'הקול מכאן 11', pressed: false }).click();
+  await desktop.getByRole('button', { name: 'הקול מכאן 11', pressed: true }).waitFor();
+  await desktop.getByRole('button', { name: 'הסרת רשת 13' }).click();
+  assert.equal(await desktop.locator('video').count(), 1);
+  await desktop.getByRole('button', { name: 'חזרה לערוץ אחד' }).click();
+  await desktop.getByRole('button', { name: 'צפייה מרובה' }).waitFor();
+  step('desktop: multi-view adds channels from the list, moves the sound, and ends');
+
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
   await desktop.getByLabel('שם הערוץ').fill('בדיקה');
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('http://insecure.example/a.m3u8');

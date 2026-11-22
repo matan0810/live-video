@@ -7,7 +7,7 @@ Update it whenever any of these change (CLAUDE.md, section 3, "Record").
 
 - **In each viewer's browser:** the last channel, favourites, their own channels, a copy
   of the channel list, the moment being watched on channels they rewound (for up to 12
-  hours), and a saved copy of the site's own files (`public/sw.js`: the page,
+  hours), the channels in multi-view, and a saved copy of the site's own files (`public/sw.js`: the page,
   its scripts, styles, fonts, icons and logos), so it opens at once. The saved copy holds
   nothing from other hosts: no video, nothing from the Worker. Nothing about a viewer is
   sent anywhere unless they file a report.
@@ -30,7 +30,7 @@ Update it whenever any of these change (CLAUDE.md, section 3, "Record").
 
 Keys in each viewer's browser (`localStorage`), each parsed and checked when read back, never
 cast: `live-video:active-channel`, `:favorites`, `:custom-channels`, `:collapsed-sections`,
-`:language`, `:remote-channels`, `:logo-tints`, `:resume`, and in the admin's browser only
+`:language`, `:remote-channels`, `:logo-tints`, `:resume`, `:multi-view`, and in the admin's browser only
 `:admin-token`.
 
 ## Hosts

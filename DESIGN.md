@@ -143,6 +143,21 @@ their auto-hiding, gestures and translated labels.
 - **Lock screen and media keys** show the channel and its logo; previous / next switch
   channel.
 
+### Multi-view
+
+- A button under the video, beside share and report, shows up to **four** channels at once
+  on screens 600 px wide and up, and **two**, one above the other, on narrower ones (a
+  phone). It is a view of its own, not a channel setting, so it is not in the "⋮" menu.
+- Two places side by side until a third channel joins, then two by two; a free place says
+  to pick a channel from the list.
+- While it is open, a channel picked anywhere (the list, search, the keys) joins the grid
+  and is heard; when the grid is full it takes the place of the channel being heard.
+- Only one channel plays sound, outlined in red with a speaker by its name; a tap on another
+  moves the sound there. Each channel can be enlarged back to the normal player, or removed.
+  "Back to one channel" returns to the normal player with the heard channel.
+- Each tile picks a quality to fit its own size. It is kept on the device, so a refresh
+  returns to the same grid; a narrower screen shows fewer, keeping the heard one.
+
 ## 6. Admin area
 
 At `#/admin`, a separate chunk viewers never download. One password, a Cloudflare secret.

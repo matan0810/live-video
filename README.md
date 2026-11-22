@@ -171,6 +171,7 @@ src/channels/                channels.json, custom channels, share links
 src/player/                  the player: hls.js playback with fallback and recovery (ours), controls on Video.js 10
 src/components/              channel list, dialogs, buttons, icons
 src/hooks/                   catalog, favourites, custom channels, active channel, shortcuts
+src/multiview/               watching up to four channels at once
 src/admin/                   the admin area (a separate chunk, loaded only at #/admin)
 src/api/                     client for the Worker API
 src/styles/                  design tokens and global styles
