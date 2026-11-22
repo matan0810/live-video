@@ -12,6 +12,11 @@ This file is binding. Follow it on every task, in every session.
 - The owner writes in Hebrew. Answer in Hebrew.
 - Everything in the repository is in English: docs, code comments, commit messages.
   The only Hebrew is interface text and channel names.
+- **Single source of truth.** Every fact lives in one place, and everywhere else links to it:
+  planned work in the issues, the version in `package.json`, changes in `CHANGELOG.md`, rules
+  and numbers in `DESIGN.md`, what is stored, which hosts are used and the threat model in
+  `SECURITY.md`. Never copy one into another. Shared values in code (a constant, a shape, a
+  colour) are defined once and imported; what the site and the Worker share is in `shared/`.
 - Keep the site simple. A new feature earns a control only if it cannot be a default.
 - `master` is production: every push to it deploys the site. **Nothing reaches `master`
   until the owner says to release** ("תעלה גרסה", "תמזג", "release", or the like). A request
@@ -19,6 +24,19 @@ This file is binding. Follow it on every task, in every session.
 - Never rewrite published history: no force push, no rebase of `dev` or `master`.
 - No model names or IDs in commits, docs or code.
 - No secrets in the repository. The admin password is a Cloudflare secret.
+
+### Working with the owner
+
+- **Decisions are the owner's.** Look, wording, scope, which channels and what counts as a
+  feature: when a request leaves one of these open, ask before building. Offer two to four
+  options with a recommendation, not a survey.
+- **Ideas first, then building.** When asked for ideas, present a numbered list, each with
+  what it is and why, and build only what the owner picks.
+- **Show, don't describe, a visual choice.** For a look decision, render the options and send
+  screenshots before touching the product.
+- **Say when you were wrong.** If a number, a claim or an earlier recommendation turns out
+  wrong, say so plainly in the report and correct it.
+- **Never call something live without having checked the deploy** (section 8, "After").
 
 ## 2. Branches
 
@@ -54,10 +72,15 @@ If `master` has commits that `dev` lacks, stop and tell the owner; that should n
    the checks green.
 4. **Test.** All of these, every time:
    - `npm run check` passes (types, ESLint, Prettier, unit tests).
-   - New logic gets a unit test next to it (`*.test.ts`).
+   - New logic gets a unit test next to it (`*.test.ts`). Logic that reads real data (the
+     channel list, a playlist) is tested against the real data too, not only a sample.
+   - A bug fix starts with a test that fails without the fix.
    - Any UI change is checked in a real browser: `npm run build && npm run e2e` (extend
      `tests/e2e/smoke.mjs` for new screens or flows), and look at screenshots: desktop
-     1280×800 and a 390px phone, no page errors.
+     1280×800 and a 390px phone, no page errors, no sideways scroll, nothing blocked by the
+     Content Security Policy (the smoke test fails on a violation).
+   - Browser tests wait for a condition, never for a fixed time, and fail in seconds, not
+     after a long default timeout.
    - Player changes are checked against a real or simulated live stream: playback, rewind,
      back to live, a failing source. Cloud sessions cannot reach the real channels; say so.
    - Worker changes are covered in `worker/src/index.test.ts` and, when they touch the
@@ -107,7 +130,19 @@ when behaviour changed, pushed to `dev`, CI on `dev` green, owner told.
 - Every admin endpoint calls `requireAdmin` first, and has a test that it refuses
   unauthenticated requests.
 - Stream links must be https.
-- A new external host the site talks to needs a reason, and a line in `SECURITY.md`.
+- The site's Content Security Policy (`vite.config.ts`) allows scripts, styles and fonts from
+  the site only, no inline script, and Trusted Types (`src/trustedTypes.ts`). Never loosen it
+  to make something work; a new kind of host needs a reason, a change to the policy and a
+  line in `SECURITY.md`.
+- Files a viewer downloads (none today) must be safe: CSV cells that start like a formula
+  escaped, file names that cannot climb folders or hide their type.
+- Supply chain: `ignore-scripts=true` in `.npmrc` (no dependency runs code at install),
+  `npm ci` from the lockfile, `npm audit` blocking high advisories in runtime dependencies.
+- CI: every workflow declares the least permissions it needs; checkouts keep no token
+  (`persist-credentials: false`), and a step that pushes gets one for itself; secrets go
+  only to the steps that use them; no untrusted text in shell commands.
+- `SECURITY.md` keeps the threat model: each threat, its answer and the test that proves
+  it, plus the limits that were accepted. A change to any of them updates it.
 
 ## 6. What CI runs
 
@@ -154,7 +189,8 @@ cannot push tags, so never try.
 
 - [ ] `dev` is pushed and CI on `dev` is green.
 - [ ] `## [Unreleased]` in `CHANGELOG.md` describes everything in
-      `git log origin/master..origin/dev`. If it is empty there is nothing to release: say so.
+      `git log origin/master..origin/dev`, plus any lines marked live without a version.
+      If it is empty there is nothing to release: say so.
 - [ ] Pick the bump by section 7 and tell the owner which one and why.
 - [ ] Bring the admin's latest channel list into the code first: a release's list replaces
       a list saved on an older version, so anything not synced would disappear for viewers.
@@ -183,6 +219,14 @@ git push origin dev:master            # must fast-forward; if it is refused, sto
 Docs, workflows and tooling can reach `master` without a bump, still only on the owner's
 order: fast-forward `master` to `dev` as above and skip `npm run bump`. The site redeploys
 and no tag is created.
+
+### Going live without a version
+
+If the owner wants a change viewers see to go live without a version, release it as above
+without a bump, and mark its CHANGELOG line
+`_(Live since YYYY-MM-DD, published without a version at the owner's request.)_`. It stays
+under Unreleased until the next release, where `npm run bump` drops the mark. So the
+CHANGELOG alone always tells what is live.
 
 ## 9. Deploying
 
