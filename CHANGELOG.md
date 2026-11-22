@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.12.0] - 2026-11-22
+
 ### Changed
 - The "⋮" menu is laid out as in YouTube: one row per setting with its current value, opening its list; on phones it rises from the bottom of the screen.
 
