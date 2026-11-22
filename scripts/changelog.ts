@@ -57,5 +57,23 @@ export function applyRelease(changelog: string, version: string, date: string): 
   const heading = '## [Unreleased]';
   const start = changelog.indexOf(heading) + heading.length;
   const end = start + changelog.slice(start).indexOf(notes) + notes.length;
-  return `${changelog.slice(0, start)}\n\n## [${version}] - ${date}\n\n${notes}${changelog.slice(end)}`;
+  const body = notes.replace(LIVE_MARK, '');
+  return `${changelog.slice(0, start)}\n\n## [${version}] - ${date}\n\n${body}${changelog.slice(end)}`;
+}
+
+/** The note on an Unreleased line already published without a version (CLAUDE.md, section 8). */
+const LIVE_MARK = / _\(Live since \d{4}-\d{2}-\d{2}, published without a version[^)]*\)_/g;
+
+/**
+ * A release the Deploy workflow may create: the tag, the commit and the date become
+ * arguments of `gh release create` and fields of a tab-separated plan, so each is checked
+ * to be exactly what it claims before it gets there.
+ */
+export function checkRelease(release: { version: string; commit: string; date: string }) {
+  if (!VERSION_PATTERN.test(release.version))
+    throw new Error(`Not a MAJOR.MINOR.PATCH version: ${release.version}`);
+  if (!/^[0-9a-f]{40}$/.test(release.commit))
+    throw new Error(`Not a full commit hash: ${release.commit}`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(release.date))
+    throw new Error(`Not a YYYY-MM-DD date: ${release.date}`);
 }

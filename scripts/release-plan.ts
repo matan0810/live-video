@@ -11,7 +11,7 @@
  */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { releasedSections } from './changelog.ts';
+import { checkRelease, releasedSections } from './changelog.ts';
 
 const [currentCommit, notesDir] = process.argv.slice(2);
 if (!currentCommit || !notesDir) {
@@ -35,6 +35,7 @@ await mkdir(notesDir, { recursive: true });
 for (const { version, commit } of releases) {
   const section = sections.get(version);
   if (!section) throw new Error(`CHANGELOG.md has no section for ${version}`);
+  checkRelease({ version, commit, date: section.date });
   const notesFile = join(notesDir, `v${version}.md`);
   await writeFile(notesFile, `${section.body}\n`);
   const isLatest = version === currentVersion;

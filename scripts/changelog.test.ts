@@ -1,6 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { applyRelease, nextVersion, releasedSections, unreleasedNotes } from './changelog';
+import {
+  applyRelease,
+  checkRelease,
+  nextVersion,
+  releasedSections,
+  unreleasedNotes,
+} from './changelog';
 
 const sample = `# Changelog
 
@@ -60,10 +66,38 @@ describe('applyRelease', () => {
     expect(releasedSections(released)).toHaveLength(3);
   });
 
+  it('drops the mark of lines already live without a version', () => {
+    const marked = sample.replace(
+      '- Something new.',
+      "- Something new. _(Live since 2024-01-30, published without a version at the owner's request.)_",
+    );
+    expect(releasedSections(applyRelease(marked, '1.2.0', '2024-02-03'))[0]?.body).toBe(
+      '### Added\n- Something new.',
+    );
+  });
+
   it('refuses an empty release and a duplicate version', () => {
     const released = applyRelease(sample, '1.2.0', '2024-02-03');
     expect(() => applyRelease(released, '1.3.0', '2024-02-04')).toThrow(/empty/);
     expect(() => applyRelease(sample, '1.1.0', '2024-02-04')).toThrow(/already/);
+  });
+});
+
+describe('checkRelease', () => {
+  const ok = { version: '3.1.0', commit: 'a'.repeat(40), date: '2026-11-20' };
+
+  it('accepts a well-formed release', () => {
+    expect(() => checkRelease(ok)).not.toThrow();
+  });
+
+  it.each([
+    ['a version with a tab', { ...ok, version: '3.1.0\tx' }],
+    ['a version with a shell word', { ...ok, version: '3.1.0; rm -rf /' }],
+    ['a short commit', { ...ok, commit: 'abc1234' }],
+    ['a branch name as commit', { ...ok, commit: 'master' }],
+    ['a date with a newline', { ...ok, date: '2026-11-20\nv9' }],
+  ])('refuses %s', (_, release) => {
+    expect(() => checkRelease(release)).toThrow();
   });
 });
 
@@ -92,5 +126,11 @@ describe('the project files', () => {
     expect(versions).toEqual(sorted);
     expect(versions).not.toContain(pkg.version);
     for (const { commit } of history) expect(commit).toMatch(/^[0-9a-f]{40}$/);
+  });
+
+  it('list only well-formed past releases', () => {
+    const dates = new Map(releasedSections(changelog).map((s) => [s.version, s.date]));
+    for (const { version, commit } of history)
+      expect(() => checkRelease({ version, commit, date: dates.get(version) ?? '' })).not.toThrow();
   });
 });
