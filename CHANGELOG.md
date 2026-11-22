@@ -19,6 +19,9 @@ breaking changes are major.
 - The "⋮" menu is always in the same place in the player's bar; on phones it opens as a large panel across the video, and on the smallest screens it also holds picture in picture.
 - The theatre-mode button moved into the player's bar, beside full screen.
 
+### Security
+- The site runs only its own scripts: a Content Security Policy with Trusted Types refuses any other script and any HTML written from code.
+
 ## [2.10.0] - 2026-11-21
 
 ### Fixed

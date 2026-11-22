@@ -4,6 +4,9 @@ import { createRoot } from 'react-dom/client';
 import { LanguageProvider } from './i18n/LanguageProvider';
 import { Root } from './Root';
 import './styles/global.css';
+import { installTrustedTypesPolicy } from './trustedTypes';
+
+installTrustedTypesPolicy();
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Missing #root element');

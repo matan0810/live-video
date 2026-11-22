@@ -24,6 +24,15 @@ async function main() {
       (target) => target.hostname !== 'localhost',
       (route) => route.abort(),
     );
+    // Anything the Content Security Policy blocks is a failure: the site must live within it.
+    await context.exposeFunction('__cspViolation', (what) =>
+      problems.push(`${tag}: blocked by the CSP: ${what}`),
+    );
+    await context.addInitScript(() => {
+      document.addEventListener('securitypolicyviolation', (e) =>
+        window.__cspViolation(`${e.violatedDirective} ${e.blockedURI}`),
+      );
+    });
     // Records the media control handlers, which only the operating system can press.
     await context.addInitScript(() => {
       window.__mediaActions = {};
@@ -56,7 +65,12 @@ async function main() {
   const { version } = JSON.parse(await readFile(new URL('../../package.json', import.meta.url)));
   await desktop.getByText(`v${version}`, { exact: true }).waitFor();
   await desktop.getByText('בחרו ערוץ מהרשימה').waitFor();
-  step('desktop: channel list, empty state and version');
+  const policy = await desktop
+    .locator('meta[http-equiv="Content-Security-Policy"]')
+    .getAttribute('content');
+  assert.match(policy ?? '', /default-src 'none'/, 'the page carries its CSP');
+  assert.match(policy ?? '', /require-trusted-types-for 'script'/, 'with Trusted Types');
+  step('desktop: channel list, empty state, version and the CSP');
 
   await desktop.getByRole('button', { name: 'כאן 11', exact: true }).click();
   await desktop.getByRole('alert').getByText('כאן 11 לא זמין כרגע').waitFor();

@@ -11,3 +11,12 @@ interface ImportMeta {
 
 /** The version in package.json, injected at build time. */
 declare const __APP_VERSION__: string;
+
+/** The part of Trusted Types the site uses (not yet in TypeScript's DOM types). */
+interface TrustedTypePolicyFactory {
+  createPolicy(name: string, rules: { createScriptURL?: (input: string) => string }): unknown;
+}
+
+interface Window {
+  readonly trustedTypes?: TrustedTypePolicyFactory;
+}
