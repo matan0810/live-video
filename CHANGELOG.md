@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- Channel search above the list, by Hebrew or English name; "/" jumps to it and Enter plays the first channel found.
 - Captions on channels that carry them (DW, NBC News, Reuters, NHK World and others), from a "⋮" menu in the player's bar.
 
 ### Changed

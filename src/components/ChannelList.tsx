@@ -12,6 +12,8 @@ export interface ChannelSection {
 
 interface ChannelListProps {
   sections: readonly ChannelSection[];
+  /** While searching, every section is open and an empty result says so. */
+  isSearching?: boolean;
   activeChannelId: string | null;
   unavailableChannelIds: ReadonlySet<string>;
   favoriteIds: readonly string[];
@@ -24,6 +26,7 @@ interface ChannelListProps {
 
 export function ChannelList({
   sections,
+  isSearching = false,
   activeChannelId,
   unavailableChannelIds,
   favoriteIds,
@@ -33,9 +36,11 @@ export function ChannelList({
   onRemove,
 }: ChannelListProps) {
   const { t } = useI18n();
-  const { collapsed, toggle } = useCollapsedSections();
+  const { collapsed: savedCollapsed, toggle } = useCollapsedSections();
+  const collapsed: ReadonlySet<string> = isSearching ? new Set() : savedCollapsed;
   return (
     <nav className={styles.list} aria-label={t.channels}>
+      {isSearching && sections.length === 0 && <p className={styles.empty}>{t.noChannelFound}</p>}
       {sections.map((section) => (
         <section key={section.id} className={styles.group}>
           <h2 className={styles.heading}>

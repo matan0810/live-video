@@ -166,6 +166,20 @@ async function main() {
   );
   step('desktop: language tags only where the section does not say it');
 
+  // Search: "/" jumps to the box, matching is by either name, Enter plays the first.
+  await desktop.keyboard.press('Slash');
+  await desktop.keyboard.type('internat');
+  // CNN International is a favourite by now, so it is found under favourites.
+  assert.deepEqual(await sectionTitles(desktop), ['מועדפים']);
+  await desktop.getByRole('button', { name: 'CNN International', exact: true }).waitFor();
+  await desktop.keyboard.press('Enter');
+  await desktop.getByRole('heading', { name: 'CNN International' }).waitFor();
+  await desktop.getByRole('searchbox', { name: 'חיפוש ערוץ' }).fill('zzz');
+  await desktop.getByText('לא נמצא ערוץ בשם הזה').waitFor();
+  await desktop.getByRole('searchbox', { name: 'חיפוש ערוץ' }).press('Escape');
+  assert.equal((await sectionTitles(desktop)).length > 3, true, 'Escape clears the search');
+  step('desktop: channel search');
+
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
   await desktop.getByLabel('שם הערוץ').fill('בדיקה');
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('http://insecure.example/a.m3u8');

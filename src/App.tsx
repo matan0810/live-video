@@ -1,4 +1,6 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { filterSections } from './channels/searchChannels';
+import { ChannelSearch } from './components/ChannelSearch';
 import { stepChannel } from './channels/stepChannel';
 import { API_URL } from './api/client';
 import { CHANNEL_GROUPS, type CatalogChannel, type Channel } from './channels';
@@ -61,12 +63,19 @@ export function App() {
   const { favoriteIds, toggleFavorite } = useFavorites();
   const { customChannels, addCustomChannel, removeCustomChannel } = useCustomChannels();
   const [isTheaterMode, setIsTheaterMode] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchRef = useRef<HTMLInputElement>(null);
   /** Channels whose stream failed while trying to play them, in this visit. */
   const [failedChannelIds, setFailedChannelIds] = useState<ReadonlySet<string>>(() => new Set());
 
   const sections = useMemo(
     () => buildSections(catalogChannels, customChannels, favoriteIds, t),
     [catalogChannels, customChannels, favoriteIds, t],
+  );
+  /** The list as shown: only matching channels while searching. */
+  const shownSections = useMemo(
+    () => filterSections(sections, searchQuery),
+    [sections, searchQuery],
   );
   /** Every channel once, in the order it appears on screen. */
   const orderedChannels = useMemo(
@@ -127,6 +136,7 @@ export function App() {
       ArrowDown: () => selectByOffset(1),
       ArrowUp: () => selectByOffset(-1),
       KeyT: () => setIsTheaterMode((current) => !current),
+      Slash: () => searchRef.current?.focus(),
     };
   }, [orderedChannels, selectChannel, selectByOffset]);
   useKeyboardShortcuts(shortcuts);
@@ -186,8 +196,18 @@ export function App() {
         </section>
 
         <aside className={styles.sidebar}>
+          <ChannelSearch
+            query={searchQuery}
+            onChange={setSearchQuery}
+            onPickFirst={() => {
+              const first = shownSections[0]?.channels[0];
+              if (first) selectChannel(first.id);
+            }}
+            inputRef={searchRef}
+          />
           <ChannelList
-            sections={sections}
+            sections={shownSections}
+            isSearching={searchQuery.trim() !== ''}
             activeChannelId={activeChannelId}
             unavailableChannelIds={unavailableChannelIds}
             favoriteIds={favoriteIds}

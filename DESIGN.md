@@ -39,6 +39,9 @@ Dark, quiet and made for watching: the video is the brightest thing on the page.
 - **Sections**, in this order: favourites (when there are any), the viewer's own channels,
   Israel, World in English, In Arabic, Other languages. A section folds from its heading,
   and the choice is remembered; a folded section shows how many channels it holds.
+- **Search**, a box above the list ("/" jumps to it): matches either name, the short label
+  or the id, ignoring case, spaces, accents and Hebrew vowel marks; every section opens
+  while searching, Enter plays the first channel found and Escape clears it.
 - **Order within a section** is by importance, as the owner sets it in the list.
   Al Jazeera (English and Arabic) is at the bottom of its section by the owner's choice.
 - **Unavailable.** A channel is marked "unavailable" when it failed to play in this visit,
