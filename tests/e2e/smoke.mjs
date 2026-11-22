@@ -180,6 +180,15 @@ async function main() {
   assert.equal((await sectionTitles(desktop)).length > 3, true, 'Escape clears the search');
   step('desktop: channel search');
 
+  await desktop.getByRole('button', { name: 'על האתר' }).click();
+  const about = desktop.getByRole('dialog', { name: 'ברוכים הבאים ל-OnAir' });
+  await about.waitFor();
+  await about.getByRole('heading', { name: 'קיצורי מקלדת' }).waitFor();
+  await about.getByText('תשעת הערוצים הראשונים').waitFor();
+  await about.getByRole('button', { name: 'סגירה' }).click();
+  await about.waitFor({ state: 'hidden' });
+  step('desktop: the about window explains the site and lists the shortcuts');
+
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
   await desktop.getByLabel('שם הערוץ').fill('בדיקה');
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('http://insecure.example/a.m3u8');

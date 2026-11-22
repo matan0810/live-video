@@ -34,6 +34,10 @@ Dark, quiet and made for watching: the video is the brightest thing on the page.
   their labels stay in the site's language.
 - **Restraint.** A control earns its place only if it cannot be a default (CLAUDE.md).
 
+- **About.** A small, borderless "i" in the header, beside the version, opens a short
+  welcome: what the site is, five tips and the keyboard shortcuts (not on touch screens).
+  It never opens by itself.
+
 ## 3. Channel list
 
 - **Sections**, in this order: favourites (when there are any), the viewer's own channels,

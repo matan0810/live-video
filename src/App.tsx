@@ -21,6 +21,7 @@ import { Player } from './player/Player';
 import { useI18n } from './i18n/context';
 import type { Strings } from './i18n/strings';
 import type { PlayerStatus } from './player/useHlsPlayer';
+import { AboutButton } from './components/AboutButton';
 import styles from './App.module.css';
 
 const DIGIT_SHORTCUT_COUNT = 9;
@@ -147,6 +148,7 @@ export function App() {
         <span className={styles.brandDot} aria-hidden="true" />
         <h1 className={styles.brand}>{t.brand}</h1>
         <span className={styles.version}>v{__APP_VERSION__}</span>
+        <AboutButton />
         <button
           type="button"
           className={styles.language}
