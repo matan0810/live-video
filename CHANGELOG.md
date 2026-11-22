@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.11.0] - 2026-11-22
+
 ### Added
 - Multi-view: up to four channels at once (two on a phone), from a button under the video; one is heard, and a tap on another moves the sound.
 - A channel status board at the top of the admin area: what the daily link check found, per channel, worst first.
