@@ -17,6 +17,7 @@ import { DvrSlider } from './DvrSlider';
 import { formatDuration } from './formatDuration';
 import { MoreMenu } from './MoreMenu';
 import type { useCaptions } from './useCaptions';
+import type { usePlaybackSpeed } from './usePlaybackSpeed';
 import type { useDvr } from './useDvr';
 import styles from './PlayerControls.module.css';
 
@@ -39,6 +40,7 @@ interface PlayerControlsProps {
   isTheaterMode: boolean;
   onToggleTheater: () => void;
   captions: ReturnType<typeof useCaptions>;
+  speed: ReturnType<typeof usePlaybackSpeed>;
 }
 
 function ControlButton({
@@ -83,6 +85,7 @@ export function PlayerControls({
   isTheaterMode,
   onToggleTheater,
   captions,
+  speed,
 }: PlayerControlsProps) {
   const { t } = useI18n();
 
@@ -200,6 +203,11 @@ export function PlayerControls({
                 captions={captions.options}
                 selectedCaption={captions.selected}
                 onChooseCaption={captions.choose}
+                speed={
+                  dvr.canRewind
+                    ? { value: speed.speed, isLive: dvr.isLive, onChoose: speed.setSpeed }
+                    : null
+                }
               />
             )}
             {isPlayable && CAN_PICTURE_IN_PICTURE && (

@@ -17,6 +17,7 @@ import { useDvr } from './useDvr';
 import { useFullscreen } from './useFullscreen';
 import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
 import { useCaptions } from './useCaptions';
+import { usePlaybackSpeed } from './usePlaybackSpeed';
 import { useMediaSession } from './useMediaSession';
 import { usePlayerControls } from './usePlayerControls';
 import styles from './Player.module.css';
@@ -58,6 +59,7 @@ export function Player({
   const { videoRef, hlsRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow } =
     useHlsPlayer(channel.sources);
   const dvr = useDvr(videoRef, getLiveWindow);
+  const speed = usePlaybackSpeed(videoRef, dvr.isLive, channel.id);
   const { t, language } = useI18n();
   const name = displayName(channel, language);
   useMediaSession(videoRef, { title: name, logo: channel.logo, onStep });
@@ -174,6 +176,7 @@ export function Player({
               isTheaterMode={isTheaterMode}
               onToggleTheater={onToggleTheater}
               captions={captions}
+              speed={speed}
               isPlayable={status !== 'error'}
             />
 

@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- Playback speed (×0.5 to ×2) in the "⋮" menu on channels with rewind; faster speeds work while behind live and return to normal on catching up.
 - Channel search above the list, by Hebrew or English name; "/" jumps to it and Enter plays the first channel found.
 - Captions on channels that carry them (DW, NBC News, Reuters, NHK World and others), from a "⋮" menu in the player's bar.
 

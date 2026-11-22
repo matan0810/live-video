@@ -401,7 +401,12 @@
   cursor: pointer;
 }
 
-.menuItem:hover {
+.menuItem:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.menuItem:hover:not(:disabled) {
   background: rgb(255 255 255 / 10%);
 }
 

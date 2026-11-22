@@ -99,10 +99,12 @@ their auto-hiding, gestures and translated labels.
   button, skip −10 / +10 (on rewindable channels), previous / next channel, picture in
   picture, theatre mode (wide screens, where the list sits beside the player), full screen.
   Under the video only the channel's name, share and report remain.
-- **"⋮" menu**, in the bar before picture in picture, for settings few viewers need. It
-  holds the captions (off by default, and back off on every channel switch) and appears
+- **"⋮" menu**, in the bar before picture in picture, for settings few viewers need, hidden
+  when it would be empty. It holds the captions (off by default, and back off on every channel switch) and appears
   only on channels that carry them: subtitle tracks loaded by hls.js, or captions inside
-  the video. Track languages are shown as names in the site's language. When a channel cannot play, only previous / next channel and full
+  the video. Track languages are shown as names in the site's language.
+  Speed (×0.5 to ×2) is offered on channels with rewind: faster speeds only while behind
+  live, back to normal on catching up with live and on every channel switch. When a channel cannot play, only previous / next channel and full
   screen remain. On phones (≤ 480 px) the skip buttons give way to the double tap, and on
   the smallest (≤ 360 px) picture in picture too, so the row never runs off the screen.
 - **Live button**: "Live" at the live edge (within **15 seconds** counts as live);
