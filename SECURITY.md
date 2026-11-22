@@ -2,8 +2,9 @@
 
 ## What is stored
 
-- **In each viewer's browser:** the last channel, favourites, their own channels and a copy
-  of the channel list, and a saved copy of the site's own files (`public/sw.js`: the page,
+- **In each viewer's browser:** the last channel, favourites, their own channels, a copy
+  of the channel list, the moment being watched on channels they rewound (for up to 12
+  hours), and a saved copy of the site's own files (`public/sw.js`: the page,
   its scripts, styles, fonts, icons and logos), so it opens at once. The saved copy holds
   nothing from other hosts: no video, nothing from the Worker. Nothing about a viewer is
   sent anywhere unless they file a report.

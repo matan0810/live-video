@@ -19,6 +19,7 @@ import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
 import { useCaptions } from './useCaptions';
 import { usePlaybackSpeed } from './usePlaybackSpeed';
 import { useMediaSession } from './useMediaSession';
+import { useResumePosition } from './useResumePosition';
 import { usePlayerControls } from './usePlayerControls';
 import styles from './Player.module.css';
 
@@ -60,6 +61,7 @@ export function Player({
     useHlsPlayer(channel.sources);
   const dvr = useDvr(videoRef, getLiveWindow);
   const speed = usePlaybackSpeed(videoRef, dvr.isLive, channel.id);
+  useResumePosition(channel.id, status, dvr);
   const { t, language } = useI18n();
   const name = displayName(channel, language);
   useMediaSession(videoRef, { title: name, logo: channel.logo, onStep });

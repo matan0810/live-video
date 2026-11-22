@@ -113,6 +113,10 @@ their auto-hiding, gestures and translated labels.
 - **Rewind** is offered when the stream keeps at least **60 seconds**. The timeline follows
   the stream's moving window (Video.js's own slider assumes history from zero) and seeks
   when the finger or mouse lets go.
+- **Resume.** Watching behind live on a rewindable channel remembers the broadcast moment
+  (every 5 seconds, on leaving the channel and on leaving the page). A refresh or a return
+  to the channel seeks back to that moment if the stream still keeps it (10 seconds inside
+  its window); otherwise, within 15 seconds of live, or after 12 hours, it starts at live.
 - **Skips show on the video**, YouTube style: arrows and the seconds on that side, rounded
   to five, adding up when repeated within 1.2 seconds. Jumps under 3 or over 65 seconds
   (the timeline, back to live) are not skips.
