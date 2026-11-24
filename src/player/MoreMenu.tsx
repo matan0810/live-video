@@ -1,21 +1,14 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MoreIcon } from '../components/icons';
 import { useI18n } from '../i18n/context';
-import type { CaptionOption } from './captionOptions';
-import { isSpeedAllowed, SPEEDS, type Speed } from './playbackSpeed';
+import type { MenuSetting } from './menuSettings';
 import styles from './MoreMenu.module.css';
 
 interface MoreMenuProps {
-  captions: readonly CaptionOption[];
-  selectedCaption: string | null;
-  onChooseCaption: (id: string | null) => void;
-  /** Offered only on channels that keep past minutes; null hides it. */
-  speed: { value: Speed; isLive: boolean; onChoose: (speed: Speed) => void } | null;
+  settings: readonly MenuSetting[];
   /** Shown in the menu only on the smallest screens, where the bar has no room for it. */
   onPictureInPicture: (() => void) | null;
 }
-
-type Page = 'main' | 'captions' | 'speed';
 
 function Chevron() {
   return (
@@ -28,17 +21,12 @@ function Chevron() {
 /**
  * The "⋮" menu, as in YouTube: one short row per setting with its current value, opening a
  * list of choices. A small pop-up by the button with a mouse; a sheet from the bottom of the
- * screen on touch screens. Always in the bar, so it does not shift between channels.
+ * screen on touch screens. The rows come from menuSettings.ts.
  */
-export function MoreMenu({
-  captions,
-  selectedCaption,
-  onChooseCaption,
-  speed,
-  onPictureInPicture,
-}: MoreMenuProps) {
+export function MoreMenu({ settings, onPictureInPicture }: MoreMenuProps) {
   const { t } = useI18n();
-  const [page, setPage] = useState<Page | null>(null);
+  /** null: closed; 'main': the rows; otherwise the id of the setting whose list is open. */
+  const [page, setPage] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const close = () => setPage(null);
 
@@ -60,54 +48,7 @@ export function MoreMenu({
     };
   }, [page]);
 
-  const speedLabel = (value: Speed) => (value === 1 ? t.speedNormal : `×${value}`);
-  const captionLabel =
-    captions.find((option) => option.id === selectedCaption)?.label ?? t.captionsOff;
-
-  const row = (label: string, value: string, target: Page) => (
-    <button type="button" role="menuitem" className={styles.row} onClick={() => setPage(target)}>
-      <span>{label}</span>
-      <span className={styles.value}>
-        <bdi>{value}</bdi>
-        <Chevron />
-      </span>
-    </button>
-  );
-
-  const choice = (
-    key: string,
-    label: string,
-    isChecked: boolean,
-    onChoose: () => void,
-    isDisabled = false,
-  ) => (
-    <button
-      key={key}
-      type="button"
-      role="menuitemradio"
-      aria-checked={isChecked}
-      disabled={isDisabled}
-      className={styles.choice}
-      onClick={() => {
-        onChoose();
-        close();
-      }}
-    >
-      <bdi>{label}</bdi>
-    </button>
-  );
-
-  const subPage = (title: string, choices: ReactNode) => (
-    <>
-      <button type="button" className={styles.back} onClick={() => setPage('main')}>
-        <Chevron />
-        {title}
-      </button>
-      <div role="group" aria-label={title}>
-        {choices}
-      </div>
-    </>
-  );
+  const open = settings.find((setting) => setting.id === page);
 
   return (
     <div ref={rootRef} className={styles.more} data-open={page !== null}>
@@ -126,11 +67,48 @@ export function MoreMenu({
         <>
           <button type="button" className={styles.backdrop} aria-label={t.close} onClick={close} />
           <div role="menu" aria-label={t.moreOptions} className={styles.menu} dir={t.dir}>
-            {page === 'main' && (
+            {open ? (
               <>
-                {captions.length > 0 && row(t.captions, captionLabel, 'captions')}
-                {speed && row(t.speed, speedLabel(speed.value), 'speed')}
-                {captions.length === 0 && !speed && <p className={styles.empty}>{t.moreNothing}</p>}
+                <button type="button" className={styles.back} onClick={() => setPage('main')}>
+                  <Chevron />
+                  {open.label}
+                </button>
+                <div role="group" aria-label={open.label}>
+                  {open.choices.map((choice) => (
+                    <button
+                      key={choice.key}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={choice.isChecked}
+                      disabled={choice.isDisabled}
+                      className={styles.choice}
+                      onClick={() => {
+                        choice.onChoose();
+                        close();
+                      }}
+                    >
+                      <bdi>{choice.label}</bdi>
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                {settings.map((setting) => (
+                  <button
+                    key={setting.id}
+                    type="button"
+                    role="menuitem"
+                    className={styles.row}
+                    onClick={() => setPage(setting.id)}
+                  >
+                    <span>{setting.label}</span>
+                    <span className={styles.value}>
+                      <bdi>{setting.value}</bdi>
+                      <Chevron />
+                    </span>
+                  </button>
+                ))}
                 {onPictureInPicture && (
                   <button
                     type="button"
@@ -146,29 +124,6 @@ export function MoreMenu({
                 )}
               </>
             )}
-            {page === 'captions' &&
-              subPage(t.captions, [
-                choice('off', t.captionsOff, selectedCaption === null, () => onChooseCaption(null)),
-                ...captions.map((option) =>
-                  choice(option.id, option.label, selectedCaption === option.id, () =>
-                    onChooseCaption(option.id),
-                  ),
-                ),
-              ])}
-            {page === 'speed' &&
-              speed &&
-              subPage(
-                t.speed,
-                SPEEDS.map((value) =>
-                  choice(
-                    String(value),
-                    speedLabel(value),
-                    speed.value === value,
-                    () => speed.onChoose(value),
-                    !isSpeedAllowed(value, speed.isLive),
-                  ),
-                ),
-              )}
           </div>
         </>
       )}

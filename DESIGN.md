@@ -104,21 +104,27 @@ their auto-hiding, gestures and translated labels.
   picture, theatre mode (wide screens, where the list sits beside the player), full screen.
   Under the video only the channel's name, share and report remain.
 - **"⋮" menu**, in the bar before picture in picture, for settings few viewers need, laid out
-  as in YouTube: one row per setting with its current value ("Captions · Off ›",
-  "Playback speed · Normal ›"), each opening its list of choices with a way back. With a
-  mouse it is a small pop-up inside the player; on touch screens a sheet rises from the
-  bottom of the screen over a dark backdrop, in full screen too. It is always there on a
-  playing channel, so the bar does not shift, and says so when the channel offers nothing.
-  Captions (off by default, and back off on every channel switch) appear on channels that
-  carry them: subtitle tracks loaded by hls.js, or captions inside the video, with track
-  languages shown as names in the site's language. Speed (×0.5 to ×2) is offered on
-  channels with rewind: faster speeds only while behind live, back to normal on catching up
-  with live and on every channel switch. On the smallest screens (≤ 360 px) picture in
-  picture moves into it.
+  as in YouTube: one row per setting with its current value, each opening its list of
+  choices with a way back. With a mouse it is a small pop-up inside the player; on touch
+  screens a sheet rises from the bottom of the screen over a dark backdrop, in full screen
+  too. A row appears only when it offers a real choice, in this order:
+  - **Captions** (off by default, and back off on every channel switch) on channels that
+    carry them: subtitle tracks loaded by hls.js, or captions inside the video, with track
+    languages shown as names in the site's language.
+  - **Playback speed** (×0.5 to ×2) on channels with rewind: faster speeds only while
+    behind live, back to normal on catching up with live and on every channel switch.
+  - **Quality**, when the stream offers more than one height and hls.js plays it (Safari's
+    own player chooses by itself): each height once, highest first, and "Auto (720p)"
+    showing what plays now. Back to automatic on every channel switch.
+  - **Sleep timer**, always: off, 15, 30, 60 or 90 minutes, then the player pauses. It
+    shows the minutes left and keeps running across channel switches.
+
+  On the smallest screens (≤ 360 px) picture in picture moves into it.
   When a channel cannot play, only previous / next channel and full
   screen remain. On phones (≤ 480 px) the skip buttons give way to the double tap, and on
   the smallest (≤ 360 px) picture in picture too, so the row never runs off the screen.
-- **Live button**: "Live" at the live edge (within **15 seconds** counts as live);
+
+- **Live button**: the red dot first, beside the volume, as in YouTube; "Live" at the live edge (within **15 seconds** counts as live);
   otherwise "Back to live −1:23", and a tap returns, on any channel, rewindable or not.
   Phones show the time alone.
 - **Rewind** is offered when the stream keeps at least **60 seconds**. The timeline follows

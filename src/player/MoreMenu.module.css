@@ -5,6 +5,7 @@
 
 .trigger {
   composes: button from './PlayerControls.module.css';
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Only on touch screens, behind the sheet; a mouse closes the pop-up by clicking away. */
@@ -114,13 +115,6 @@
   cursor: default;
 }
 
-.empty {
-  margin: 0;
-  padding: 8px 16px;
-  color: rgb(255 255 255 / 70%);
-  font-size: 0.8125rem;
-}
-
 /* Picture in picture moves into the menu only where the bar has no room for its button. */
 .row.pip {
   display: none;
@@ -129,10 +123,6 @@
 @media (max-width: 360px) {
   .row.pip {
     display: flex;
-  }
-
-  .menu:has(.pip) .empty {
-    display: none;
   }
 }
 

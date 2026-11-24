@@ -7,6 +7,14 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- Quality in the "⋮" menu: pick a picture height, or leave it automatic (which shows what plays now).
+- A sleep timer in the "⋮" menu: the player pauses after 15, 30, 60 or 90 minutes.
+
+### Changed
+- The "⋮" menu no longer says when a channel has nothing to set: rows appear only when they offer a choice.
+- The live label in the player's bar starts with its red dot, a little further from the volume.
+
 ## [2.12.0] - 2026-11-22
 
 ### Changed

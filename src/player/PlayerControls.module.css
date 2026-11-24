@@ -204,7 +204,8 @@
   align-items: center;
   gap: 8px;
   height: 36px;
-  margin-inline-start: 6px;
+  /* As in YouTube: the red dot first, beside the volume, then the label ("● Live"). */
+  margin-inline-start: 14px;
   padding: 0 12px;
   border: none;
   border-radius: var(--radius-pill);
@@ -319,7 +320,7 @@
   }
 
   .live {
-    margin-inline-start: 2px;
+    margin-inline-start: 6px;
     padding: 0 10px;
   }
 

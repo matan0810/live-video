@@ -16,8 +16,7 @@ import { useI18n } from '../i18n/context';
 import { DvrSlider } from './DvrSlider';
 import { formatDuration } from './formatDuration';
 import { MoreMenu } from './MoreMenu';
-import type { useCaptions } from './useCaptions';
-import type { usePlaybackSpeed } from './usePlaybackSpeed';
+import type { MenuSetting } from './menuSettings';
 import type { useDvr } from './useDvr';
 import styles from './PlayerControls.module.css';
 
@@ -39,8 +38,8 @@ interface PlayerControlsProps {
   /** Wide screens only, where the channel list sits beside the player. */
   isTheaterMode: boolean;
   onToggleTheater: () => void;
-  captions: ReturnType<typeof useCaptions>;
-  speed: ReturnType<typeof usePlaybackSpeed>;
+  /** The rows of the "⋮" menu (menuSettings.ts). */
+  menu: readonly MenuSetting[];
 }
 
 function ControlButton({
@@ -84,8 +83,7 @@ export function PlayerControls({
   isPlayable,
   isTheaterMode,
   onToggleTheater,
-  captions,
-  speed,
+  menu,
 }: PlayerControlsProps) {
   const { t } = useI18n();
 
@@ -146,7 +144,6 @@ export function PlayerControls({
                 <button
                   type="button"
                   className={styles.live}
-                  dir={t.dir}
                   data-live={dvr.isLive}
                   onClick={dvr.goLive}
                   // Enabled whenever behind, even on a channel without a timeline: there must
@@ -200,14 +197,7 @@ export function PlayerControls({
             </>
             {isPlayable && (
               <MoreMenu
-                captions={captions.options}
-                selectedCaption={captions.selected}
-                onChooseCaption={captions.choose}
-                speed={
-                  dvr.canRewind
-                    ? { value: speed.speed, isLive: dvr.isLive, onChoose: speed.setSpeed }
-                    : null
-                }
+                settings={menu}
                 onPictureInPicture={CAN_PICTURE_IN_PICTURE ? onTogglePictureInPicture : null}
               />
             )}
