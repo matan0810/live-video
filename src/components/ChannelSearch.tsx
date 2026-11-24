@@ -1,5 +1,4 @@
 import type { RefObject } from 'react';
-import { useI18n } from '../i18n/context';
 import styles from './ChannelSearch.module.css';
 
 interface ChannelSearchProps {
@@ -8,19 +7,26 @@ interface ChannelSearchProps {
   /** Enter plays the first channel found. */
   onPickFirst: () => void;
   inputRef: RefObject<HTMLInputElement | null>;
+  /** What it searches, as the open tab says: channels or stations. */
+  label: string;
 }
 
 /** A search box above the channel list; "/" jumps into it. */
-export function ChannelSearch({ query, onChange, onPickFirst, inputRef }: ChannelSearchProps) {
-  const { t } = useI18n();
+export function ChannelSearch({
+  query,
+  onChange,
+  onPickFirst,
+  inputRef,
+  label,
+}: ChannelSearchProps) {
   return (
     <input
       ref={inputRef}
       type="search"
       className={styles.search}
       value={query}
-      placeholder={t.searchChannels}
-      aria-label={t.searchChannels}
+      placeholder={label}
+      aria-label={label}
       enterKeyHint="go"
       autoComplete="off"
       onChange={(event) => onChange(event.target.value)}

@@ -219,6 +219,25 @@ async function main() {
   await desktop.getByRole('button', { name: 'צפייה מרובה' }).waitFor();
   step('desktop: multi-view adds channels from the list, moves the sound, and ends');
 
+  // Radio has a tab of its own: stations never mix with TV channels.
+  await desktop.getByRole('tab', { name: 'רדיו' }).click();
+  await desktop.getByRole('searchbox', { name: 'חיפוש תחנה' }).waitFor();
+  assert.equal(await desktop.locator('aside').getByRole('button', { name: 'כאן 11' }).count(), 0);
+  await desktop.locator('aside').getByRole('button', { name: 'רדיו 103FM', exact: true }).click();
+  await desktop.getByRole('heading', { name: 'רדיו 103FM' }).waitFor();
+  await desktop.getByText('בשידור').waitFor();
+  assert.equal(await desktop.getByRole('button', { name: 'צפייה מרובה' }).count(), 0);
+  await desktop.keyboard.press('ArrowDown');
+  await desktop.getByRole('heading', { name: 'כאן גימל' }).waitFor();
+  await desktop.getByRole('tab', { name: 'טלוויזיה' }).click();
+  await desktop
+    .locator('aside')
+    .getByRole('button', { name: /^כאן 11/ })
+    .first()
+    .waitFor();
+  assert.equal(await desktop.locator('aside').getByRole('button', { name: 'גלגלצ' }).count(), 0);
+  step('desktop: radio in its own tab, a station shows its card, stepping stays in radio');
+
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
   await desktop.getByLabel('שם הערוץ').fill('בדיקה');
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('http://insecure.example/a.m3u8');

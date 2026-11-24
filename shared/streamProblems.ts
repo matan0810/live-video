@@ -49,3 +49,8 @@ export function findStreamProblems(
   if (allowedOrigin !== '*' && allowedOrigin !== siteOrigin) problems.push('blocks-site');
   return problems;
 }
+
+/** Whether a response is a plain audio stream (a radio station over Icecast: MP3, AAC, Ogg). */
+export function isAudioContentType(contentType: string): boolean {
+  return /^(audio\/|application\/ogg)/i.test(contentType.trim());
+}

@@ -439,5 +439,370 @@
     "language": "ru",
     "group": "languages",
     "sources": ["https://dwamdstream110.akamaized.net/hls/live/2017971/dwstream110/master.m3u8"]
+  },
+  {
+    "id": "radio-kan-bet",
+    "name": "כאן ב׳",
+    "nameEn": "Kan Bet",
+    "short": "ב׳",
+    "language": "he",
+    "group": "radio",
+    "sources": [
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/radio/kan_reshet_bet/live.livx/playlist.m3u8?renditions&fmp4"
+    ]
+  },
+  {
+    "id": "radio-galei-zahal",
+    "name": "גלי צה״ל",
+    "nameEn": "Galei Tzahal",
+    "short": "גלצ",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://glzwizzlv.bynetcdn.com/glz_mp3"]
+  },
+  {
+    "id": "radio-103fm",
+    "name": "רדיו 103FM",
+    "nameEn": "103FM",
+    "short": "103",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/103FM/Live/icecast.audio"]
+  },
+  {
+    "id": "radio-kan-gimel",
+    "name": "כאן גימל",
+    "nameEn": "Kan Gimel",
+    "short": "גימל",
+    "language": "he",
+    "group": "radio",
+    "sources": [
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/radio/kan_gimel/live.livx/playlist.m3u8?renditions&fmp4"
+    ]
+  },
+  {
+    "id": "radio-galgalatz",
+    "name": "גלגלצ",
+    "nameEn": "Galgalatz",
+    "short": "גלגלצ",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://api.bynetcdn.com/Redirector/glz/glglz/ICE-LIVE"]
+  },
+  {
+    "id": "radio-kan-88",
+    "name": "כאן 88",
+    "nameEn": "Kan 88",
+    "short": "88",
+    "language": "he",
+    "group": "radio",
+    "sources": [
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/radio/kan_88/live.livx/playlist.m3u8?renditions&fmp4"
+    ]
+  },
+  {
+    "id": "radio-eco99",
+    "name": "אקו 99FM",
+    "nameEn": "Eco 99FM",
+    "short": "אקו",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://eco01.livecdn.biz/ecolive/99fm_aac/icecast.audio"]
+  },
+  {
+    "id": "radio-radius-100",
+    "name": "רדיוס 100FM",
+    "nameEn": "Radius 100FM",
+    "short": "100",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Radios_100FM_Website/Audio/icecast.audio"]
+  },
+  {
+    "id": "radio-tel-aviv-102",
+    "name": "רדיו תל אביב 102FM",
+    "nameEn": "Radio Tel Aviv 102FM",
+    "short": "102",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://102.livecdn.biz/102fm_aac"]
+  },
+  {
+    "id": "radio-jerusalem",
+    "name": "רדיו ירושלים 101FM",
+    "nameEn": "Radio Jerusalem 101FM",
+    "short": "101",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://radio.streamgates.net/stream/101fm"]
+  },
+  {
+    "id": "radio-kol-chai",
+    "name": "קול חי",
+    "nameEn": "Kol Chai",
+    "short": "93",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://live.kcm.fm/live-new"]
+  },
+  {
+    "id": "radio-kol-barama",
+    "name": "קול ברמה",
+    "nameEn": "Kol Barama",
+    "short": "ברמה",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Kol_Barama/Live_Audio/icecast.audio"]
+  },
+  {
+    "id": "radio-lev-hamedina",
+    "name": "לב המדינה 91",
+    "nameEn": "Lev HaMedina 91",
+    "short": "91",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Lev_Hamedina/Audio/icecast.audio"]
+  },
+  {
+    "id": "radio-kan-tarbut",
+    "name": "כאן תרבות",
+    "nameEn": "Kan Tarbut",
+    "short": "תרבות",
+    "language": "he",
+    "group": "radio",
+    "sources": [
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/radio/kan_tarbut/live.livx/playlist.m3u8?renditions&fmp4"
+    ]
+  },
+  {
+    "id": "radio-kan-classical",
+    "name": "כאן קול המוזיקה",
+    "nameEn": "Kan Kol HaMusika",
+    "short": "♪",
+    "language": "he",
+    "group": "radio",
+    "sources": [
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/radio/kan_kol_hamuzika/live.livx/playlist.m3u8?renditions&fmp4"
+    ]
+  },
+  {
+    "id": "radio-kan-moreshet",
+    "name": "כאן מורשת",
+    "nameEn": "Kan Moreshet",
+    "short": "מורשת",
+    "language": "he",
+    "group": "radio",
+    "sources": [
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/radio/kan_moreshet/live.livx/playlist.m3u8?renditions&fmp4"
+    ]
+  },
+  {
+    "id": "radio-kan-reka",
+    "name": "כאן רקע",
+    "nameEn": "Kan Reka",
+    "short": "רקע",
+    "language": "he",
+    "group": "radio",
+    "sources": [
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/radio/kan_reka/live.livx/playlist.m3u8?renditions&fmp4"
+    ]
+  },
+  {
+    "id": "radio-haifa",
+    "name": "רדיו חיפה",
+    "nameEn": "Radio Haifa",
+    "short": "107.5",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn88.mediacast.co.il/1075-hfa-live/radiohaifa/icecast.audio"]
+  },
+  {
+    "id": "radio-tzafon-1045",
+    "name": "צפון 104.5",
+    "nameEn": "Tzafon 104.5",
+    "short": "צפון",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Tzafon_NonStop/Live_Audio/icecast.audio"]
+  },
+  {
+    "id": "radio-kol-kinneret",
+    "name": "רדיו קול הכנרת",
+    "nameEn": "Kol HaKinneret",
+    "short": "כנרת",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://radio.streamgates.net/stream/kinneret"]
+  },
+  {
+    "id": "radio-kol-yezreel",
+    "name": "רדיו קול יזרעאל",
+    "nameEn": "Kol Yizre'el",
+    "short": "יזרעאל",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://radio.streamgates.net/stream/yezreel"]
+  },
+  {
+    "id": "radio-kol-hashfela",
+    "name": "רדיו קול השפלה",
+    "nameEn": "Kol HaShfela",
+    "short": "שפלה",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://radio.streamgates.net/stream/1036kh"]
+  },
+  {
+    "id": "radio-darom-97",
+    "name": "רדיו דרום 97",
+    "nameEn": "Radio Darom 97",
+    "short": "97",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Darom_97FM/Live/icecast.audio"]
+  },
+  {
+    "id": "radio-darom-1015",
+    "name": "רדיו דרום 101.5",
+    "nameEn": "Radio Darom 101.5",
+    "short": "101.5",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Darom_1015FM/Live/icecast.audio"]
+  },
+  {
+    "id": "radio-eilat",
+    "name": "רדיו אילת 102",
+    "nameEn": "Radio Eilat 102",
+    "short": "102",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Eilat_Radio/Live/icecast.audio"]
+  },
+  {
+    "id": "radio-kol-rega",
+    "name": "קול רגע",
+    "nameEn": "Kol Rega",
+    "short": "96",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Kol_Rega/Live_Audio/icecast.audio"]
+  },
+  {
+    "id": "radio-90",
+    "name": "רדיו 90",
+    "nameEn": "Radio 90",
+    "short": "90",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Emtza_Haderech/Live_Audio/icecast.audio"]
+  },
+  {
+    "id": "radio-galei-israel",
+    "name": "גלי ישראל",
+    "nameEn": "Galei Israel",
+    "short": "גלי",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Galei_Israel/Live/icecast.audio"]
+  },
+  {
+    "id": "radio-nostalgia-963",
+    "name": "רדיוס נוסטלגי 96.3",
+    "nameEn": "Radius Nostalgi 96.3",
+    "short": "96.3",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdna.streamgates.net/radios-audio/Nostalgia_963fm/icecast.audio"]
+  },
+  {
+    "id": "radio-hatachana",
+    "name": "התחנה 101.5",
+    "nameEn": "HaTachana 101.5",
+    "short": "101.5",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Hatahana_1015/Live_Audio/icecast.audio"]
+  },
+  {
+    "id": "radio-hamesh-995",
+    "name": "רדיו חם אש 99.5",
+    "nameEn": "Hamesh 99.5",
+    "short": "99.5",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://995.livecdn.biz/995fm"]
+  },
+  {
+    "id": "radio-kzradio",
+    "name": "רדיו הקצה",
+    "nameEn": "Radio HaKatze",
+    "short": "הקצה",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://kzradio.mediacast.co.il/kzradio_live/kzradio/icecast.audio"]
+  },
+  {
+    "id": "radio-kol-galim",
+    "name": "רדיו קול גלים",
+    "nameEn": "Kol Galim",
+    "short": "גלים",
+    "language": "he",
+    "group": "radio",
+    "sources": ["https://live.ecast.co.il/stream/galimlive"]
+  },
+  {
+    "id": "radio-makan",
+    "name": "מכאן (רדיו)",
+    "nameEn": "Makan Radio",
+    "short": "מכאן",
+    "language": "ar",
+    "group": "radio",
+    "sources": [
+      "https://kancdn.medonecdn.net/livehls/oil/kancdn-live/live/radio/radio_makan/live.livx/playlist.m3u8?renditions&fmp4"
+    ]
+  },
+  {
+    "id": "radio-ashams",
+    "name": "רדיו א־שמס",
+    "nameEn": "A-Shams",
+    "short": "שמס",
+    "language": "ar",
+    "group": "radio",
+    "sources": ["https://cdna.streamgates.net/Ashams/Live/icecast.audio"]
+  },
+  {
+    "id": "radio-nas",
+    "name": "רדיו נאס 103.3",
+    "nameEn": "Nas 103.3",
+    "short": "NAS",
+    "language": "ar",
+    "group": "radio",
+    "sources": ["https://live1.nasapp.net/nas/live_audio.m3u8"]
+  },
+  {
+    "id": "radio-pervoye-891",
+    "name": "פרוויה 89.1",
+    "nameEn": "Pervoye 89.1",
+    "short": "89.1",
+    "language": "ru",
+    "group": "radio",
+    "sources": ["https://cdn.cybercdn.live/Pervoia/Audio/icecast.audio"]
+  },
+  {
+    "id": "radio-bbc-world-service",
+    "name": "BBC World Service",
+    "short": "BBC",
+    "language": "en",
+    "group": "radio",
+    "sources": ["https://stream.live.vc.bbcmedia.co.uk/bbc_world_service"]
+  },
+  {
+    "id": "radio-npr",
+    "name": "NPR",
+    "short": "NPR",
+    "language": "en",
+    "group": "radio",
+    "sources": ["https://npr-ice.streamguys1.com/live.mp3"]
   }
 ]

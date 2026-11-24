@@ -38,6 +38,8 @@ interface PlayerControlsProps {
   /** Wide screens only, where the channel list sits beside the player. */
   isTheaterMode: boolean;
   onToggleTheater: () => void;
+  /** False for radio: nothing to show in picture in picture. */
+  hasPicture: boolean;
   /** The rows of the "⋮" menu (menuSettings.ts). */
   menu: readonly MenuSetting[];
 }
@@ -84,6 +86,7 @@ export function PlayerControls({
   isTheaterMode,
   onToggleTheater,
   menu,
+  hasPicture,
 }: PlayerControlsProps) {
   const { t } = useI18n();
 
@@ -198,10 +201,12 @@ export function PlayerControls({
             {isPlayable && (
               <MoreMenu
                 settings={menu}
-                onPictureInPicture={CAN_PICTURE_IN_PICTURE ? onTogglePictureInPicture : null}
+                onPictureInPicture={
+                  hasPicture && CAN_PICTURE_IN_PICTURE ? onTogglePictureInPicture : null
+                }
               />
             )}
-            {isPlayable && CAN_PICTURE_IN_PICTURE && (
+            {isPlayable && hasPicture && CAN_PICTURE_IN_PICTURE && (
               <ControlButton
                 className={styles.pip}
                 label={t.pictureInPicture}

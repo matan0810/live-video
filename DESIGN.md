@@ -7,7 +7,7 @@ change together: a change to a rule, a number or a behaviour updates the section
 
 | In                                                           | Out                                                   |
 | ------------------------------------------------------------ | ----------------------------------------------------- |
-| Live news channels on one page, Israeli and international    | Recordings, programme guides, on-demand video         |
+| Live news channels and radio, Israeli and international      | Recordings, programme guides, on-demand video         |
 | Rewind on channels whose stream keeps past minutes           | Recording or downloading video                        |
 | Hebrew (right to left) and English                           | Other interface languages                             |
 | Favourites and the viewer's own channels, kept on the device | Accounts, comments, anything shared between viewers   |
@@ -40,6 +40,9 @@ Dark, quiet and made for watching: the video is the brightest thing on the page.
 
 ## 3. Channel list
 
+- **Two tabs, TV and Radio**, above the search: underlined, as in YouTube. They never mix:
+  each tab has its own sections, favourites and search ("Search stations" on Radio). The
+  list opens on the tab of the channel last watched, or the one a shared link opens.
 - **Sections**, in this order: favourites (when there are any), the viewer's own channels,
   Israel, World in English, In Arabic, Other languages. A section folds from its heading,
   and the choice is remembered; a folded section shows how many channels it holds.
@@ -152,6 +155,23 @@ their auto-hiding, gestures and translated labels.
 - **Lock screen and media keys** show the channel and its logo; previous / next switch
   channel.
 
+### Radio
+
+- **Stations** are channels in the `radio` group (`src/channels/channels.json`), shown only
+  in the Radio tab: Kan's stations, Galei Tzahal and Galgalatz, the national and regional
+  stations, a few in Arabic and Russian (tagged), and BBC World Service and NPR. They came
+  from a public catalog of Israeli stations (issue #12); stations without a logo show their
+  frequency or a short name.
+- **Links** are HLS playlists (Kan) or plain audio streams (MP3 or AAC over Icecast), which
+  the browser plays by itself: a link not ending in `.m3u8` is audio
+  (`shared/channels/sources.ts`, `isHlsSource`).
+- **The view**: in place of a picture, the station's tile large, its name, and a small red
+  level meter that moves while it plays and rests when paused.
+- **The bar** is the TV one without picture in picture, quality or multi-view, which need a
+  picture; the sleep timer is there, and rewind when the stream keeps a window.
+- **Stepping** (↑ / ↓, the bar's buttons, the lock screen, 1–9 within the open tab) stays
+  within the kind: radio to radio, TV to TV. Picking a station during multi-view ends it.
+
 ### Multi-view
 
 - A button under the video, beside share and report, shows up to **four** channels at once
@@ -173,7 +193,8 @@ At `#/admin`, a separate chunk viewers never download. One password, a Cloudflar
 
 - **Editor**: every field of a channel, links one per line (first is primary), a logo
   preview showing the tile as viewers will see it, and a check of each link from the
-  owner's own browser.
+  owner's own browser (a radio station's audio stream is checked by starting to play it,
+  silently).
 - **Link finder**, in stages, stopping at the first that finds something: the page's
   source, the players it embeds, a real browser in the cloud (Cloudflare Browser Run,
   up to 15 times a day), then the iptv-org directory for the same website.
@@ -189,7 +210,8 @@ At `#/admin`, a separate chunk viewers never download. One password, a Cloudflar
 
 - **Daily link check** (`scripts/check-links.ts`) tests the list viewers get. A link can
   answer and still be useless: no sound, below 360p, a recording, or a server that refuses
-  the site, which open an issue; HEVC only is a limitation, listed without an issue. Kan's
+  the site, which open an issue; HEVC only is a limitation, listed without an issue. A radio station's plain audio stream
+  counts as working when it answers with an audio type (its headers alone are read). Kan's
   hosts refuse anyone abroad and are listed as not checkable. Channels with no link are
   listed apart. Each run is also saved to the Worker for the admin's status board.
 - **Weekly Sync channels**: the admin's list and outside logos into the code (section 4).

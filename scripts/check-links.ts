@@ -1,6 +1,7 @@
 /**
  * Checks that every stream viewers are offered answers with a live HLS playlist they can
- * actually watch (sound, quality, a format browsers play, a server that allows the site):
+ * actually watch (sound, quality, a format browsers play, a server that allows the site),
+ * or for a radio station's plain audio stream, with audio:
  * the list saved in the admin area when API_URL is set and one was saved, else channels.json.
  *
  * Usage: [API_URL=https://…] [STATUS_FILE=status.json] node scripts/check-links.ts
@@ -11,10 +12,10 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { isSavedListCurrent, isVersion } from '../shared/channels/listVersion.ts';
 import { parseChannels } from '../shared/channels/parseChannels.ts';
-import { resolveStreamUrl } from '../shared/channels/sources.ts';
+import { isHlsSource, resolveStreamUrl } from '../shared/channels/sources.ts';
 import type { CatalogChannel } from '../shared/channels/types.ts';
 import type { LinkStatus } from '../shared/linkStatus.ts';
-import { findStreamProblems } from '../shared/streamProblems.ts';
+import { findStreamProblems, isAudioContentType } from '../shared/streamProblems.ts';
 import { formatReport, LIMITATIONS, needsAttention, type SourceResult } from './linkReport.ts';
 
 const CHANNELS_FILE = new URL('../src/channels/channels.json', import.meta.url);
@@ -23,7 +24,12 @@ const TIMEOUT_MS = 15_000;
 const HLS_SIGNATURE = '#EXTM3U';
 const SITE_ORIGIN = 'https://matan0810.github.io';
 /** Hosts that refuse anyone outside Israel, where the check runs; a failure there says nothing. */
-const ISRAEL_ONLY_HOSTS = new Set(['kancdn.medonecdn.net']);
+const ISRAEL_ONLY_HOSTS = new Set([
+  'kancdn.medonecdn.net',
+  // Radio Tel Aviv 102 and Hamesh 99.5: their CDN refuses addresses outside Israel.
+  '102.livecdn.biz',
+  '995.livecdn.biz',
+]);
 // Some CDNs refuse requests that do not look like they come from a browser.
 const USER_AGENT =
   'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36';
@@ -41,6 +47,16 @@ async function checkSource(url: string): Promise<SourceResult> {
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (!response.ok) return down(`HTTP ${response.status}`);
+
+    // A radio station's plain audio stream never ends: its headers are enough, and the
+    // browser plays it without CORS, so the site's origin is not checked.
+    if (!isHlsSource(url)) {
+      const type = response.headers.get('Content-Type') ?? '';
+      await response.body?.cancel();
+      return isAudioContentType(type)
+        ? { url, state: 'ok', detail: 'OK', problems: [] }
+        : down(`not an audio stream (${type || 'no type'})`);
+    }
 
     const body = await response.text();
     if (!body.trimStart().startsWith(HLS_SIGNATURE)) return down('not an HLS playlist');

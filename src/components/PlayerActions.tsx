@@ -10,6 +10,8 @@ import { ShareButton } from './ShareButton';
 
 interface PlayerActionsProps {
   channel: Channel;
+  /** False for radio, which has no picture to put in a grid. */
+  canMultiView: boolean;
   onStartMultiView: () => void;
 }
 
@@ -17,13 +19,15 @@ interface PlayerActionsProps {
  * The buttons under the video: multi-view, and for channels from the list (not the
  * viewer's own) report and share.
  */
-export function PlayerActions({ channel, onStartMultiView }: PlayerActionsProps) {
+export function PlayerActions({ channel, canMultiView, onStartMultiView }: PlayerActionsProps) {
   const { t } = useI18n();
   return (
     <>
-      <IconButton label={t.multiView} onClick={onStartMultiView}>
-        <GridIcon />
-      </IconButton>
+      {canMultiView && (
+        <IconButton label={t.multiView} onClick={onStartMultiView}>
+          <GridIcon />
+        </IconButton>
+      )}
       {!isCustomChannelId(channel.id) && (
         <>
           {API_URL && <ReportButton channel={channel} />}

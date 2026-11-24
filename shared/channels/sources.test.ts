@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isStreamSource, resolveStreamUrl } from './sources';
+import { isHlsSource, isStreamSource, resolveStreamUrl } from './sources';
 
 const MAKO = 'mako:/stream/hls/live/2033791/k12n12wad/index.m3u8';
 
@@ -18,6 +18,21 @@ describe('isStreamSource', () => {
     [42, false],
   ])('%s → %s', (value, expected) => {
     expect(isStreamSource(value)).toBe(expected);
+  });
+});
+
+describe('isHlsSource', () => {
+  it.each([
+    ['https://a.example/live/playlist.m3u8', true],
+    ['https://kancdn.example/radio/kan_88/live.livx/playlist.m3u8?renditions&fmp4', true],
+    ['https://a.example/LIVE.M3U8', true],
+    [MAKO, true],
+    ['https://eco01.livecdn.biz/ecolive/99fm_aac/icecast.audio', false],
+    ['https://npr-ice.streamguys1.com/live.mp3', false],
+    ['https://a.example/m3u8/stream', false],
+    ['https://a.example/x.mp3?file=.m3u8', false],
+  ])('%s → %s', (value, expected) => {
+    expect(isHlsSource(value)).toBe(expected);
   });
 });
 

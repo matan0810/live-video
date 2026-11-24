@@ -1,0 +1,92 @@
+/* Over the (empty) video, under the controls; clicks pass through to the player. */
+.stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding-block-end: 48px;
+  background: radial-gradient(
+    circle at 50% 40%,
+    color-mix(in srgb, var(--color-accent) 14%, #15181d),
+    #0b0d10 70%
+  );
+  pointer-events: none;
+}
+
+.logo {
+  /* By the player's height, so a short phone player still fits the logo and the name. */
+  width: auto;
+  height: min(36%, 132px);
+  aspect-ratio: 1;
+  border-radius: 22%;
+  font-size: clamp(1.25rem, 4vw, 2rem);
+  box-shadow: 0 12px 36px rgb(0 0 0 / 45%);
+}
+
+.name {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1rem, 2.4vw, 1.375rem);
+  font-weight: 700;
+}
+
+.onAir {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: rgb(255 255 255 / 60%);
+  font-size: 0.8125rem;
+}
+
+/* Four bars that rise and fall while the station plays, and rest when it is paused. */
+.meter {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.meter span {
+  width: 3px;
+  height: 30%;
+  border-radius: 1px;
+  background: var(--color-accent);
+}
+
+.stage[data-playing='true'] .meter span {
+  animation: level 1s ease-in-out infinite alternate;
+}
+
+.stage[data-playing='true'] .meter span:nth-child(2) {
+  animation-delay: -0.4s;
+}
+
+.stage[data-playing='true'] .meter span:nth-child(3) {
+  animation-delay: -0.7s;
+}
+
+.stage[data-playing='true'] .meter span:nth-child(4) {
+  animation-delay: -0.2s;
+}
+
+@keyframes level {
+  from {
+    height: 25%;
+  }
+
+  to {
+    height: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage[data-playing='true'] .meter span {
+    animation: none;
+    height: 70%;
+  }
+}

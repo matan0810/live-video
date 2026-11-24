@@ -9,6 +9,17 @@ const MAKO_PATH = /^\/stream\/hls\/live\/[\w/.-]+\.m3u8$/;
 const MAKO_ORIGIN = 'https://mako-streaming.akamaized.net';
 const MAKO_TICKET_URL = 'https://mass.mako.co.il/ClicksStatistics/entitlementsServicesV2.jsp';
 
+/**
+ * Whether a source is an HLS playlist (played by hls.js) rather than a plain audio stream
+ * (an Icecast MP3 or AAC stream, played by the browser itself). Decided by the address:
+ * HLS playlists end in `.m3u8`.
+ */
+export function isHlsSource(source: string): boolean {
+  if (source.startsWith(MAKO_PREFIX)) return true;
+  if (!URL.canParse(source)) return false;
+  return new URL(source).pathname.toLowerCase().endsWith('.m3u8');
+}
+
 export function isStreamSource(value: unknown): value is string {
   if (typeof value !== 'string') return false;
   if (value.startsWith(MAKO_PREFIX)) return MAKO_PATH.test(value.slice(MAKO_PREFIX.length));

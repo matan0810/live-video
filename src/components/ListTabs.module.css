@@ -1,0 +1,39 @@
+/* Underlined tabs, as in YouTube: text with a small icon, and a red line under the chosen. */
+.tabs {
+  display: flex;
+  gap: 24px;
+  border-block-end: 1px solid var(--color-border);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  margin-block-end: -1px;
+  padding: 0 2px;
+  border: none;
+  border-block-end: 2px solid transparent;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition:
+    color var(--transition),
+    border-color var(--transition);
+}
+
+.tab svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+.tab[aria-selected='true'] {
+  border-block-end-color: var(--color-accent);
+  color: var(--color-text);
+}

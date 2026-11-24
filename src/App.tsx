@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { buildSections } from './channels/buildSections';
+import { channelsLike, kindOf, sectionsOfKind, type ChannelKind } from './channels/channelKinds';
+import { isRadio } from './channels/isRadio';
 import { isCustomChannelId } from './channels/customChannels';
 import { filterSections } from './channels/searchChannels';
 import { stepChannel } from './channels/stepChannel';
@@ -9,6 +11,7 @@ import { AppHeader } from './components/AppHeader';
 import { ChannelList } from './components/ChannelList';
 import { ChannelSearch } from './components/ChannelSearch';
 import { EmptyStage } from './components/EmptyStage';
+import { ListTabs } from './components/ListTabs';
 import { PlayerActions } from './components/PlayerActions';
 import { useActiveChannel } from './hooks/useActiveChannel';
 import { useCatalog } from './hooks/useCatalog';
@@ -34,15 +37,21 @@ export function App() {
   const [isTheaterMode, setIsTheaterMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const searchRef = useRef<HTMLInputElement>(null);
+  // The tab opens on the kind of the channel last watched (or the one a shared link opens).
+  const [tab, setTab] = useState<ChannelKind>(() => {
+    const last = catalogChannels.find((channel) => channel.id === activeChannelId);
+    return last ? kindOf(last) : 'tv';
+  });
 
   const sections = useMemo(
     () => buildSections(catalogChannels, customChannels, favoriteIds, t),
     [catalogChannels, customChannels, favoriteIds, t],
   );
-  /** The list as shown: only matching channels while searching. */
+  /** The open tab's sections, and as shown: only matching channels while searching. */
+  const tabSections = useMemo(() => sectionsOfKind(sections, tab), [sections, tab]);
   const shownSections = useMemo(
-    () => filterSections(sections, searchQuery),
-    [sections, searchQuery],
+    () => filterSections(tabSections, searchQuery),
+    [tabSections, searchQuery],
   );
   /** Every channel once, in the order it appears on screen. */
   const orderedChannels = useMemo(
@@ -51,13 +60,32 @@ export function App() {
   );
   const activeChannel = orderedChannels.find((channel) => channel.id === activeChannelId) ?? null;
   const maxTiles = useMediaQuery('(min-width: 600px)') ? MAX_CHANNELS_WIDE : MAX_CHANNELS_NARROW;
+  // Radio has no picture, so multi-view holds TV channels only.
   const multiView = useMultiView(maxTiles, (id) =>
-    orderedChannels.some((channel) => channel.id === id),
+    orderedChannels.some((channel) => channel.id === id && !isRadio(channel)),
   );
   /** The channel the list marks and stepping starts from: the heard one while watching several. */
   const currentChannelId = multiView.view?.focusedId ?? activeChannelId;
-  // While watching several, a channel picked anywhere joins the grid instead of replacing it.
-  const chooseChannel = multiView.view ? multiView.pick : selectChannel;
+  const currentChannel = orderedChannels.find((channel) => channel.id === currentChannelId);
+  /** What stepping and the full-screen bar move through: channels of the current kind. */
+  const stepChannels = useMemo(
+    () => channelsLike(orderedChannels, currentChannel),
+    [orderedChannels, currentChannel],
+  );
+  // While watching several, a TV channel picked anywhere joins the grid instead of replacing
+  // it; a radio station ends multi-view and plays.
+  const chooseChannel = useCallback(
+    (channelId: string) => {
+      const picked = orderedChannels.find((channel) => channel.id === channelId);
+      if (multiView.view && !(picked && isRadio(picked))) {
+        multiView.pick(channelId);
+        return;
+      }
+      if (multiView.view) multiView.exit();
+      selectChannel(channelId);
+    },
+    [orderedChannels, multiView, selectChannel],
+  );
   const { unavailableChannelIds, handleStatusChange } = useUnavailableChannels(orderedChannels);
 
   const handleAddChannel = (channel: Channel) => {
@@ -73,15 +101,15 @@ export function App() {
 
   const selectByOffset = useCallback(
     (offset: 1 | -1) => {
-      const next = stepChannel(orderedChannels, currentChannelId, offset);
+      const next = stepChannel(stepChannels, currentChannelId, offset);
       if (next) chooseChannel(next.id);
     },
-    [orderedChannels, currentChannelId, chooseChannel],
+    [stepChannels, currentChannelId, chooseChannel],
   );
 
   const toggleTheater = useCallback(() => setIsTheaterMode((current) => !current), []);
   useChannelShortcuts({
-    channels: orderedChannels,
+    channels: tabSections.flatMap((section) => section.channels),
     onChoose: chooseChannel,
     onStep: selectByOffset,
     onToggleTheater: toggleTheater,
@@ -121,7 +149,7 @@ export function App() {
               onToggleTheater={toggleTheater}
               overlay={
                 <ChannelStrip
-                  channels={orderedChannels}
+                  channels={stepChannels}
                   activeChannelId={activeChannel.id}
                   unavailableChannelIds={unavailableChannelIds}
                   onSelect={selectChannel}
@@ -130,6 +158,7 @@ export function App() {
               actions={
                 <PlayerActions
                   channel={activeChannel}
+                  canMultiView={!isRadio(activeChannel)}
                   onStartMultiView={() => multiView.start(activeChannel.id)}
                 />
               }
@@ -140,7 +169,15 @@ export function App() {
         </section>
 
         <aside className={styles.sidebar}>
+          <ListTabs
+            kind={tab}
+            onChange={(kind) => {
+              setTab(kind);
+              setSearchQuery('');
+            }}
+          />
           <ChannelSearch
+            label={tab === 'radio' ? t.searchStations : t.searchChannels}
             query={searchQuery}
             onChange={setSearchQuery}
             onPickFirst={() => {

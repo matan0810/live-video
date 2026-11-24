@@ -1,4 +1,4 @@
-import type { Channel } from '../channels';
+import type { Channel, ChannelGroup } from '../channels';
 import { useI18n } from '../i18n/context';
 import { useCollapsedSections } from '../hooks/useCollapsedSections';
 import { ChannelCard } from './ChannelCard';
@@ -7,7 +7,8 @@ import styles from './ChannelList.module.css';
 export interface ChannelSection {
   id: string;
   title: string;
-  channels: readonly Channel[];
+  /** Catalog channels carry their group (TV or radio); the viewer's own have none. */
+  channels: readonly (Channel & { group?: ChannelGroup })[];
 }
 
 interface ChannelListProps {

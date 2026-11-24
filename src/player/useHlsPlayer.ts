@@ -1,6 +1,6 @@
 import type Hls from 'hls.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { resolveStreamUrl } from '../../shared/channels/sources';
+import { isHlsSource, resolveStreamUrl } from '../../shared/channels/sources';
 import { UNSUPPORTED_FORMAT } from './codecSupport';
 import { networkRetryDelay, RestartBudget, StallWatch } from './recovery';
 
@@ -40,7 +40,8 @@ function hasMediaSource() {
  * when all of them fail does the status become `error`. A source that has played is kept
  * through network drops (retried with back-off, and at once when the device is back
  * online) and through freezes (restarted), and dropped only when that keeps failing.
- * Uses hls.js where Media Source Extensions exist and the browser's own HLS otherwise.
+ * Uses hls.js for HLS where Media Source Extensions exist and the browser's own player
+ * otherwise, and for plain audio streams (radio).
  */
 export function useHlsPlayer(sources: readonly string[]) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -146,12 +147,15 @@ export function useHlsPlayer(sources: readonly string[]) {
         return;
       }
 
+      // A plain audio stream (radio over Icecast) is the browser's own to play; hls.js is
+      // loaded only for HLS playlists.
+      const isHls = isHlsSource(source);
       let url: string;
       let HlsClass: typeof Hls | null = null;
       try {
         [url, HlsClass] = await Promise.all([
           resolveStreamUrl(source),
-          hasMediaSource() ? loadHls() : null,
+          isHls && hasMediaSource() ? loadHls() : null,
         ]);
       } catch (error) {
         loadNextSource(error instanceof Error ? error.message : 'Could not resolve the stream');
@@ -160,7 +164,9 @@ export function useHlsPlayer(sources: readonly string[]) {
       if (isDisposed) return;
       startTimeout = setTimeout(() => loadNextSource('did not start in time'), START_TIMEOUT_MS);
 
-      if (HlsClass?.isSupported()) {
+      if (!isHls) {
+        video.src = url;
+      } else if (HlsClass?.isSupported()) {
         // Never fetch more pixels than the player shows: a small player on a phone
         // otherwise downloads full HD it cannot display. Beyond double density the
         // difference is not visible, so very dense phone screens count as double.

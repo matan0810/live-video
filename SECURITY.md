@@ -35,15 +35,15 @@ cast: `live-video:active-channel`, `:favorites`, `:custom-channels`, `:collapsed
 
 ## Hosts
 
-| Host                                         | Why                                                        | Who            |
-| -------------------------------------------- | ---------------------------------------------------------- | -------------- |
-| `matan0810.github.io`                        | The site itself (GitHub Pages)                             | every viewer   |
-| The Worker (`live-video-api…workers.dev`)    | The channel list, reports, the admin API                   | every viewer   |
-| Stream hosts (any https)                     | The channels' video; viewers can add channels of their own | every viewer   |
-| `mass.mako.co.il`                            | A playback ticket for `mako:` links (N12)                  | those watching |
-| Logo hosts                                   | Only until Sync channels copies a logo in (Known limits)   | every viewer   |
-| `iptv-org.github.io`                         | The public stream directory, for the link finder           | the admin only |
-| Cloudflare Browser Run, pages being searched | The link finder, from the Worker                           | the admin only |
+| Host                                         | Why                                                                                      | Who            |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------- |
+| `matan0810.github.io`                        | The site itself (GitHub Pages)                                                           | every viewer   |
+| The Worker (`live-video-api…workers.dev`)    | The channel list, reports, the admin API                                                 | every viewer   |
+| Stream hosts (any https)                     | The channels' video and the radio stations' audio; viewers can add channels of their own | every viewer   |
+| `mass.mako.co.il`                            | A playback ticket for `mako:` links (N12)                                                | those watching |
+| Logo hosts                                   | Only until Sync channels copies a logo in (Known limits)                                 | every viewer   |
+| `iptv-org.github.io`                         | The public stream directory, for the link finder                                         | the admin only |
+| Cloudflare Browser Run, pages being searched | The link finder, from the Worker                                                         | the admin only |
 
 The Content Security Policy (`vite.config.ts`) holds the site to this: scripts, styles and
 fonts from the site only, no inline script, Trusted Types refusing any HTML written from

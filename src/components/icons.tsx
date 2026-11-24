@@ -141,3 +141,22 @@ export function SpeakerIcon() {
     </Icon>
   );
 }
+
+export function TvIcon() {
+  return (
+    <Icon>
+      <rect x="3" y="6" width="18" height="12" rx="2" />
+      <path d="M8 21h8M9 3l3 3 3-3" />
+    </Icon>
+  );
+}
+
+export function RadioIcon() {
+  return (
+    <Icon>
+      <rect x="3" y="8" width="18" height="12" rx="2" />
+      <circle cx="15.5" cy="14" r="2.5" />
+      <path d="M7 12h3M7 16h3M5 8l11-5" />
+    </Icon>
+  );
+}

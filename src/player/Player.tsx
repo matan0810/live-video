@@ -2,7 +2,8 @@ import { Container, createPlayer } from '@videojs/react';
 import { I18nProvider } from '@videojs/react/i18n';
 import { Video, videoFeatures } from '@videojs/react/video';
 import { useEffect, useMemo, useRef, type PointerEvent, type ReactNode } from 'react';
-import type { Channel } from '../channels';
+import type { Channel, ChannelGroup } from '../channels';
+import { isRadio } from '../channels/isRadio';
 import { useAutoHide } from '../hooks/useAutoHide';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useMediaQuery } from '../hooks/useMediaQuery';
@@ -12,6 +13,7 @@ import { UNSUPPORTED_FORMAT } from './codecSupport';
 import { PlayerControls } from './PlayerControls';
 import { PlayerGestures } from './PlayerGestures';
 import { PlayerStatusOverlay } from './PlayerStatusOverlay';
+import { RadioStage } from './RadioStage';
 import { SkipIndicator } from './SkipIndicator';
 import { useDvr } from './useDvr';
 import { useFullscreen } from './useFullscreen';
@@ -33,7 +35,7 @@ const STRIP_ZONE_SHARE = 0.3;
 const MOUSE_QUERY = '(hover: hover) and (pointer: fine)';
 
 interface PlayerProps {
-  channel: Channel;
+  channel: Channel & { group?: ChannelGroup };
   onStatusChange?: (channelId: string, status: PlayerStatus) => void;
   /** Extra buttons rendered at the end of the bar under the video. */
   actions?: ReactNode;
@@ -62,6 +64,7 @@ export function Player({
   useResumePosition(channel.id, status, dvr);
   const { t, language } = useI18n();
   const name = displayName(channel, language);
+  const radio = isRadio(channel);
   useMediaSession(videoRef, { title: name, logo: channel.logo, onStep });
   const menu = usePlayerMenu(videoRef, hlsRef, channel.id, dvr);
 
@@ -138,6 +141,7 @@ export function Player({
             onPointerMove={handlePointerMove}
           >
             <Video ref={videoRef} className={styles.video} playsInline />
+            {radio && <RadioStage channel={channel} name={name} isPlaying={status === 'playing'} />}
             <SkipIndicator videoRef={videoRef} />
 
             <PlayerStatusOverlay
@@ -176,6 +180,7 @@ export function Player({
               isTheaterMode={isTheaterMode}
               onToggleTheater={onToggleTheater}
               menu={menu}
+              hasPicture={!radio}
               isPlayable={status !== 'error'}
             />
 

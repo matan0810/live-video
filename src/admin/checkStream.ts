@@ -1,4 +1,4 @@
-import { resolveStreamUrl } from '../../shared/channels/sources';
+import { isHlsSource, resolveStreamUrl } from '../../shared/channels/sources';
 import { readPlaylistInfo } from '../../shared/playlistInfo';
 
 export interface StreamCheck {
@@ -14,6 +14,7 @@ const HLS_SIGNATURE = '#EXTM3U';
  * A stream that fails here will not play on the site either.
  */
 export async function checkStream(url: string): Promise<StreamCheck> {
+  if (!isHlsSource(url)) return checkAudioStream(url);
   try {
     const resolved = await resolveStreamUrl(url);
     const response = await fetch(resolved, { signal: AbortSignal.timeout(TIMEOUT_MS) });
@@ -33,4 +34,39 @@ export async function checkStream(url: string): Promise<StreamCheck> {
   } catch {
     return { isWorking: false, detail: 'לא נגיש (חסום, לא קיים או בלי CORS)' };
   }
+}
+
+/**
+ * A radio station's plain audio stream: reading it would need CORS the player does not need,
+ * so this asks the browser to start playing it (silently) and waits for it to be ready.
+ */
+function checkAudioStream(url: string): Promise<StreamCheck> {
+  return new Promise((resolve) => {
+    const audio = new Audio();
+    audio.muted = true;
+    audio.preload = 'auto';
+    const finish = (result: StreamCheck) => {
+      clearTimeout(timeout);
+      audio.removeAttribute('src');
+      audio.load();
+      resolve(result);
+    };
+    const timeout = setTimeout(
+      () => finish({ isWorking: false, detail: 'לא התחיל לנגן תוך 10 שניות' }),
+      TIMEOUT_MS,
+    );
+    audio.addEventListener(
+      'canplay',
+      () => finish({ isWorking: true, detail: 'תקין · שידור רדיו' }),
+      {
+        once: true,
+      },
+    );
+    audio.addEventListener(
+      'error',
+      () => finish({ isWorking: false, detail: 'לא נגיש או לא שידור קול' }),
+      { once: true },
+    );
+    audio.src = url;
+  });
 }

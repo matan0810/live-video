@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { findStreamProblems } from './streamProblems';
+import { findStreamProblems, isAudioContentType } from './streamProblems';
 
 const SITE = 'https://site.example';
 const master = (...variants: string[]) =>
@@ -43,5 +43,29 @@ describe('findStreamProblems', () => {
     expect(findStreamProblems('#EXTM3U\n#EXTINF:6,\na.ts', 'https://other.example', SITE)).toEqual([
       'blocks-site',
     ]);
+  });
+});
+
+describe('isAudioContentType', () => {
+  it.each([
+    ['audio/mpeg', true],
+    ['audio/aacp; charset=utf-8', true],
+    [' application/ogg', true],
+    ['text/html; charset=utf-8', false],
+    ['application/vnd.apple.mpegurl', false],
+    ['', false],
+  ])('%s → %s', (type, expected) => {
+    expect(isAudioContentType(type)).toBe(expected);
+  });
+});
+
+describe('an audio-only HLS playlist (radio)', () => {
+  it('is not judged on picture height or sound', () => {
+    const playlist = [
+      '#EXTM3U',
+      '#EXT-X-STREAM-INF:BANDWIDTH=128000,CODECS="mp4a.40.2"',
+      'audio.m3u8',
+    ].join('\n');
+    expect(findStreamProblems(playlist, '*', 'https://site.example')).toEqual([]);
   });
 });

@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- Radio: 39 live stations (Kan, Galei Tzahal, Galgalatz, 103FM, Eco 99 and many more, plus BBC World Service and NPR) in a tab of their own beside TV. A station shows its card while it plays, and stepping stays among the stations.
 - Quality in the "⋮" menu: pick a picture height, or leave it automatic (which shows what plays now).
 - A sleep timer in the "⋮" menu: the player pauses after 15, 30, 60 or 90 minutes.
 

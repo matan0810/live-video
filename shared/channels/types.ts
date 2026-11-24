@@ -1,4 +1,7 @@
-export const CHANNEL_GROUPS = ['israel', 'world', 'arabic', 'languages'] as const;
+export const CHANNEL_GROUPS = ['israel', 'world', 'arabic', 'languages', 'radio'] as const;
+
+/** Radio stations are channels in this group; the site shows them in a tab of their own. */
+export const RADIO_GROUP = 'radio';
 
 /** Broadcast languages, as ISO 639-1 codes. */
 export const CHANNEL_LANGUAGES = ['he', 'en', 'ar', 'fr', 'es', 'de', 'it', 'ru'] as const;
@@ -21,7 +24,10 @@ export interface Channel {
   logo?: string;
   /** The language it broadcasts in. */
   language?: ChannelLanguage;
-  /** HLS playlist URLs in priority order: the first is the primary, the rest are fallbacks. */
+  /**
+   * Stream URLs in priority order: the first is the primary, the rest are fallbacks. HLS
+   * playlists (`.m3u8`), or for radio also plain audio streams (MP3 or AAC, as Icecast serves).
+   */
   sources: string[];
 }
 
@@ -36,4 +42,5 @@ export const GROUP_LANGUAGES: Record<ChannelGroup, ChannelLanguage | null> = {
   world: 'en',
   arabic: 'ar',
   languages: null,
+  radio: 'he',
 };
