@@ -456,6 +456,7 @@
     "name": "גלי צה״ל",
     "nameEn": "Galei Tzahal",
     "short": "גלצ",
+    "logo": "logos/radio-galei-zahal.jpg",
     "language": "he",
     "group": "radio",
     "sources": ["https://glzwizzlv.bynetcdn.com/glz_mp3"]
@@ -465,6 +466,7 @@
     "name": "רדיו 103FM",
     "nameEn": "103FM",
     "short": "103",
+    "logo": "logos/radio-103fm.svg",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/103FM/Live/icecast.audio"]
@@ -485,6 +487,7 @@
     "name": "גלגלצ",
     "nameEn": "Galgalatz",
     "short": "גלגלצ",
+    "logo": "logos/radio-galgalatz.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://api.bynetcdn.com/Redirector/glz/glglz/ICE-LIVE"]
@@ -494,6 +497,7 @@
     "name": "כאן 88",
     "nameEn": "Kan 88",
     "short": "88",
+    "logo": "logos/radio-kan-88.svg",
     "language": "he",
     "group": "radio",
     "sources": [
@@ -514,6 +518,7 @@
     "name": "רדיוס 100FM",
     "nameEn": "Radius 100FM",
     "short": "100",
+    "logo": "logos/radio-radius-100.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Radios_100FM_Website/Audio/icecast.audio"]
@@ -523,6 +528,7 @@
     "name": "רדיו תל אביב 102FM",
     "nameEn": "Radio Tel Aviv 102FM",
     "short": "102",
+    "logo": "logos/radio-tel-aviv-102.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://102.livecdn.biz/102fm_aac"]
@@ -532,6 +538,7 @@
     "name": "רדיו ירושלים 101FM",
     "nameEn": "Radio Jerusalem 101FM",
     "short": "101",
+    "logo": "logos/radio-jerusalem.jpg",
     "language": "he",
     "group": "radio",
     "sources": ["https://radio.streamgates.net/stream/101fm"]
@@ -541,6 +548,7 @@
     "name": "קול חי",
     "nameEn": "Kol Chai",
     "short": "93",
+    "logo": "logos/radio-kol-chai.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://live.kcm.fm/live-new"]
@@ -550,6 +558,7 @@
     "name": "קול ברמה",
     "nameEn": "Kol Barama",
     "short": "ברמה",
+    "logo": "logos/radio-kol-barama.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Kol_Barama/Live_Audio/icecast.audio"]
@@ -559,6 +568,7 @@
     "name": "לב המדינה 91",
     "nameEn": "Lev HaMedina 91",
     "short": "91",
+    "logo": "logos/radio-lev-hamedina.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Lev_Hamedina/Audio/icecast.audio"]
@@ -612,6 +622,7 @@
     "name": "רדיו חיפה",
     "nameEn": "Radio Haifa",
     "short": "107.5",
+    "logo": "logos/radio-haifa.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn88.mediacast.co.il/1075-hfa-live/radiohaifa/icecast.audio"]
@@ -630,6 +641,7 @@
     "name": "רדיו קול הכנרת",
     "nameEn": "Kol HaKinneret",
     "short": "כנרת",
+    "logo": "logos/radio-kol-kinneret.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://radio.streamgates.net/stream/kinneret"]
@@ -639,6 +651,7 @@
     "name": "רדיו קול יזרעאל",
     "nameEn": "Kol Yizre'el",
     "short": "יזרעאל",
+    "logo": "logos/radio-kol-yezreel.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://radio.streamgates.net/stream/yezreel"]
@@ -648,6 +661,7 @@
     "name": "רדיו קול השפלה",
     "nameEn": "Kol HaShfela",
     "short": "שפלה",
+    "logo": "logos/radio-kol-hashfela.jpg",
     "language": "he",
     "group": "radio",
     "sources": ["https://radio.streamgates.net/stream/1036kh"]
@@ -657,6 +671,7 @@
     "name": "רדיו דרום 97",
     "nameEn": "Radio Darom 97",
     "short": "97",
+    "logo": "logos/radio-darom-97.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Darom_97FM/Live/icecast.audio"]
@@ -693,6 +708,7 @@
     "name": "רדיו 90",
     "nameEn": "Radio 90",
     "short": "90",
+    "logo": "logos/radio-90.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Emtza_Haderech/Live_Audio/icecast.audio"]
@@ -702,6 +718,7 @@
     "name": "גלי ישראל",
     "nameEn": "Galei Israel",
     "short": "גלי",
+    "logo": "logos/radio-galei-israel.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Galei_Israel/Live/icecast.audio"]
@@ -729,6 +746,7 @@
     "name": "רדיו חם אש 99.5",
     "nameEn": "Hamesh 99.5",
     "short": "99.5",
+    "logo": "logos/radio-hamesh-995.jpg",
     "language": "he",
     "group": "radio",
     "sources": ["https://995.livecdn.biz/995fm"]
@@ -738,6 +756,7 @@
     "name": "רדיו הקצה",
     "nameEn": "Radio HaKatze",
     "short": "הקצה",
+    "logo": "logos/radio-kzradio.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://kzradio.mediacast.co.il/kzradio_live/kzradio/icecast.audio"]
@@ -756,6 +775,7 @@
     "name": "מכאן (רדיו)",
     "nameEn": "Makan Radio",
     "short": "מכאן",
+    "logo": "logos/makan33.png",
     "language": "ar",
     "group": "radio",
     "sources": [
@@ -767,6 +787,7 @@
     "name": "רדיו א־שמס",
     "nameEn": "A-Shams",
     "short": "שמס",
+    "logo": "logos/radio-ashams.png",
     "language": "ar",
     "group": "radio",
     "sources": ["https://cdna.streamgates.net/Ashams/Live/icecast.audio"]
@@ -785,6 +806,7 @@
     "name": "פרוויה 89.1",
     "nameEn": "Pervoye 89.1",
     "short": "89.1",
+    "logo": "logos/radio-pervoye-891.png",
     "language": "ru",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Pervoia/Audio/icecast.audio"]
@@ -793,6 +815,7 @@
     "id": "radio-bbc-world-service",
     "name": "BBC World Service",
     "short": "BBC",
+    "logo": "logos/radio-bbc-world-service.png",
     "language": "en",
     "group": "radio",
     "sources": ["https://stream.live.vc.bbcmedia.co.uk/bbc_world_service"]
@@ -801,6 +824,7 @@
     "id": "radio-npr",
     "name": "NPR",
     "short": "NPR",
+    "logo": "logos/radio-npr.png",
     "language": "en",
     "group": "radio",
     "sources": ["https://npr-ice.streamguys1.com/live.mp3"]
