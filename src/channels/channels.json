@@ -445,6 +445,7 @@
     "name": "כאן ב׳",
     "nameEn": "Kan Bet",
     "short": "ב׳",
+    "logo": "logos/radio-kan-bet.png",
     "language": "he",
     "group": "radio",
     "sources": [
@@ -509,6 +510,7 @@
     "name": "אקו 99FM",
     "nameEn": "Eco 99FM",
     "short": "אקו",
+    "logo": "logos/radio-eco99.jpg",
     "language": "he",
     "group": "radio",
     "sources": ["https://eco01.livecdn.biz/ecolive/99fm_aac/icecast.audio"]
@@ -578,6 +580,7 @@
     "name": "כאן תרבות",
     "nameEn": "Kan Tarbut",
     "short": "תרבות",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/ed/KanTarbutNewLogo.svg",
     "language": "he",
     "group": "radio",
     "sources": [
@@ -611,6 +614,7 @@
     "name": "כאן רקע",
     "nameEn": "Kan Reka",
     "short": "רקע",
+    "logo": "logos/radio-kan-reka.png",
     "language": "he",
     "group": "radio",
     "sources": [
@@ -632,6 +636,7 @@
     "name": "צפון 104.5",
     "nameEn": "Tzafon 104.5",
     "short": "צפון",
+    "logo": "logos/radio-tzafon-1045.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Tzafon_NonStop/Live_Audio/icecast.audio"]
@@ -690,6 +695,7 @@
     "name": "רדיו אילת 102",
     "nameEn": "Radio Eilat 102",
     "short": "102",
+    "logo": "logos/radio-eilat.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Eilat_Radio/Live/icecast.audio"]
@@ -699,6 +705,7 @@
     "name": "קול רגע",
     "nameEn": "Kol Rega",
     "short": "96",
+    "logo": "logos/radio-kol-rega.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Kol_Rega/Live_Audio/icecast.audio"]
@@ -728,6 +735,7 @@
     "name": "רדיוס נוסטלגי 96.3",
     "nameEn": "Radius Nostalgi 96.3",
     "short": "96.3",
+    "logo": "logos/radio-nostalgia-963.jpg",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdna.streamgates.net/radios-audio/Nostalgia_963fm/icecast.audio"]
@@ -737,6 +745,7 @@
     "name": "התחנה 101.5",
     "nameEn": "HaTachana 101.5",
     "short": "101.5",
+    "logo": "logos/radio-hatachana.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Hatahana_1015/Live_Audio/icecast.audio"]
@@ -766,6 +775,7 @@
     "name": "רדיו קול גלים",
     "nameEn": "Kol Galim",
     "short": "גלים",
+    "logo": "logos/radio-kol-galim.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://live.ecast.co.il/stream/galimlive"]
