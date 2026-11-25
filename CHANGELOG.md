@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.13.0] - 2026-11-25
+
 ### Added
 - Radio: 39 live stations (Kan, Galei Tzahal, Galgalatz, 103FM, Eco 99 and many more, plus BBC World Service and NPR) in a tab of their own beside TV, each with its logo. A station shows its card while it plays, and stepping stays among the stations.
 - Quality in the "⋮" menu: pick a picture height, or leave it automatic (which shows what plays now).
