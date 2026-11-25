@@ -477,6 +477,7 @@
     "name": "כאן גימל",
     "nameEn": "Kan Gimel",
     "short": "גימל",
+    "logo": "logos/radio-kan-gimel.png",
     "language": "he",
     "group": "radio",
     "sources": [
@@ -580,7 +581,7 @@
     "name": "כאן תרבות",
     "nameEn": "Kan Tarbut",
     "short": "תרבות",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/ed/KanTarbutNewLogo.svg",
+    "logo": "logos/radio-kan-tarbut.png",
     "language": "he",
     "group": "radio",
     "sources": [
@@ -592,6 +593,7 @@
     "name": "כאן קול המוזיקה",
     "nameEn": "Kan Kol HaMusika",
     "short": "♪",
+    "logo": "logos/radio-kan-classical.png",
     "language": "he",
     "group": "radio",
     "sources": [
@@ -603,6 +605,7 @@
     "name": "כאן מורשת",
     "nameEn": "Kan Moreshet",
     "short": "מורשת",
+    "logo": "logos/radio-kan-moreshet.png",
     "language": "he",
     "group": "radio",
     "sources": [
@@ -686,6 +689,7 @@
     "name": "רדיו דרום 101.5",
     "nameEn": "Radio Darom 101.5",
     "short": "101.5",
+    "logo": "logos/radio-darom-1015.png",
     "language": "he",
     "group": "radio",
     "sources": ["https://cdn.cybercdn.live/Darom_1015FM/Live/icecast.audio"]
@@ -807,6 +811,7 @@
     "name": "רדיו נאס 103.3",
     "nameEn": "Nas 103.3",
     "short": "NAS",
+    "logo": "logos/radio-nas.jpg",
     "language": "ar",
     "group": "radio",
     "sources": ["https://live1.nasapp.net/nas/live_audio.m3u8"]

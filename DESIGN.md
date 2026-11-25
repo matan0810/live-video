@@ -160,9 +160,10 @@ their auto-hiding, gestures and translated labels.
 - **Stations** are channels in the `radio` group (`src/channels/channels.json`), shown only
   in the Radio tab: Kan's stations, Galei Tzahal and Galgalatz, the national and regional
   stations, a few in Arabic and Russian (tagged), and BBC World Service and NPR. They came
-  from a public catalog of Israeli stations (issue #12). Logos are stored with the site like
-  the TV channels': the station's own site icon, or its logo from Wikipedia; a station still
-  without one shows its frequency or a short name until a logo is added in the admin area.
+  from a public catalog of Israeli stations (issue #12). Every station has a logo, stored with the
+  site like the TV channels': the station's own site icon, its logo from Wikipedia, or from
+  the OnlineRadioBox and myTuner directories. A logo that fails to load gives way to the
+  station's frequency or short name.
 - **Links** are HLS playlists (Kan) or plain audio streams (MP3 or AAC over Icecast), which
   the browser plays by itself: a link not ending in `.m3u8` is audio
   (`shared/channels/sources.ts`, `isHlsSource`).
