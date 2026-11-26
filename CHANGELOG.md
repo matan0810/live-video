@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Changed
+- Section names agree across TV and radio: "World in English" on TV, "Other languages" and "World" on radio.
 - Adding your own channel: a link alone is enough (it is named after its site), and Ctrl+Enter adds it as well as Enter.
 
 ### Fixed

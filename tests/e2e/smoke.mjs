@@ -58,7 +58,7 @@ async function main() {
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'rtl');
   assert.deepEqual(await sectionTitles(desktop), [
     'ישראל',
-    'עולם · באנגלית',
+    'עולם באנגלית',
     'בערבית',
     'שפות נוספות',
   ]);
@@ -224,7 +224,7 @@ async function main() {
   // Radio has a tab of its own: stations never mix with TV channels.
   await desktop.getByRole('tab', { name: 'רדיו' }).click();
   await desktop.getByRole('searchbox', { name: 'חיפוש תחנה' }).waitFor();
-  assert.deepEqual(await sectionTitles(desktop), ['ארציות', 'אזוריות', 'בשפות אחרות', 'מחו״ל']);
+  assert.deepEqual(await sectionTitles(desktop), ['ארציות', 'אזוריות', 'שפות נוספות', 'עולם']);
   assert.equal(await desktop.locator('aside').getByRole('button', { name: 'כאן 11' }).count(), 0);
   await desktop.locator('aside').getByRole('button', { name: 'רדיו 103FM', exact: true }).click();
   await desktop.getByRole('heading', { name: 'רדיו 103FM' }).waitFor();
@@ -285,7 +285,7 @@ async function main() {
     'מועדפים',
     'הערוצים שלי',
     'ישראל',
-    'עולם · באנגלית',
+    'עולם באנגלית',
     'בערבית',
     'שפות נוספות',
   ]);
@@ -293,7 +293,7 @@ async function main() {
   assert.deepEqual(await sectionTitles(desktop), [
     'מועדפים',
     'ישראל',
-    'עולם · באנגלית',
+    'עולם באנגלית',
     'בערבית',
     'שפות נוספות',
   ]);
