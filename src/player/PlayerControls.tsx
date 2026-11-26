@@ -11,7 +11,7 @@ import {
   VolumeOffIcon,
 } from '@videojs/react/icons';
 import type { ReactNode } from 'react';
-import { TheaterIcon } from '../components/icons';
+import { MoonIcon, TheaterIcon } from '../components/icons';
 import { useI18n } from '../i18n/context';
 import { DvrSlider } from './DvrSlider';
 import { formatDuration } from './formatDuration';
@@ -40,6 +40,8 @@ interface PlayerControlsProps {
   onToggleTheater: () => void;
   /** False for radio: nothing to show in picture in picture. */
   hasPicture: boolean;
+  /** Minutes until the sleep timer pauses the player; null while it is off. */
+  sleepMinutesLeft: number | null;
   /** The rows of the "⋮" menu (menuSettings.ts). */
   menu: readonly MenuSetting[];
 }
@@ -87,6 +89,7 @@ export function PlayerControls({
   onToggleTheater,
   menu,
   hasPicture,
+  sleepMinutesLeft,
 }: PlayerControlsProps) {
   const { t } = useI18n();
 
@@ -198,6 +201,18 @@ export function PlayerControls({
                 <ChevronIcon className={styles.chevronDown} />
               </ControlButton>
             </>
+            {isPlayable && sleepMinutesLeft !== null && (
+              // While the sleep timer runs it is shown in the bar, so it is never a surprise.
+              <span
+                className={styles.sleep}
+                role="timer"
+                aria-label={t.sleepChip(sleepMinutesLeft)}
+                title={t.sleepChip(sleepMinutesLeft)}
+              >
+                <MoonIcon />
+                <bdi>{t.sleepShort(sleepMinutesLeft)}</bdi>
+              </span>
+            )}
             {isPlayable && (
               <MoreMenu
                 settings={menu}

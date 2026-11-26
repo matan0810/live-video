@@ -18,6 +18,7 @@ import { SkipIndicator } from './SkipIndicator';
 import { useDvr } from './useDvr';
 import { useFullscreen } from './useFullscreen';
 import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
+import { useAutoPictureInPicture } from './useAutoPictureInPicture';
 import { usePlayerMenu } from './usePlayerMenu';
 import { useMediaSession } from './useMediaSession';
 import { useResumePosition } from './useResumePosition';
@@ -67,6 +68,7 @@ export function Player({
   const radio = isRadio(channel);
   useMediaSession(videoRef, { title: name, logo: channel.logo, onStep });
   const menu = usePlayerMenu(videoRef, hlsRef, channel.id, dvr);
+  useAutoPictureInPicture(videoRef, !radio && status === 'playing');
 
   const { seekBy, canRewind } = dvr;
   const frameRef = useRef<HTMLDivElement>(null);
@@ -165,6 +167,12 @@ export function Player({
               </div>
             )}
 
+            {menu.sleep.hasStopped && (
+              <p className={styles.sleepStopped} role="status">
+                {t.sleepStopped}
+              </p>
+            )}
+
             {status === 'playing' && isAutoMuted && (
               <button type="button" className={styles.unmute} onClick={unmute}>
                 {t.autoMuted}
@@ -179,7 +187,8 @@ export function Player({
               onStep={onStep}
               isTheaterMode={isTheaterMode}
               onToggleTheater={onToggleTheater}
-              menu={menu}
+              menu={menu.settings}
+              sleepMinutesLeft={menu.sleep.minutesLeft}
               hasPicture={!radio}
               isPlayable={status !== 'error'}
             />

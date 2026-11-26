@@ -10,8 +10,11 @@ const TICK_MS = 15_000;
 export function useSleepTimer(videoRef: RefObject<HTMLVideoElement | null>) {
   const [endsAt, setEndsAt] = useState<number | null>(null);
   const [left, setLeft] = useState<number | null>(null);
+  /** The timer paused the player, and it has not played since: the player says so. */
+  const [hasStopped, setHasStopped] = useState(false);
 
   const start = useCallback((minutes: SleepMinutes | null) => {
+    setHasStopped(false);
     if (minutes === null) {
       setEndsAt(null);
       setLeft(null);
@@ -28,6 +31,7 @@ export function useSleepTimer(videoRef: RefObject<HTMLVideoElement | null>) {
       videoRef.current?.pause();
       setEndsAt(null);
       setLeft(null);
+      setHasStopped(true);
     }, endsAt - Date.now());
     return () => {
       clearInterval(tick);
@@ -35,5 +39,14 @@ export function useSleepTimer(videoRef: RefObject<HTMLVideoElement | null>) {
     };
   }, [endsAt, videoRef]);
 
-  return { minutesLeft: left, start };
+  // Playing again (any way: the button, a key, the lock screen) clears the message.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !hasStopped) return;
+    const clear = () => setHasStopped(false);
+    video.addEventListener('play', clear);
+    return () => video.removeEventListener('play', clear);
+  }, [videoRef, hasStopped]);
+
+  return { minutesLeft: left, hasStopped, start };
 }

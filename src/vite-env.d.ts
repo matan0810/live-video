@@ -20,3 +20,11 @@ interface TrustedTypePolicyFactory {
 interface Window {
   readonly trustedTypes?: TrustedTypePolicyFactory;
 }
+
+/**
+ * Chrome's automatic picture in picture: the browser calls this action when the viewer
+ * switches tab while a video plays (not yet in TypeScript's DOM types).
+ */
+interface MediaSession {
+  setActionHandler(action: 'enterpictureinpicture', handler: (() => void) | null): void;
+}

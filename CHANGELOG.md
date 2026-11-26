@@ -7,6 +7,12 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- Leaving the site while a channel plays opens it in picture in picture, as on YouTube (in Chrome, after allowing it once).
+
+### Changed
+- The sleep timer shows its minutes left in the player's bar while it runs, and says so when it pauses the player.
+
 ## [2.13.0] - 2026-11-25
 
 ### Added

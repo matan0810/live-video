@@ -119,8 +119,10 @@ their auto-hiding, gestures and translated labels.
   - **Quality**, when the stream offers more than one height and hls.js plays it (Safari's
     own player chooses by itself): each height once, highest first, and "Auto (720p)"
     showing what plays now. Back to automatic on every channel switch.
-  - **Sleep timer**, always: off, 15, 30, 60 or 90 minutes, then the player pauses. It
-    shows the minutes left and keeps running across channel switches.
+  - **Sleep timer**, always: off, 15, 30, 60 or 90 minutes, then the player pauses. While
+    it runs, a moon and the minutes left sit in the bar beside "⋮"; when it pauses the
+    player, a line over the picture says so until it plays again. It keeps running across
+    channel switches.
 
   On the smallest screens (≤ 360 px) picture in picture moves into it.
   When a channel cannot play, only previous / next channel and full
@@ -152,6 +154,10 @@ their auto-hiding, gestures and translated labels.
   more channels lie that way, and keeps the playing channel in view. On phones full screen turns the picture sideways where the browser allows.
 - **Stepping channels** (keys, full-screen buttons, lock screen) follows the list order,
   wraps around, and skips channels with no link.
+- **Leaving the site** while a picture plays opens picture in picture, as YouTube does:
+  Chrome on a computer on switching tab (it asks the viewer once), Safari through the
+  video's `autopictureinpicture` attribute, Android from full screen. Radio just keeps
+  playing. Closing the tab ends playback; no site can keep playing after that.
 - **Lock screen and media keys** show the channel and its logo; previous / next switch
   channel.
 

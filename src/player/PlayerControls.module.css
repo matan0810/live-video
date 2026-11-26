@@ -359,3 +359,22 @@
     display: none;
   }
 }
+
+/* The sleep timer's minutes, quietly in the bar while it runs. */
+.sleep {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  color: rgb(255 255 255 / 80%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sleep svg {
+  width: 15px;
+  height: 15px;
+}

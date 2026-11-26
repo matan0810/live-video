@@ -9,7 +9,8 @@ import { useSleepTimer } from './useSleepTimer';
 
 /**
  * Everything the "⋮" menu controls (captions, speed, quality, the sleep timer), kept
- * together so the player itself only places the menu.
+ * together so the player itself only places the menu; the sleep timer's state is also
+ * returned, since the player shows it while it runs.
  */
 export function usePlayerMenu(
   videoRef: RefObject<HTMLVideoElement | null>,
@@ -23,7 +24,7 @@ export function usePlayerMenu(
   const quality = useQuality(hlsRef, channelKey);
   const sleep = useSleepTimer(videoRef);
 
-  return useMemo(
+  const settings = useMemo(
     () =>
       menuSettings(
         {
@@ -38,4 +39,5 @@ export function usePlayerMenu(
       ),
     [captions, speed.speed, speed.setSpeed, dvr.canRewind, dvr.isLive, quality, sleep, t],
   );
+  return { settings, sleep };
 }
