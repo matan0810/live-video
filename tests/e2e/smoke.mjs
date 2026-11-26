@@ -219,6 +219,8 @@ async function main() {
   await desktop.getByRole('button', { name: 'צפייה מרובה' }).waitFor();
   step('desktop: multi-view adds channels from the list, moves the sound, and ends');
 
+  // Muted stays muted, even into radio, whose player is a different element.
+  await desktop.keyboard.press('KeyM');
   // Radio has a tab of its own: stations never mix with TV channels.
   await desktop.getByRole('tab', { name: 'רדיו' }).click();
   await desktop.getByRole('searchbox', { name: 'חיפוש תחנה' }).waitFor();
@@ -226,6 +228,10 @@ async function main() {
   assert.equal(await desktop.locator('aside').getByRole('button', { name: 'כאן 11' }).count(), 0);
   await desktop.locator('aside').getByRole('button', { name: 'רדיו 103FM', exact: true }).click();
   await desktop.getByRole('heading', { name: 'רדיו 103FM' }).waitFor();
+  const isMuted = () => desktop.evaluate(() => document.querySelector('video, audio')?.muted);
+  assert.equal(await isMuted(), true, 'mute carries over from TV to radio');
+  await desktop.keyboard.press('KeyM');
+  assert.equal(await isMuted(), false);
   // Offline here, so the station fails: its message must sit above the card, not under it.
   await desktop.getByRole('alert').getByText('רדיו 103FM לא זמין כרגע').waitFor();
   // The card lets clicks through, so compare the layers themselves.

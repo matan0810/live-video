@@ -1,3 +1,4 @@
+import { applySound, rememberSound } from './soundChoice';
 import type Hls from 'hls.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isHlsSource, resolveStreamUrl } from '../../shared/channels/sources';
@@ -40,7 +41,11 @@ function hasMediaSource() {
  * Uses hls.js for HLS where Media Source Extensions exist and the browser's own player
  * otherwise, and for plain audio streams (radio).
  */
-export function useHlsPlayer(sources: readonly string[]) {
+/**
+ * `keepsSound`: the main player follows the viewer's sound choice and records it. Multi-view
+ * tiles do not: they are muted and unmuted by which one is heard, not by the viewer's choice.
+ */
+export function useHlsPlayer(sources: readonly string[], { keepsSound = false } = {}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   /** The source playing is a plain audio stream (radio), which keeps no past to rewind to. */
@@ -75,12 +80,16 @@ export function useHlsPlayer(sources: readonly string[]) {
     let isWaitingForNetwork = false;
     const stallWatch = new StallWatch(STALL_MS);
     let restarts = new RestartBudget(MAX_RESTARTS, RESTART_WINDOW_MS);
+    // Muted by the browser's autoplay rule, not by the viewer: not their choice to keep.
+    let isMutedForAutoplay = false;
+    if (keepsSound) applySound(video);
 
     const play = () => {
       video.play().catch((error: unknown) => {
         const isAutoplayBlocked = error instanceof DOMException && error.name === 'NotAllowedError';
         if (isDisposed || !isAutoplayBlocked) return;
         // Browsers only allow autoplay without a user gesture when muted.
+        isMutedForAutoplay = true;
         video.muted = true;
         setIsAutoMuted(true);
         video.play().catch(() => undefined);
@@ -217,7 +226,11 @@ export function useHlsPlayer(sources: readonly string[]) {
       setStatus('playing');
     };
     const handleVolumeChange = () => {
-      if (!video.muted) setIsAutoMuted(false);
+      if (!video.muted) {
+        isMutedForAutoplay = false;
+        setIsAutoMuted(false);
+      }
+      if (keepsSound && !isMutedForAutoplay) rememberSound(video);
     };
     const handleNativeError = () => {
       // With hls.js, failures are reported through its own ERROR event instead.
@@ -263,7 +276,7 @@ export function useHlsPlayer(sources: readonly string[]) {
       window.removeEventListener('online', handleOnline);
       unload();
     };
-  }, [sources, attempt]);
+  }, [sources, attempt, keepsSound]);
 
   const retry = useCallback(() => {
     setStatus('loading');

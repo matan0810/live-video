@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Fixed
+- Muted stays muted when switching between TV and radio.
 - Bloomberg plays in every browser again: its links are now Bloomberg's own, in a format all browsers play (the old ones were HEVC only).
 
 ## [2.15.0] - 2026-11-26

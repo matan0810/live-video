@@ -67,7 +67,7 @@ export function Player({
     unmute,
     getLiveWindow,
     isHlsJs,
-  } = useHlsPlayer(channel.sources);
+  } = useHlsPlayer(channel.sources, { keepsSound: true });
   const dvr = useDvr(videoRef, getLiveWindow);
   useResumePosition(channel.id, status, dvr);
   const { t, language } = useI18n();

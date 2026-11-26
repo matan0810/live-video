@@ -122,6 +122,10 @@ their auto-hiding, gestures and translated labels.
   button, skip −10 / +10 (on rewindable channels), previous / next channel, picture in
   picture, theatre mode (wide screens, where the list sits beside the player), full screen.
   Under the video only the channel's name, share and report remain.
+- **Sound** (muted, volume) holds for the whole visit: across channels, TV and radio,
+  theatre mode and TV mode. It is not stored, so a new visit starts with sound. A mute the
+  browser imposes for autoplay is not taken as the viewer's choice, nor is multi-view's
+  muting of the tiles not being heard.
 - **"⋮" menu**, in the bar before picture in picture, for settings few viewers need, laid out
   as in YouTube: one row per setting with its current value, each opening its list of
   choices with a way back. With a mouse it is a small pop-up inside the player; on touch
