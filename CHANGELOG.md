@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.14.1] - 2026-11-26
+
 ### Fixed
 - A radio station that cannot play now says so, with a retry button; the message was hidden behind the station's card.
 
