@@ -9,9 +9,9 @@ breaking changes are major.
 
 ### Added
 - Loudness levelling: switching channels no longer jumps in volume; a much louder or quieter TV channel is gently brought to the same level (Chrome on computers and Android).
-- Settings (the gear in the header): language, look and big screen, kept on the device. The language button moved here.
+- Settings (the gear in the header): language, look and TV mode, kept on the device. The language button moved here.
 - A light look: it follows the device's light or dark mode, or is chosen in the settings. The player stays dark.
-- Big screen, for watching on a TV: the channel list makes way for a large player with big channel tiles under it, and everything is a step larger. In the settings, or with the B key.
+- TV mode, for watching on a big screen: the channel list makes way for a large player with big channel tiles under it, and everything is a step larger. In the settings, or with the B key.
 - The About window offers installing the site as an app (or says how, on an iPhone), and its tips mention radio, the ⋮ menu's settings and multi-view.
 
 ### Changed

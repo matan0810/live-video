@@ -42,9 +42,9 @@ Quiet and made for watching: the video is the brightest thing on the page.
 - **Restraint.** A control earns its place only if it cannot be a default (CLAUDE.md).
 
 - **Settings.** A gear in the header opens a small window with the only three settings:
-  language (Hebrew / English), look (like the device / light / dark) and big screen
+  language (Hebrew / English), look (like the device / light / dark) and TV mode
   (off / on). Each is a row of choices with the chosen one marked, kept on the device.
-- **Big screen.** For a TV seen from across the room (the setting, or B): the channel list
+- **TV mode** (the "big screen" layout in the code). For a TV seen from across the room (the setting, or B): the channel list
   is hidden, the player is centred and sized so a large channel bar (the open tab's
   channels, 72px logos) fits under it on the screen, and every rem-based size is a quarter
   larger. Phones can turn it on too, though they gain little.
@@ -163,7 +163,7 @@ their auto-hiding, gestures and translated labels.
   the left or right half skips 10 seconds.
 - **Keyboard**: Space play/pause, M mute, F full screen, P picture in picture, ← / → 10
   seconds (on rewindable channels only), ↑ / ↓ previous / next channel, 1–9 the first nine channels of the open tab, T theatre mode,
-  R TV or radio, B big screen, / search.
+  R TV or radio, B TV mode, / search.
 - **Full screen** is the player's frame, so the site's overlays stay. With a mouse, a
   channel bar shows over the top; on touch screens it does not (too easy to tap by
   mistake). It opens only when the pointer comes to the top 30% of the video (moving over
