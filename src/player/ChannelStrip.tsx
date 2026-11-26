@@ -13,14 +13,17 @@ interface ChannelStripProps {
   activeChannelId: string;
   unavailableChannelIds: ReadonlySet<string>;
   onSelect: (channelId: string) => void;
+  /** Large: under the player in the big-screen layout, with tiles to read from a sofa. */
+  size?: 'compact' | 'large';
 }
 
-/** A row of channels shown over the video in full screen and theatre mode. */
+/** A row of channels: over the video in full screen and theatre mode, or under it on a big screen. */
 export function ChannelStrip({
   channels,
   activeChannelId,
   unavailableChannelIds,
   onSelect,
+  size = 'compact',
 }: ChannelStripProps) {
   const { t, language } = useI18n();
   const activeRef = useRef<HTMLButtonElement>(null);
@@ -32,7 +35,7 @@ export function ChannelStrip({
   }, [activeChannelId]);
 
   return (
-    <nav className={styles.strip} aria-label={t.channelBar}>
+    <nav className={styles.strip} data-size={size} aria-label={t.channelBar}>
       {scroll.hasBefore && (
         <button
           type="button"

@@ -13,7 +13,9 @@ import { useActiveChannel } from './hooks/useActiveChannel';
 import { useCatalog } from './hooks/useCatalog';
 import { useChannelChoice } from './hooks/useChannelChoice';
 import { useChannelLists } from './hooks/useChannelLists';
+import { useBigScreen } from './hooks/useBigScreen';
 import { useChannelShortcuts } from './hooks/useChannelShortcuts';
+import { useTheme } from './hooks/useTheme';
 import { useCustomChannels } from './hooks/useCustomChannels';
 import { useFavorites } from './hooks/useFavorites';
 import { useMediaQuery } from './hooks/useMediaQuery';
@@ -32,6 +34,8 @@ export function App() {
   const { favoriteIds, toggleFavorite } = useFavorites();
   const { customChannels, addCustomChannel, removeCustomChannel } = useCustomChannels();
   const [isTheaterMode, setIsTheaterMode] = useState(false);
+  const [theme, setTheme] = useTheme();
+  const [isBigScreen, setBigScreen] = useBigScreen();
   const searchRef = useRef<HTMLInputElement>(null);
   const lists = useChannelLists(catalogChannels, customChannels, favoriteIds, activeChannelId, t);
   const { orderedChannels, shownSections, tab } = lists;
@@ -59,12 +63,18 @@ export function App() {
     onStep: selectByOffset,
     onToggleTheater: toggleTheater,
     onToggleTab: () => lists.changeTab(tab === 'tv' ? 'radio' : 'tv'),
+    onToggleBigScreen: () => setBigScreen(!isBigScreen),
     searchRef,
   });
 
   return (
-    <div className={styles.app}>
-      <AppHeader />
+    <div className={styles.app} data-big-screen={isBigScreen}>
+      <AppHeader
+        theme={theme}
+        onTheme={setTheme}
+        isBigScreen={isBigScreen}
+        onBigScreen={setBigScreen}
+      />
 
       <main className={styles.main} data-theater={isTheaterMode}>
         <section className={styles.stage} aria-label={t.player}>
@@ -111,6 +121,15 @@ export function App() {
             />
           ) : (
             <EmptyStage />
+          )}
+          {isBigScreen && activeChannel && !multiView.view && (
+            <ChannelStrip
+              size="large"
+              channels={stepChannels}
+              activeChannelId={activeChannel.id}
+              unavailableChannelIds={unavailableChannelIds}
+              onSelect={selectChannel}
+            />
           )}
         </section>
 

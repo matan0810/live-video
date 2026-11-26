@@ -164,6 +164,8 @@
   .frame {
     border-radius: 0;
     max-height: 56dvh;
+    /* Edge to edge on a phone: a shadow would only smudge the row under the video. */
+    box-shadow: none;
   }
 
   .bar {

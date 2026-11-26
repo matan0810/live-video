@@ -18,11 +18,18 @@ change together: a change to a rule, a number or a behaviour updates the section
 
 ## 2. Look
 
-Dark, quiet and made for watching: the video is the brightest thing on the page.
+Quiet and made for watching: the video is the brightest thing on the page.
 
 - **Colour.** Near-black surfaces, light text, and one accent, red `#ff4654`
   (`--color-accent` in `src/styles/global.css`), used for "live", the active channel, the
   timeline's fill and primary buttons. Nothing else is red.
+- **Light and dark.** The look follows the device (light or dark) unless the viewer picks
+  one in the settings; the choice is kept on the device and applied before the first paint.
+  The light look has the same tokens with light values (accent `#e0313f`, a darker red that
+  reads on white). The player and the multi-view grid stay dark in both
+  (`data-surface="dark"`): pictures look best on black, and its controls are drawn over
+  video. The shadow around the player follows the page; on a phone, where the video runs
+  edge to edge, there is none.
 - **Type.** Heebo (variable), bundled with the site: no font host.
 - **Channel tiles.** A logo sits on a light card tinted with the logo's own main colour
   (`src/channels/logoTint.ts`), so the list is not a column of white squares; a channel
@@ -34,6 +41,13 @@ Dark, quiet and made for watching: the video is the brightest thing on the page.
   their labels stay in the site's language.
 - **Restraint.** A control earns its place only if it cannot be a default (CLAUDE.md).
 
+- **Settings.** A gear in the header opens a small window with the only three settings:
+  language (Hebrew / English), look (like the device / light / dark) and big screen
+  (off / on). Each is a row of choices with the chosen one marked, kept on the device.
+- **Big screen.** For a TV seen from across the room (the setting, or B): the channel list
+  is hidden, the player is centred and sized so a large channel bar (the open tab's
+  channels, 72px logos) fits under it on the screen, and every rem-based size is a quarter
+  larger. Phones can turn it on too, though they gain little.
 - **About.** A small, borderless "i" in the header, beside the version, opens a short
   welcome: what the site is, five tips and the keyboard shortcuts (not on touch screens).
   It never opens by itself. Where the browser offers installing the site as an app (Chrome),
@@ -149,7 +163,7 @@ their auto-hiding, gestures and translated labels.
   the left or right half skips 10 seconds.
 - **Keyboard**: Space play/pause, M mute, F full screen, P picture in picture, ← / → 10
   seconds (on rewindable channels only), ↑ / ↓ previous / next channel, 1–9 the first nine channels of the open tab, T theatre mode,
-  R TV or radio, / search.
+  R TV or radio, B big screen, / search.
 - **Full screen** is the player's frame, so the site's overlays stay. With a mouse, a
   channel bar shows over the top; on touch screens it does not (too easy to tap by
   mistake). It opens only when the pointer comes to the top 30% of the video (moving over

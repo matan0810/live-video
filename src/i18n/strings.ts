@@ -1,6 +1,7 @@
 import type { ChannelGroup } from '../../shared/channels/types';
 import type { CustomChannelError } from '../channels/customChannels';
 import type { ReportReason } from '../../shared/reports';
+import type { Theme } from '../theme';
 
 export const LANGUAGES = ['he', 'en'] as const;
 export type Language = (typeof LANGUAGES)[number];
@@ -9,8 +10,6 @@ export type Language = (typeof LANGUAGES)[number];
 const he = {
   dir: 'rtl',
   brand: 'OnAir',
-  switchLanguage: 'English',
-  switchLanguageLabel: 'Switch to English',
   groups: {
     israel: 'ישראל',
     world: 'עולם · באנגלית',
@@ -117,6 +116,14 @@ const he = {
   multiViewHear: (name: string) => `הקול מ${name}`,
   multiViewExpand: (name: string) => `צפייה רק ב${name}`,
   multiViewRemove: (name: string) => `הסרת ${name}`,
+  settings: 'הגדרות',
+  settingsLanguage: 'שפה',
+  settingsTheme: 'מראה',
+  themes: { auto: 'לפי המכשיר', light: 'בהיר', dark: 'כהה' } satisfies Record<Theme, string>,
+  settingsBigScreen: 'מסך גדול',
+  bigScreenHint: 'לטלוויזיה: נגן רחב, ערוצים גדולים מתחתיו וכיתוב גדול. גם במקש B.',
+  on: 'פועל',
+  off: 'כבוי',
   about: 'על האתר',
   aboutTitle: 'ברוכים הבאים ל-OnAir',
   aboutIntro:
@@ -140,6 +147,7 @@ const he = {
     ['P', 'תמונה בתוך תמונה'],
     ['T', 'מסך רחב'],
     ['R', 'טלוויזיה / רדיו'],
+    ['B', 'מסך גדול (לטלוויזיה)'],
     ['← →', '10 שניות אחורה / קדימה'],
     ['↑ ↓', 'ערוץ קודם / הבא'],
     ['1–9', 'תשעת הערוצים הראשונים'],
@@ -162,8 +170,6 @@ export type Strings = typeof he;
 const en: Strings = {
   dir: 'ltr',
   brand: 'OnAir',
-  switchLanguage: 'עברית',
-  switchLanguageLabel: 'החלפה לעברית',
   groups: {
     israel: 'Israel',
     world: 'World · in English',
@@ -272,6 +278,14 @@ const en: Strings = {
   multiViewHear: (name) => `Sound from ${name}`,
   multiViewExpand: (name) => `Watch only ${name}`,
   multiViewRemove: (name) => `Remove ${name}`,
+  settings: 'Settings',
+  settingsLanguage: 'Language',
+  settingsTheme: 'Look',
+  themes: { auto: 'Like the device', light: 'Light', dark: 'Dark' },
+  settingsBigScreen: 'Big screen',
+  bigScreenHint: 'For a TV: a wide player, big channels under it and larger text. Also with B.',
+  on: 'On',
+  off: 'Off',
   about: 'About the site',
   aboutTitle: 'Welcome to OnAir',
   aboutIntro:
@@ -295,6 +309,7 @@ const en: Strings = {
     ['P', 'Picture in picture'],
     ['T', 'Theatre mode'],
     ['R', 'TV / radio'],
+    ['B', 'Big screen (for a TV)'],
     ['← →', '10 seconds back / forward'],
     ['↑ ↓', 'Previous / next channel'],
     ['1–9', 'The first nine channels'],

@@ -40,7 +40,7 @@ export function MultiViewGrid({
 
   return (
     <div className={styles.multiView}>
-      <div className={styles.grid} data-places={places}>
+      <div className={styles.grid} data-places={places} data-surface="dark">
         {shown.map((channel) => (
           <MultiViewTile
             key={channel.id}

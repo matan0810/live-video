@@ -27,25 +27,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.language {
-  height: 36px;
-  padding: 0 14px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background: none;
-  color: var(--color-text-muted);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  transition:
-    color var(--transition),
-    border-color var(--transition);
-}
-
-.language:hover {
-  border-color: var(--color-border-strong);
-  color: var(--color-text);
-}
-
 @media (max-width: 959px) {
   .header {
     height: 48px;

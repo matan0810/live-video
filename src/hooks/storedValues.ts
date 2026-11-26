@@ -12,3 +12,12 @@ export function storedStrings(value: unknown): string[] | null {
     ? value.filter((entry): entry is string => typeof entry === 'string')
     : null;
 }
+
+/** One of a closed list of choices (a setting), or null. */
+export function storedChoice<T extends string>(value: unknown, choices: readonly T[]): T | null {
+  return choices.find((choice) => choice === value) ?? null;
+}
+
+export function storedBoolean(value: unknown): boolean | null {
+  return typeof value === 'boolean' ? value : null;
+}

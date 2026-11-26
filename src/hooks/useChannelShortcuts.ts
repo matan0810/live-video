@@ -11,12 +11,14 @@ interface ChannelShortcuts {
   onToggleTheater: () => void;
   /** Between the TV and radio tabs. */
   onToggleTab: () => void;
+  /** The big-screen layout, for a TV. */
+  onToggleBigScreen: () => void;
   searchRef: RefObject<HTMLInputElement | null>;
 }
 
 /**
  * The site's keys (the player has its own): 1–9, ↑ / ↓, T theatre mode, R TV or radio,
- * / search.
+ * B big screen, / search.
  */
 export function useChannelShortcuts({
   channels,
@@ -24,6 +26,7 @@ export function useChannelShortcuts({
   onStep,
   onToggleTheater,
   onToggleTab,
+  onToggleBigScreen,
   searchRef,
 }: ChannelShortcuts) {
   const shortcuts = useMemo<KeyboardShortcuts>(() => {
@@ -38,8 +41,9 @@ export function useChannelShortcuts({
       ArrowUp: () => onStep(-1),
       KeyT: onToggleTheater,
       KeyR: onToggleTab,
+      KeyB: onToggleBigScreen,
       Slash: () => searchRef.current?.focus(),
     };
-  }, [channels, onChoose, onStep, onToggleTheater, onToggleTab, searchRef]);
+  }, [channels, onChoose, onStep, onToggleTheater, onToggleTab, onToggleBigScreen, searchRef]);
   useKeyboardShortcuts(shortcuts);
 }

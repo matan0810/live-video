@@ -119,6 +119,7 @@ export function Player({
           <Container
             ref={frameRef}
             className={styles.frame}
+            data-surface="dark"
             data-idle={isOverlayShown && !overlayVisibility.isVisible}
             onPointerMove={handlePointerMove}
           >

@@ -37,6 +37,24 @@
   display: none;
 }
 
+/* Big screen, for a TV across the room: the player alone, sized so the channel bar under
+   it fits on the screen, and everything a step larger (the root font size, see global.css). */
+.app[data-big-screen='true'] .main {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: none;
+}
+
+.app[data-big-screen='true'] .sidebar {
+  display: none;
+}
+
+.app[data-big-screen='true'] .stage {
+  position: static;
+  width: 100%;
+  max-width: calc((100dvh - var(--header-height) - 15rem) * 16 / 9);
+  margin-inline: auto;
+}
+
 @media (max-width: 959px) {
   .main {
     grid-template-columns: minmax(0, 1fr);

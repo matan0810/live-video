@@ -30,7 +30,7 @@ Update it whenever any of these change (CLAUDE.md, section 3, "Record").
 
 Keys in each viewer's browser (`localStorage`), each parsed and checked when read back, never
 cast: `live-video:active-channel`, `:favorites`, `:custom-channels`, `:collapsed-sections`,
-`:language`, `:remote-channels`, `:logo-tints`, `:resume`, `:multi-view`, and in the admin's browser only
+`:language`, `:theme`, `:big-screen`, `:remote-channels`, `:logo-tints`, `:resume`, `:multi-view`, and in the admin's browser only
 `:admin-token`.
 
 ## Hosts

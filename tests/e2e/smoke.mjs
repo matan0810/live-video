@@ -301,15 +301,62 @@ async function main() {
   step('desktop: an address from the bookmark opens the admin area');
 
   await desktop.goto(url);
-  await desktop.getByRole('button', { name: 'Switch to English' }).click();
+  const settings = desktop.getByRole('dialog', { name: 'הגדרות' });
+  await desktop.getByRole('button', { name: 'הגדרות' }).click();
+  await settings.getByRole('radio', { name: 'English' }).click();
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'ltr');
   assert.equal(await desktop.evaluate(() => document.documentElement.lang), 'en');
   await desktop.getByText('Israel', { exact: true }).waitFor();
   await desktop.getByRole('button', { name: 'Kan 11', exact: true }).waitFor();
   await desktop.reload();
-  await desktop.getByRole('button', { name: 'החלפה לעברית' }).click();
+  await desktop.getByRole('button', { name: 'Settings' }).click();
+  await desktop
+    .getByRole('dialog', { name: 'Settings' })
+    .getByRole('radio', { name: 'עברית' })
+    .click();
   assert.equal(await desktop.evaluate(() => document.documentElement.dir), 'rtl');
-  step('desktop: English and Hebrew, remembered across reloads');
+  step('desktop: English and Hebrew from the settings, remembered across reloads');
+
+  // The look: the device's by default, or chosen; the player stays dark either way.
+  const background = () => desktop.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  await desktop.emulateMedia({ colorScheme: 'dark' });
+  const darkBackground = await background();
+  await settings.getByRole('radio', { name: 'בהיר' }).click();
+  assert.equal(await desktop.evaluate(() => document.documentElement.dataset.theme), 'light');
+  assert.notEqual(await background(), darkBackground, 'the light theme lights the page');
+  await settings.getByRole('button', { name: 'סגירה' }).click();
+  await desktop.reload();
+  assert.equal(await desktop.evaluate(() => document.documentElement.dataset.theme), 'light');
+  await desktop
+    .getByRole('button', { name: /^כאן 11/ })
+    .first()
+    .click();
+  const frameText = await desktop
+    .locator('[data-surface="dark"]')
+    .first()
+    .evaluate((frame) => getComputedStyle(frame).color);
+  assert.equal(frameText, 'rgb(242, 244, 247)', 'the player keeps its dark colours');
+  await desktop.getByRole('button', { name: 'הגדרות' }).click();
+  await settings.getByRole('radio', { name: 'לפי המכשיר' }).click();
+  assert.equal(await desktop.evaluate(() => document.documentElement.dataset.theme), undefined);
+  assert.equal(await background(), darkBackground, 'auto follows the (dark) device again');
+  await settings.getByRole('button', { name: 'סגירה' }).click();
+  step('desktop: a light look, chosen and remembered, with a dark player');
+
+  // Big screen: B, or the setting. The list goes, a large channel bar comes under the player.
+  await desktop.keyboard.press('b');
+  const bigBar = desktop.locator('nav[data-size="large"]');
+  await bigBar.waitFor();
+  assert.equal(await desktop.locator('aside').isVisible(), false);
+  await desktop.reload();
+  await bigBar.getByRole('button', { name: 'רשת 13' }).click();
+  await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
+  await desktop.getByRole('button', { name: 'הגדרות' }).click();
+  await settings.getByRole('radio', { name: 'כבוי' }).click();
+  await settings.getByRole('button', { name: 'סגירה' }).click();
+  await bigBar.waitFor({ state: 'detached' });
+  await desktop.locator('aside').waitFor();
+  step('desktop: big screen by key and setting, remembered across reloads');
 
   // ---------- Offline ----------
   // A context of its own: request interception would bypass the service worker.
