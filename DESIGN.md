@@ -70,6 +70,10 @@ Quiet and made for watching: the video is the brightest thing on the page.
   Al Jazeera (English and Arabic) is at the bottom of its section by the owner's choice.
 - **Unavailable.** A channel is marked "unavailable" when it failed to play in this visit,
   and from the start when it has no link at all.
+- **The viewer's own channel**, from "Add your own channel" under the list: an https link
+  (http is refused, since the browser would block it on an https page) and an optional
+  name; without one, the channel is named after the link's site. Enter or Ctrl+Enter
+  (⌘+Enter) adds it. It is kept on the device.
 - **Important channels are never deleted for lack of a link.** They stay listed with an
   empty `sources` list (N12, Fox News, Kan Educational, Sky News), so a link can be added in
   the admin area. A channel the owner no longer wants is removed (Walla, TRT World).

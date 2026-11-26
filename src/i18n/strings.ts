@@ -155,12 +155,11 @@ const he = {
   ] satisfies readonly (readonly [string, string])[],
   aboutVersion: (version: string) => `גרסה ${version}`,
   addOwnChannel: 'הוספת ערוץ משלך',
-  channelName: 'שם הערוץ',
+  channelName: 'שם הערוץ (לא חובה)',
   streamLink: 'קישור לשידור (m3u8)',
   add: 'הוספה',
   savedInBrowser: 'הערוץ נשמר רק בדפדפן הזה.',
   customChannelErrors: {
-    'missing-name': 'צריך לתת לערוץ שם',
     'invalid-url': 'הקישור צריך להיות כתובת https מלאה לקובץ m3u8',
   } satisfies Record<CustomChannelError, string>,
 };
@@ -317,12 +316,11 @@ const en: Strings = {
   ],
   aboutVersion: (version) => `Version ${version}`,
   addOwnChannel: 'Add your own channel',
-  channelName: 'Channel name',
+  channelName: 'Channel name (optional)',
   streamLink: 'Stream link (m3u8)',
   add: 'Add',
   savedInBrowser: 'The channel is saved in this browser only.',
   customChannelErrors: {
-    'missing-name': 'Give the channel a name',
     'invalid-url': 'The link must be a full https address of an m3u8 file',
   },
 };

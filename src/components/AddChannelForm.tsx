@@ -47,7 +47,18 @@ export function AddChannelForm({ onAdd }: AddChannelFormProps) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate>
+    <form
+      className={styles.form}
+      onSubmit={handleSubmit}
+      // Enter adds from either field; Ctrl+Enter (⌘+Enter on a Mac) too, as in chat boxes.
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+          event.preventDefault();
+          event.currentTarget.requestSubmit();
+        }
+      }}
+      noValidate
+    >
       <label className={styles.label} htmlFor={nameId}>
         {t.channelName}
       </label>

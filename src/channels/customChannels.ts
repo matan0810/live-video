@@ -5,7 +5,7 @@ import { isRecord } from '../../shared/isRecord';
 export const CUSTOM_ID_PREFIX = 'custom-';
 const SHORT_LABEL_LENGTH = 3;
 
-export type CustomChannelError = 'missing-name' | 'invalid-url';
+export type CustomChannelError = 'invalid-url';
 
 export type CustomChannelResult =
   { ok: true; channel: Channel } | { ok: false; error: CustomChannelError };
@@ -14,19 +14,25 @@ export function isCustomChannelId(id: string) {
   return id.startsWith(CUSTOM_ID_PREFIX);
 }
 
-/** Builds a user-added channel from form input, or reports why the input is invalid. */
+/**
+ * Builds a user-added channel from form input, or reports why the input is invalid. The
+ * name is optional: a pasted link alone is enough, and the channel is named after its site.
+ */
 export function createCustomChannel(name: string, url: string): CustomChannelResult {
-  const trimmedName = name.trim();
   const trimmedUrl = url.trim();
-  if (trimmedName.length === 0) return { ok: false, error: 'missing-name' };
   if (!isHttpsUrl(trimmedUrl)) return { ok: false, error: 'invalid-url' };
+  const trimmedName = name.trim() || new URL(trimmedUrl).hostname.replace(/^www\./, '');
 
   return {
     ok: true,
     channel: {
       id: `${CUSTOM_ID_PREFIX}${crypto.randomUUID().slice(0, 8)}`,
       name: trimmedName,
-      short: [...trimmedName].slice(0, SHORT_LABEL_LENGTH).join(''),
+      // Letters and digits only: a label from "tv.example.com" reads "tve", not "tv.".
+      short: [...trimmedName]
+        .filter((character) => /[\p{L}\p{N}]/u.test(character))
+        .slice(0, SHORT_LABEL_LENGTH)
+        .join(''),
       sources: [trimmedUrl],
     },
   };

@@ -264,14 +264,20 @@ async function main() {
   step('desktop: radio in its own tab, a station shows its card, stepping stays in radio');
 
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
-  await desktop.getByLabel('שם הערוץ').fill('בדיקה');
+  // A link alone is enough: Enter adds it, named after its site.
+  await desktop.getByLabel('קישור לשידור (m3u8)').fill('https://www.only-link.example/x.m3u8');
+  await desktop.getByLabel('קישור לשידור (m3u8)').press('Enter');
+  await desktop.getByRole('heading', { name: 'only-link.example' }).waitFor();
+  await desktop.getByRole('button', { name: 'מחיקת only-link.example' }).click();
+  await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
+  await desktop.getByLabel('שם הערוץ (לא חובה)').fill('בדיקה');
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('http://insecure.example/a.m3u8');
   await desktop.getByRole('button', { name: 'הוספה', exact: true }).click();
   await desktop.getByRole('alert').getByText('https').waitFor();
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('https://stream.example/a.m3u8');
-  await desktop.getByRole('button', { name: 'הוספה', exact: true }).click();
+  await desktop.getByLabel('קישור לשידור (m3u8)').press('Control+Enter');
   await desktop.getByRole('heading', { name: 'בדיקה' }).waitFor();
-  step('desktop: a custom channel is validated, added and selected');
+  step('desktop: a custom channel is validated and added by Enter, Ctrl+Enter or a link alone');
 
   await desktop.reload();
   await desktop.getByRole('heading', { name: 'בדיקה' }).waitFor();

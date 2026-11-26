@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Changed
+- Adding your own channel: a link alone is enough (it is named after its site), and Ctrl+Enter adds it as well as Enter.
+
 ### Fixed
 - TV mode has the TV / Radio tabs above its channel bar, and shows the bar before a channel is chosen, so every channel and station can be reached; long names take two lines.
 - Muted stays muted when switching between TV and radio.

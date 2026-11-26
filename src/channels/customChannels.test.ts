@@ -11,10 +11,10 @@ describe('createCustomChannel', () => {
     expect(result.ok && isCustomChannelId(result.channel.id)).toBe(true);
   });
 
-  it('rejects an empty name', () => {
-    expect(createCustomChannel('  ', 'https://example.com/live.m3u8')).toEqual({
-      ok: false,
-      error: 'missing-name',
+  it("names a channel added with only a link after the link's site", () => {
+    expect(createCustomChannel('  ', 'https://www.tv.example.com/live.m3u8')).toMatchObject({
+      ok: true,
+      channel: { name: 'tv.example.com', short: 'tve' },
     });
   });
 
