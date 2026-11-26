@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.14.0] - 2026-11-26
+
 ### Changed
 - Radio stations are in four sections, National, Regional, Other languages and From abroad, ordered by how many listen to them (TGI survey).
 - The sleep timer shows its minutes left in the player's bar while it runs, and says so when it pauses the player.
