@@ -1,6 +1,7 @@
 /** Formats seconds as m:ss, or h:mm:ss from one hour up. */
 export function formatDuration(totalSeconds: number): string {
-  const seconds = Math.max(0, Math.floor(totalSeconds));
+  // A stream can report an endless or unknown time; it never shows as "NaN".
+  const seconds = Number.isFinite(totalSeconds) ? Math.max(0, Math.floor(totalSeconds)) : 0;
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const pad = (value: number) => String(value).padStart(2, '0');

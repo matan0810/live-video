@@ -10,6 +10,8 @@ describe('formatDuration', () => {
     [3600, '1:00:00'],
     [3725.9, '1:02:05'],
     [-5, '0:00'],
+    [Infinity, '0:00'],
+    [NaN, '0:00'],
   ])('formats %d seconds as %s', (seconds, expected) => {
     expect(formatDuration(seconds)).toBe(expected);
   });

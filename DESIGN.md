@@ -176,7 +176,9 @@ their auto-hiding, gestures and translated labels.
 - **The view**: in place of a picture, the station's tile large, its name, and a small red
   level meter that moves while it plays and rests when paused.
 - **The bar** is the TV one without picture in picture, quality or multi-view, which need a
-  picture; the sleep timer is there, and rewind when the stream keeps a window.
+  picture; the sleep timer is there, and rewind only when an HLS stream keeps a window. A
+  plain audio stream never offers rewind, however the browser reports its range (Android
+  Chrome reports it as endless).
 - **Stepping** (↑ / ↓, the bar's buttons, the lock screen, 1–9 within the open tab) stays
   within the kind: radio to radio, TV to TV. Picking a station during multi-view ends it.
 

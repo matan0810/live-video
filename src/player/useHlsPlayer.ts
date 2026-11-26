@@ -2,15 +2,12 @@ import type Hls from 'hls.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isHlsSource, resolveStreamUrl } from '../../shared/channels/sources';
 import { UNSUPPORTED_FORMAT } from './codecSupport';
+import { nativeLiveWindow, type LiveWindow } from './liveWindow';
 import { networkRetryDelay, RestartBudget, StallWatch } from './recovery';
 
 export type PlayerStatus = 'loading' | 'playing' | 'error';
 
-/** The part of a live stream that can currently be seeked, in media time (seconds). */
-export interface LiveWindow {
-  start: number;
-  end: number;
-}
+export type { LiveWindow } from './liveWindow';
 
 const NATIVE_HLS_TYPE = 'application/vnd.apple.mpegurl';
 /** A source that has not started playing by then is treated as failed, e.g. an unsupported codec. */
@@ -46,6 +43,8 @@ function hasMediaSource() {
 export function useHlsPlayer(sources: readonly string[]) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
+  /** The source playing is a plain audio stream (radio), which keeps no past to rewind to. */
+  const isPlainAudioRef = useRef(false);
   const [status, setStatus] = useState<PlayerStatus>('loading');
   const [attempt, setAttempt] = useState(0);
   const [isAutoMuted, setIsAutoMuted] = useState(false);
@@ -150,6 +149,7 @@ export function useHlsPlayer(sources: readonly string[]) {
       // A plain audio stream (radio over Icecast) is the browser's own to play; hls.js is
       // loaded only for HLS playlists.
       const isHls = isHlsSource(source);
+      isPlainAudioRef.current = !isHls;
       let url: string;
       let HlsClass: typeof Hls | null = null;
       try {
@@ -283,9 +283,11 @@ export function useHlsPlayer(sources: readonly string[]) {
     }
 
     const { seekable } = video;
-    const isLive = !Number.isFinite(video.duration);
-    if (!isLive || seekable.length === 0) return null;
-    return { start: seekable.start(0), end: seekable.end(seekable.length - 1) };
+    const ranges = Array.from(
+      { length: seekable.length },
+      (_, index) => [seekable.start(index), seekable.end(index)] as const,
+    );
+    return nativeLiveWindow(video.duration, ranges, isPlainAudioRef.current);
   }, []);
 
   return { videoRef, hlsRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow };

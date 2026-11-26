@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- On some phones, a radio station showed a rewind timeline and "−Infinity:NaN:NaN" instead of "Live".
+
 ### Added
 - Leaving the site while a channel plays opens it in picture in picture, as on YouTube (in Chrome, after allowing it once).
 
