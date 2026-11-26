@@ -4,6 +4,7 @@ import { Video, videoFeatures } from '@videojs/react/video';
 import { useEffect, useRef, type ReactNode } from 'react';
 import type { Channel, ChannelGroup } from '../channels';
 import { isRadio } from '../channels/isRadio';
+import { isAppleMobile } from '../device';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { displayName } from '../channels/displayName';
 import { useI18n } from '../i18n/context';
@@ -17,6 +18,7 @@ import { useDvr } from './useDvr';
 import { useFullscreen } from './useFullscreen';
 import { useHlsPlayer, type PlayerStatus } from './useHlsPlayer';
 import { useAutoPictureInPicture } from './useAutoPictureInPicture';
+import { useLoudnessLevelling } from './useLoudnessLevelling';
 import { usePlayerMenu } from './usePlayerMenu';
 import { useMediaSession } from './useMediaSession';
 import { useResumePosition } from './useResumePosition';
@@ -55,8 +57,17 @@ export function Player({
   isTheaterMode,
   onToggleTheater,
 }: PlayerProps) {
-  const { videoRef, hlsRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow } =
-    useHlsPlayer(channel.sources);
+  const {
+    videoRef,
+    hlsRef,
+    status,
+    errorDetail,
+    retry,
+    isAutoMuted,
+    unmute,
+    getLiveWindow,
+    isHlsJs,
+  } = useHlsPlayer(channel.sources);
   const dvr = useDvr(videoRef, getLiveWindow);
   useResumePosition(channel.id, status, dvr);
   const { t, language } = useI18n();
@@ -65,6 +76,9 @@ export function Player({
   useMediaSession(videoRef, { title: name, logo: channel.logo, onStep });
   const menu = usePlayerMenu(videoRef, hlsRef, channel.id, dvr);
   useAutoPictureInPicture(videoRef, !radio && status === 'playing');
+  // Not on iPhones and iPads: playing on with the screen locked is not sure there once the
+  // sound goes through Web Audio, and it cannot be tested from here.
+  useLoudnessLevelling(videoRef, !radio && isHlsJs && !isAppleMobile(), channel.id);
 
   const frameRef = useRef<HTMLDivElement>(null);
   const controls = usePlayerControls(videoRef);
@@ -108,7 +122,14 @@ export function Player({
             data-idle={isOverlayShown && !overlayVisibility.isVisible}
             onPointerMove={handlePointerMove}
           >
-            <Video ref={videoRef} className={styles.video} playsInline />
+            {/* Radio gets an element of its own: one routed through Web Audio for levelling
+                (TV) must never play a stream from another site directly, or it would be silent. */}
+            <Video
+              key={radio ? 'radio' : 'tv'}
+              ref={videoRef}
+              className={styles.video}
+              playsInline
+            />
             {radio && <RadioStage channel={channel} name={name} status={status} />}
             <SkipIndicator videoRef={videoRef} />
 

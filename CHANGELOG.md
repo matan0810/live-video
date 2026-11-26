@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Added
+- Loudness levelling: switching channels no longer jumps in volume; a much louder or quieter TV channel is gently brought to the same level (Chrome on computers and Android).
 - The About window offers installing the site as an app (or says how, on an iPhone), and its tips mention radio, the ⋮ menu's settings and multi-view.
 
 ### Changed

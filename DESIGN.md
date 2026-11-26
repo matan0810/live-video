@@ -158,6 +158,15 @@ their auto-hiding, gestures and translated labels.
   more channels lie that way, and keeps the playing channel in view. On phones full screen turns the picture sideways where the browser allows.
 - **Stepping channels** (keys, full-screen buttons, lock screen) follows the list order,
   wraps around, and skips channels with no link.
+- **Loudness levelling**: switching from a quiet channel to a loud one should not jump in
+  volume. While hls.js plays a TV channel, its sound is measured (the speech's level, past
+  silence and pauses) and turned gently towards one level (−27 dB, where most channels sit),
+  at most 0.5 dB a quarter-second, within −12 to +9 dB, with a limiter against clipping. It
+  starts after the viewer's first tap or key (browsers allow no audio processing before),
+  measures past the viewer's own volume and never makes up for it, and pauses with the
+  video. Not on radio stations streamed directly (their sound cannot be processed, and would
+  go silent; radio has an element of its own), nor on iPhones and iPads, where playing on
+  with the screen locked through Web Audio is not sure. Nothing to switch on or off.
 - **Leaving the site** while a picture plays opens picture in picture, as YouTube does:
   Chrome on a computer on switching tab (it asks the viewer once), Safari through the
   video's `autopictureinpicture` attribute, Android from full screen. Radio just keeps

@@ -1,5 +1,6 @@
 import { useRef } from 'react';
-import { isAppleMobile, isInstalled, useInstallOffer } from '../install';
+import { isAppleMobile } from '../device';
+import { isInstalled, useInstallOffer } from '../install';
 import { useI18n } from '../i18n/context';
 import { IconButton } from './IconButton';
 import { InfoIcon } from './icons';

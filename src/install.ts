@@ -24,11 +24,6 @@ export const isInstalled = () =>
   window.matchMedia('(display-mode: standalone)').matches ||
   ('standalone' in navigator && navigator.standalone === true);
 
-/** Safari on iPhone and iPad installs only through Share, so it is explained instead. */
-export const isAppleMobile = () =>
-  /iPhone|iPad|iPod/.test(navigator.userAgent) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
 /** The browser's install offer, or null when it has none (or the site is installed). */
 export function useInstallOffer() {
   const current = useSyncExternalStore(

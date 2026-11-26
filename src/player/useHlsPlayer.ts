@@ -48,6 +48,8 @@ export function useHlsPlayer(sources: readonly string[]) {
   const [status, setStatus] = useState<PlayerStatus>('loading');
   const [attempt, setAttempt] = useState(0);
   const [isAutoMuted, setIsAutoMuted] = useState(false);
+  /** Whether hls.js plays the current source (its audio can be processed), or the browser. */
+  const [isHlsJs, setIsHlsJs] = useState(false);
   /** Why the last source failed, shown under the error message to help diagnose a channel. */
   const [errorDetail, setErrorDetail] = useState<string | null>(null);
 
@@ -164,6 +166,7 @@ export function useHlsPlayer(sources: readonly string[]) {
       if (isDisposed) return;
       startTimeout = setTimeout(() => loadNextSource('did not start in time'), START_TIMEOUT_MS);
 
+      setIsHlsJs(isHls && Boolean(HlsClass?.isSupported()));
       if (!isHls) {
         video.src = url;
       } else if (HlsClass?.isSupported()) {
@@ -290,5 +293,15 @@ export function useHlsPlayer(sources: readonly string[]) {
     return nativeLiveWindow(video.duration, ranges, isPlainAudioRef.current);
   }, []);
 
-  return { videoRef, hlsRef, status, errorDetail, retry, isAutoMuted, unmute, getLiveWindow };
+  return {
+    videoRef,
+    hlsRef,
+    status,
+    errorDetail,
+    retry,
+    isAutoMuted,
+    unmute,
+    getLiveWindow,
+    isHlsJs,
+  };
 }
