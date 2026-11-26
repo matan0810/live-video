@@ -873,6 +873,7 @@
     "id": "radio-bloomberg",
     "name": "Bloomberg Radio",
     "short": "BBG",
+    "logo": "logos/radio-bloomberg.png",
     "group": "radio-world",
     "sources": ["https://playerservices.streamtheworld.com/api/livestream-redirect/WBBRAMAAC.aac"]
   },
