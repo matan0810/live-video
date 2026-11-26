@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.15.0] - 2026-11-26
+
 ### Added
 - Loudness levelling: switching channels no longer jumps in volume; a much louder or quieter TV channel is gently brought to the same level (Chrome on computers and Android).
 - Settings (the gear in the header): language, look and TV mode, kept on the device. The language button moved here.
