@@ -24,6 +24,14 @@ export type ChannelLanguage = (typeof CHANNEL_LANGUAGES)[number];
 
 export type ChannelGroup = (typeof CHANNEL_GROUPS)[number];
 
+/**
+ * Ways a channel works only in part, which the viewer is told about: better a preview
+ * without sound than nothing, as long as it says so. In the order they are shown.
+ */
+export const CHANNEL_LIMITS = ['preview', 'no-sound', 'low-quality', 'some-browsers'] as const;
+
+export type ChannelLimit = (typeof CHANNEL_LIMITS)[number];
+
 /** Anything the player can play: a built-in channel or one the user added. */
 export interface Channel {
   /** Stable identifier, used for persistence and URLs. Lowercase letters, digits and dashes. */
@@ -38,6 +46,8 @@ export interface Channel {
   logo?: string;
   /** The language it broadcasts in. */
   language?: ChannelLanguage;
+  /** How it works only in part, if it does; absent when it works fully. */
+  limits?: ChannelLimit[];
   /**
    * Stream URLs in priority order: the first is the primary, the rest are fallbacks. HLS
    * playlists (`.m3u8`), or for radio also plain audio streams (MP3 or AAC, as Icecast serves).

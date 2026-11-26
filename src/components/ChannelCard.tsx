@@ -2,6 +2,7 @@ import type { Channel } from '../channels';
 import { displayName } from '../channels/displayName';
 import { languageBadge } from '../channels/languageBadge';
 import { useI18n } from '../i18n/context';
+import { ChannelLimits } from './ChannelLimits';
 import { ChannelTile } from './ChannelTile';
 import { IconButton } from './IconButton';
 import { CloseIcon, StarIcon } from './icons';
@@ -42,8 +43,13 @@ export function ChannelCard({
           <span className={styles.name}>
             <bdi>{name}</bdi>
           </span>
-          {isActive && !isUnavailable && <span className={styles.state}>{t.playingNow}</span>}
-          {isUnavailable && <span className={styles.state}>{t.unavailable}</span>}
+          {isUnavailable ? (
+            <span className={styles.state}>{t.unavailable}</span>
+          ) : channel.limits ? (
+            <ChannelLimits limits={channel.limits} />
+          ) : (
+            isActive && <span className={styles.state}>{t.playingNow}</span>
+          )}
         </span>
       </button>
 

@@ -236,6 +236,7 @@
     "logo": "logos/abc-news.png",
     "language": "en",
     "group": "world",
+    "limits": ["some-browsers"],
     "sources": ["https://pb-0n3n2ej0w8pl9.akamaized.net/ABCNewsLive_Disney.m3u8"]
   },
   {
@@ -256,7 +257,8 @@
     "logo": "logos/fox-news.svg",
     "language": "en",
     "group": "world",
-    "sources": []
+    "limits": ["preview", "no-sound", "low-quality"],
+    "sources": ["https://247preview.foxnews.com/hls/live/2020027/fncv3preview/index.m3u8"]
   },
   {
     "id": "livenow-fox",

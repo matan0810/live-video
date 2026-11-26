@@ -1,3 +1,4 @@
+import { ChannelLimits } from '../components/ChannelLimits';
 import { Container, createPlayer } from '@videojs/react';
 import { I18nProvider } from '@videojs/react/i18n';
 import { Video, videoFeatures } from '@videojs/react/video';
@@ -162,7 +163,8 @@ export function Player({
               </p>
             )}
 
-            {status === 'playing' && isAutoMuted && (
+            {/* A channel without sound has nothing to unmute. */}
+            {status === 'playing' && isAutoMuted && !channel.limits?.includes('no-sound') && (
               <button type="button" className={styles.unmute} onClick={unmute}>
                 {t.autoMuted}
               </button>
@@ -188,9 +190,13 @@ export function Player({
       </MediaPlayer>
 
       <div className={styles.bar}>
-        <h2 className={styles.title}>
-          <bdi>{name}</bdi>
-        </h2>
+        <div className={styles.heading}>
+          <h2 className={styles.title}>
+            <bdi>{name}</bdi>
+          </h2>
+          {/* Under the picture, not over it: it never hides the broadcast or the channel bar. */}
+          {channel.limits && <ChannelLimits limits={channel.limits} isFull />}
+        </div>
         <div className={styles.barEnd}>{actions}</div>
       </div>
     </div>

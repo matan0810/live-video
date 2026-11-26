@@ -1,9 +1,11 @@
 import {
   CHANNEL_GROUPS,
   CHANNEL_LANGUAGES,
+  CHANNEL_LIMITS,
   type CatalogChannel,
   type ChannelGroup,
   type ChannelLanguage,
+  type ChannelLimit,
 } from './types.ts';
 import { isStreamSource } from './sources.ts';
 import { isHttpsUrl } from './url.ts';
@@ -27,13 +29,27 @@ function isChannelGroup(value: unknown): value is ChannelGroup {
   return CHANNEL_GROUPS.some((group) => group === value);
 }
 
+function isChannelLimit(value: unknown): value is ChannelLimit {
+  return CHANNEL_LIMITS.some((limit) => limit === value);
+}
+
+/** A non-empty list of known tags, each once. */
+function isLimitList(value: unknown): value is ChannelLimit[] {
+  return (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every(isChannelLimit) &&
+    new Set(value).size === value.length
+  );
+}
+
 function parseChannel(value: unknown, position: number): CatalogChannel {
   const fail = (reason: string): never => {
     throw new Error(`Channel #${position + 1}: ${reason}`);
   };
 
   if (!isRecord(value)) return fail('must be an object');
-  const { id, name, nameEn, short, logo, language, group, sources } = value;
+  const { id, name, nameEn, short, logo, language, limits, group, sources } = value;
 
   if (typeof id !== 'string' || !ID_PATTERN.test(id)) {
     return fail('"id" must contain only lowercase letters, digits and dashes');
@@ -65,6 +81,10 @@ function parseChannel(value: unknown, position: number): CatalogChannel {
     return fail(`"language" must be one of: ${CHANNEL_LANGUAGES.join(', ')} (id: ${id})`);
   }
 
+  if (limits !== undefined && !isLimitList(limits)) {
+    return fail(`"limits" must list some of: ${CHANNEL_LIMITS.join(', ')}, once each (id: ${id})`);
+  }
+
   return {
     id,
     name,
@@ -72,6 +92,7 @@ function parseChannel(value: unknown, position: number): CatalogChannel {
     short,
     ...(logo === undefined ? {} : { logo }),
     ...(language === undefined ? {} : { language }),
+    ...(limits === undefined ? {} : { limits }),
     group,
     sources,
   };

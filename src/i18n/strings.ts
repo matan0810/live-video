@@ -1,4 +1,4 @@
-import type { ChannelGroup } from '../../shared/channels/types';
+import type { ChannelGroup, ChannelLimit } from '../../shared/channels/types';
 import type { CustomChannelError } from '../channels/customChannels';
 import type { ReportReason } from '../../shared/reports';
 import type { Theme } from '../theme';
@@ -40,6 +40,12 @@ const he = {
   emptyHint: 'בחרו ערוץ מהרשימה כדי להתחיל לצפות',
   playingNow: 'מנגן עכשיו',
   unavailable: 'לא זמין כרגע',
+  limits: {
+    preview: 'תצוגה מקדימה בלבד',
+    'no-sound': 'ללא קול',
+    'low-quality': 'איכות נמוכה',
+    'some-browsers': 'לא בכל דפדפן',
+  } satisfies Record<ChannelLimit, string>,
   removeChannel: (name: string) => `מחיקת ${name}`,
   addFavorite: (name: string) => `הוספת ${name} למועדפים`,
   removeFavorite: (name: string) => `הסרת ${name} מהמועדפים`,
@@ -199,6 +205,12 @@ const en: Strings = {
   emptyHint: 'Pick a channel from the list to start watching',
   playingNow: 'Playing now',
   unavailable: 'Unavailable right now',
+  limits: {
+    preview: 'Preview only',
+    'no-sound': 'No sound',
+    'low-quality': 'Low quality',
+    'some-browsers': 'Not in every browser',
+  },
   removeChannel: (name) => `Delete ${name}`,
   addFavorite: (name) => `Add ${name} to favourites`,
   removeFavorite: (name) => `Remove ${name} from favourites`,

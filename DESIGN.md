@@ -74,8 +74,15 @@ Quiet and made for watching: the video is the brightest thing on the page.
   (http is refused, since the browser would block it on an https page) and an optional
   name; without one, the channel is named after the link's site. Enter or Ctrl+Enter
   (⌘+Enter) adds it. It is kept on the device.
+- **Works only in part.** Better a preview without sound than nothing, as long as it says
+  so. A channel may carry tags from a closed list (`limits` in the channel list, set in the
+  admin area): preview only, no sound, low quality, not in every browser. The list shows
+  the first, which says the most, beside an amber dot (`--color-warning`), in place of
+  "playing now"; under the player, beside the name, all of them. Never over the picture:
+  it would hide the broadcast and collide with the channel bar. "Unavailable" wins over
+  both. Today: Fox News (its official preview: no sound, 144p) and ABC News (HEVC only).
 - **Important channels are never deleted for lack of a link.** They stay listed with an
-  empty `sources` list (N12, Fox News, Kan Educational, Sky News), so a link can be added in
+  empty `sources` list (N12, Kan Educational, Sky News), so a link can be added in
   the admin area. A channel the owner no longer wants is removed (Walla, TRT World).
 
 ## 4. Where the channel list comes from

@@ -267,3 +267,25 @@ textarea.input {
   gap: 10px;
   font-size: 0.875rem;
 }
+
+.limits {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.limits legend {
+  float: inline-start;
+  margin-inline-end: 8px;
+}
+
+.limit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+}

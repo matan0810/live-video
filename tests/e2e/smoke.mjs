@@ -79,12 +79,18 @@ async function main() {
   step('desktop: unreachable channel shows the error state and is marked in the list');
 
   // Kept on the list without a link: marked before anyone tries, and nothing to retry.
-  await desktop.getByRole('button', { name: 'Fox News לא זמין כרגע' }).waitFor();
-  await desktop.getByRole('button', { name: 'Fox News לא זמין כרגע' }).click();
+  await desktop.getByRole('button', { name: 'Sky News לא זמין כרגע' }).waitFor();
+  await desktop.getByRole('button', { name: 'Sky News לא זמין כרגע' }).click();
   await desktop.getByRole('alert').getByText('אין כרגע קישור לשידור').waitFor();
   assert.equal(await desktop.getByRole('button', { name: 'נסה שוב עכשיו' }).count(), 0);
   await desktop.getByRole('button', { name: 'כאן 11 לא זמין כרגע' }).click();
   step('desktop: a channel with no link is shown as unavailable, without retries');
+
+  // A channel that works only in part says so: briefly in the list, in full under the player.
+  await desktop.getByRole('button', { name: 'Fox News תצוגה מקדימה בלבד' }).click();
+  await desktop.getByText('תצוגה מקדימה בלבד · ללא קול · איכות נמוכה').waitFor();
+  await desktop.getByRole('button', { name: 'כאן 11 לא זמין כרגע' }).click();
+  step('desktop: a channel that works in part is tagged in the list and under the player');
 
   await desktop.keyboard.press('ArrowDown');
   // N12 has no link, so stepping skips it.

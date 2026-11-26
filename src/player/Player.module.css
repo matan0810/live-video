@@ -147,6 +147,14 @@
   min-height: 40px;
 }
 
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  min-width: 0;
+}
+
 .title {
   margin: 0;
   font-size: 1.25rem;

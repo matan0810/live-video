@@ -24,6 +24,20 @@ describe('parseChannels', () => {
     expect(parseChannels([withLogo])).toEqual([withLogo]);
   });
 
+  it('keeps the tags of a channel that works only in part', () => {
+    const limited = { ...valid, limits: ['preview', 'no-sound'] };
+    expect(parseChannels([limited])).toEqual([limited]);
+  });
+
+  it.each([
+    ['an unknown tag', ['preview', 'broken']],
+    ['a repeated tag', ['no-sound', 'no-sound']],
+    ['an empty list', []],
+    ['a single string', 'preview'],
+  ])('refuses %s', (_, limits) => {
+    expect(() => parseChannels([{ ...valid, limits }])).toThrow(/limits/);
+  });
+
   it('keeps a channel that has no working link right now', () => {
     expect(parseChannels([{ ...valid, sources: [] }])).toEqual([{ ...valid, sources: [] }]);
   });

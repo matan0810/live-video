@@ -3,6 +3,7 @@ import { CHANNEL_GROUPS } from '../channels';
 import { STRINGS } from '../i18n/strings';
 import { CheckBadge } from './CheckBadge';
 import { LANGUAGE_NAMES } from './languageNames';
+import { LimitsField } from './LimitsField';
 import { LogoPreview } from './LogoPreview';
 import { draftSources, type DraftChannel } from './drafts';
 import type { StreamCheckState } from './useStreamChecks';
@@ -114,6 +115,8 @@ export function ChannelEditorRow({
           />
         </label>
       </div>
+
+      <LimitsField limits={draft.limits} onChange={(limits) => update({ limits })} />
 
       <LogoPreview
         channel={{
