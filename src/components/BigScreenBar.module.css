@@ -1,0 +1,6 @@
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-block-start: 12px;
+}

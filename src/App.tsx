@@ -4,6 +4,7 @@ import { isCustomChannelId } from './channels/customChannels';
 import type { Channel } from './channels';
 import { AddChannelForm } from './components/AddChannelForm';
 import { AppHeader } from './components/AppHeader';
+import { BigScreenBar } from './components/BigScreenBar';
 import { ChannelList } from './components/ChannelList';
 import { ChannelSearch } from './components/ChannelSearch';
 import { EmptyStage } from './components/EmptyStage';
@@ -44,6 +45,7 @@ export function App() {
   const { multiView, currentChannelId, stepChannels, chooseChannel, selectByOffset } =
     useChannelChoice(orderedChannels, activeChannelId, selectChannel, maxTiles);
   const { unavailableChannelIds, handleStatusChange } = useUnavailableChannels(orderedChannels);
+  const tabChannels = lists.tabSections.flatMap((section) => section.channels);
 
   const handleAddChannel = (channel: Channel) => {
     addCustomChannel(channel);
@@ -58,7 +60,7 @@ export function App() {
 
   const toggleTheater = useCallback(() => setIsTheaterMode((current) => !current), []);
   useChannelShortcuts({
-    channels: lists.tabSections.flatMap((section) => section.channels),
+    channels: tabChannels,
     onChoose: chooseChannel,
     onStep: selectByOffset,
     onToggleTheater: toggleTheater,
@@ -122,13 +124,14 @@ export function App() {
           ) : (
             <EmptyStage />
           )}
-          {isBigScreen && activeChannel && !multiView.view && (
-            <ChannelStrip
-              size="large"
-              channels={stepChannels}
-              activeChannelId={activeChannel.id}
+          {isBigScreen && !multiView.view && (
+            <BigScreenBar
+              tab={tab}
+              onTab={lists.changeTab}
+              channels={tabChannels}
+              activeChannelId={activeChannel?.id ?? null}
               unavailableChannelIds={unavailableChannelIds}
-              onSelect={selectChannel}
+              onSelect={chooseChannel}
             />
           )}
         </section>

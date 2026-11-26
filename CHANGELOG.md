@@ -8,6 +8,7 @@ breaking changes are major.
 ## [Unreleased]
 
 ### Fixed
+- TV mode has the TV / Radio tabs above its channel bar, and shows the bar before a channel is chosen, so every channel and station can be reached; long names take two lines.
 - Muted stays muted when switching between TV and radio.
 - Bloomberg plays in every browser again: its links are now Bloomberg's own, in a format all browsers play (the old ones were HEVC only).
 

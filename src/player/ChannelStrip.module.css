@@ -131,7 +131,15 @@
 }
 
 .strip[data-size='large'] .name {
+  /* Room for two lines: station names are long, and a cut name is hard to read from afar. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  min-height: 2.5em;
   font-size: 1rem;
+  line-height: 1.25;
+  white-space: normal;
 }
 
 .strip[data-size='large'] .edge {

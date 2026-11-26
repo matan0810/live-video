@@ -10,7 +10,8 @@ import styles from './ChannelStrip.module.css';
 
 interface ChannelStripProps {
   channels: readonly Channel[];
-  activeChannelId: string;
+  /** Null when nothing is playing yet (TV mode, before a channel is chosen). */
+  activeChannelId: string | null;
   unavailableChannelIds: ReadonlySet<string>;
   onSelect: (channelId: string) => void;
   /** Large: under the player in the big-screen layout, with tiles to read from a sofa. */

@@ -51,7 +51,7 @@
 .app[data-big-screen='true'] .stage {
   position: static;
   width: 100%;
-  max-width: calc((100dvh - var(--header-height) - 15rem) * 16 / 9);
+  max-width: calc((100dvh - var(--header-height) - 17rem) * 16 / 9);
   margin-inline: auto;
 }
 

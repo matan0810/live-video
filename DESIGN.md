@@ -45,9 +45,10 @@ Quiet and made for watching: the video is the brightest thing on the page.
   language (Hebrew / English), look (like the device / light / dark) and TV mode
   (off / on). Each is a row of choices with the chosen one marked, kept on the device.
 - **TV mode** (the "big screen" layout in the code). For a TV seen from across the room (the setting, or B): the channel list
-  is hidden, the player is centred and sized so a large channel bar (the open tab's
-  channels, 72px logos) fits under it on the screen, and every rem-based size is a quarter
-  larger. Phones can turn it on too, though they gain little.
+  is hidden, the player is centred and sized so the TV / Radio tabs and a large channel
+  bar (the open tab's channels, 72px logos, names on up to two lines) fit under it on the
+  screen. The bar shows before any channel is chosen too, so TV mode alone is enough to
+  reach every channel and station. Every rem-based size is a quarter larger. Phones can turn it on too, though they gain little.
 - **About.** A small, borderless "i" in the header, beside the version, opens a short
   welcome: what the site is, five tips and the keyboard shortcuts (not on touch screens).
   It never opens by itself. Where the browser offers installing the site as an app (Chrome),

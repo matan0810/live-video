@@ -133,11 +133,11 @@ async function main() {
 
   await desktop.keyboard.press('KeyF');
   await desktop.waitForFunction(() => document.fullscreenElement !== null);
-  assert.ok(
-    await desktop.evaluate(() =>
-      Boolean(document.fullscreenElement?.querySelector('nav[aria-label="החלפת ערוץ"]')),
-    ),
-    'the channel bar is inside the full-screen element',
+  // The bar appears with the controls, a moment after full screen starts: wait for it.
+  await desktop.waitForFunction(
+    () => Boolean(document.fullscreenElement?.querySelector('nav[aria-label="החלפת ערוץ"]')),
+    null,
+    { timeout: 5000 },
   );
   // Streams are unreachable here, so this channel has failed: switching must still work.
   await desktop.getByRole('alert').waitFor();
@@ -349,7 +349,7 @@ async function main() {
   await settings.getByRole('button', { name: 'סגירה' }).click();
   step('desktop: a light look, chosen and remembered, with a dark player');
 
-  // Big screen: B, or the setting. The list goes, a large channel bar comes under the player.
+  // TV mode: B, or the setting. The list goes, tabs and a large channel bar come under the player.
   await desktop.keyboard.press('b');
   const bigBar = desktop.locator('nav[data-size="large"]');
   await bigBar.waitFor();
@@ -357,12 +357,18 @@ async function main() {
   await desktop.reload();
   await bigBar.getByRole('button', { name: 'רשת 13' }).click();
   await desktop.getByRole('heading', { name: 'רשת 13' }).waitFor();
+  // The list is hidden, so the tabs come with the bar: radio stations from TV mode.
+  await desktop.getByRole('tab', { name: 'רדיו' }).click();
+  await bigBar.getByRole('button', { name: 'גלגלצ' }).click();
+  await desktop.getByRole('heading', { name: 'גלגלצ' }).waitFor();
+  await desktop.getByRole('tab', { name: 'טלוויזיה' }).click();
+  await bigBar.getByRole('button', { name: 'רשת 13' }).waitFor();
   await desktop.getByRole('button', { name: 'הגדרות' }).click();
   await settings.getByRole('radio', { name: 'כבוי' }).click();
   await settings.getByRole('button', { name: 'סגירה' }).click();
   await bigBar.waitFor({ state: 'detached' });
   await desktop.locator('aside').waitFor();
-  step('desktop: big screen by key and setting, remembered across reloads');
+  step('desktop: TV mode by key and setting, remembered, with its own TV / radio tabs');
 
   // ---------- Offline ----------
   // A context of its own: request interception would bypass the service worker.
