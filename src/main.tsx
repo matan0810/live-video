@@ -1,4 +1,5 @@
 import '@fontsource-variable/heebo';
+import './install';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { LanguageProvider } from './i18n/LanguageProvider';

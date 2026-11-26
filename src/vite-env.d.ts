@@ -28,3 +28,13 @@ interface Window {
 interface MediaSession {
   setActionHandler(action: 'enterpictureinpicture', handler: (() => void) | null): void;
 }
+
+/** Chrome's offer to install the site as an app (not yet in TypeScript's DOM types). */
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  readonly userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
+interface WindowEventMap {
+  beforeinstallprompt: BeforeInstallPromptEvent;
+}

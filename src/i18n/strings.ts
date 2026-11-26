@@ -120,14 +120,18 @@ const he = {
   about: 'על האתר',
   aboutTitle: 'ברוכים הבאים ל-OnAir',
   aboutIntro:
-    'כל ערוצי החדשות החיים בדף אחד. בלי הרשמה, בלי פרסומות ובלי לחפש בעשרה אתרים: לוחצים על ערוץ, והשידור כבר רץ.',
+    'כל ערוצי החדשות ותחנות הרדיו החיים בדף אחד. בלי הרשמה, בלי פרסומות ובלי לחפש בעשרה אתרים: לוחצים על ערוץ, והשידור כבר רץ.',
   aboutTips: [
     'כוכב ליד ערוץ מעלה אותו לראש הרשימה.',
     'בערוצים ששומרים את הדקות האחרונות אפשר לחזור אחורה, והאתר זוכר איפה עצרתם.',
-    'בתפריט ⋮ שבנגן: כתוביות ומהירות צפייה.',
+    'בתפריט ⋮ שבנגן: כתוביות, מהירות, איכות וטיימר שינה.',
+    'כפתור הריבועים מתחת לנגן מציג עד ארבעה ערוצים יחד.',
     'ערוץ לא עובד? הדגל שמתחת לנגן שולח דיווח.',
     'מועדפים וערוצים שהוספתם נשמרים רק במכשיר שלכם.',
   ],
+  installHint: 'אפשר להתקין את האתר כאפליקציה: נפתח במסך מלא, מהמסך הראשי.',
+  installHintApple: 'להתקנה כאפליקציה: שיתוף ← הוספה למסך הבית.',
+  installButton: 'התקנה',
   shortcutsTitle: 'קיצורי מקלדת',
   shortcuts: [
     ['רווח', 'הפעלה / השהיה'],
@@ -271,14 +275,18 @@ const en: Strings = {
   about: 'About the site',
   aboutTitle: 'Welcome to OnAir',
   aboutIntro:
-    'Every live news channel on one page. No sign-up, no ads, no hunting through ten websites: pick a channel and it is already playing.',
+    'Every live news channel and radio station on one page. No sign-up, no ads, no hunting through ten websites: pick a channel and it is already playing.',
   aboutTips: [
     'A star next to a channel moves it to the top of the list.',
     'Channels that keep their last minutes can be rewound, and the site remembers where you stopped.',
-    'The ⋮ menu in the player has captions and playback speed.',
+    'The ⋮ menu in the player has captions, speed, quality and a sleep timer.',
+    'The squares button under the player shows up to four channels at once.',
     'A channel not working? The flag under the player sends a report.',
     'Favourites and channels you add are kept on your device only.',
   ],
+  installHint: 'You can install the site as an app: it opens full screen, from your home screen.',
+  installHintApple: 'To install it as an app: Share → Add to Home Screen.',
+  installButton: 'Install',
   shortcutsTitle: 'Keyboard shortcuts',
   shortcuts: [
     ['Space', 'Play / pause'],

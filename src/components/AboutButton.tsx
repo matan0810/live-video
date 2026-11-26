@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { isAppleMobile, isInstalled, useInstallOffer } from '../install';
 import { useI18n } from '../i18n/context';
 import { IconButton } from './IconButton';
 import { InfoIcon } from './icons';
@@ -12,6 +13,8 @@ export function AboutButton() {
   const { t } = useI18n();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const close = () => dialogRef.current?.close();
+  const install = useInstallOffer();
+  const showsInstall = !isInstalled() && (install !== null || isAppleMobile());
 
   return (
     <>
@@ -39,6 +42,16 @@ export function AboutButton() {
               <li key={tip}>{tip}</li>
             ))}
           </ul>
+          {showsInstall && (
+            <div className={styles.install}>
+              <span>{install ? t.installHint : t.installHintApple}</span>
+              {install && (
+                <button type="button" className={styles.installButton} onClick={install}>
+                  {t.installButton}
+                </button>
+              )}
+            </div>
+          )}
           <section className={styles.shortcuts} aria-labelledby="shortcuts-title">
             <h3 id="shortcuts-title" className={styles.subtitle}>
               {t.shortcutsTitle}

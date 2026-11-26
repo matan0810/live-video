@@ -7,6 +7,12 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- The About window offers installing the site as an app (or says how, on an iPhone), and its tips mention radio, the ⋮ menu's settings and multi-view.
+
+### Changed
+- "Live" in the player's bar sits on a faint dark pill, so it stays readable over a news ticker.
+
 ## [2.14.1] - 2026-11-26
 
 ### Fixed

@@ -36,7 +36,9 @@ Dark, quiet and made for watching: the video is the brightest thing on the page.
 
 - **About.** A small, borderless "i" in the header, beside the version, opens a short
   welcome: what the site is, five tips and the keyboard shortcuts (not on touch screens).
-  It never opens by itself.
+  It never opens by itself. Where the browser offers installing the site as an app (Chrome),
+  it has an Install button; on an iPhone it says how (Share, then Add to Home Screen); once
+  installed, neither shows.
 
 ## 3. Channel list
 
@@ -129,7 +131,8 @@ their auto-hiding, gestures and translated labels.
   screen remain. On phones (≤ 480 px) the skip buttons give way to the double tap, and on
   the smallest (≤ 360 px) picture in picture too, so the row never runs off the screen.
 
-- **Live button**: the red dot first, beside the volume, as in YouTube; "Live" at the live edge (within **15 seconds** counts as live);
+- **Live button**: the red dot first, beside the volume, as in YouTube, on a faint dark pill
+  so it reads over a ticker; "Live" at the live edge (within **15 seconds** counts as live);
   otherwise "Back to live −1:23", and a tap returns, on any channel, rewindable or not.
   Phones show the time alone.
 - **Rewind** is offered when the stream keeps at least **60 seconds**. The timeline follows

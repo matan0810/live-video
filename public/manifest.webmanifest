@@ -1,7 +1,7 @@
 {
   "name": "OnAir",
   "short_name": "OnAir",
-  "description": "ערוצי חדשות בשידור חי, במקום אחד",
+  "description": "ערוצי חדשות ותחנות רדיו בשידור חי, במקום אחד",
   "lang": "he",
   "dir": "rtl",
   "start_url": "/live-video/",
