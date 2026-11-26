@@ -209,7 +209,7 @@ their auto-hiding, gestures and translated labels.
 - **Stations** are channels in four radio groups (`src/channels/channels.json`), shown only
   in the Radio tab as its sections: **National** (Galgalatz, Kan Bet, Galei Tzahal, Kan
   Gimel, then Kan's smaller stations), **Regional**, **Other languages** (Arabic, Russian;
-  tagged) and **World** (BBC World Service, NPR). The two tabs share their words: "Other
+  tagged) and **World** (BBC World Service and NPR, then news and talk stations: English first, then French, German and Spanish, tagged). BBC Radio 4 and 5 Live are not offered: the BBC keeps them to the UK. The two tabs share their words: "Other
   languages" in both, and "World" (not "abroad") for anything from outside Israel. Within National and Regional,
   stations are ordered by weekday listening in the TGI survey (July 2025 to June 2026);
   stations it does not report follow, the North's and the South's together. They came

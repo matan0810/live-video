@@ -845,5 +845,92 @@
     "language": "en",
     "group": "radio-world",
     "sources": ["https://npr-ice.streamguys1.com/live.mp3"]
+  },
+  {
+    "id": "radio-lbc",
+    "name": "LBC",
+    "short": "LBC",
+    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/Leading_Britain%27s_Conversation_logo.svg",
+    "group": "radio-world",
+    "sources": ["https://media-ssl.musicradio.com/LBCUK"]
+  },
+  {
+    "id": "radio-lbc-news",
+    "name": "LBC News",
+    "short": "LBC",
+    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/LBC_News_station_logo.png",
+    "group": "radio-world",
+    "sources": ["https://media-ssl.musicradio.com/LBCNewsUK"]
+  },
+  {
+    "id": "radio-times",
+    "name": "Times Radio",
+    "short": "TMS",
+    "group": "radio-world",
+    "sources": ["https://timesradio.wireless.radio/stream"]
+  },
+  {
+    "id": "radio-bloomberg",
+    "name": "Bloomberg Radio",
+    "short": "BBG",
+    "group": "radio-world",
+    "sources": ["https://playerservices.streamtheworld.com/api/livestream-redirect/WBBRAMAAC.aac"]
+  },
+  {
+    "id": "radio-wnyc",
+    "name": "WNYC",
+    "short": "NYC",
+    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/WNYC-Logo.svg",
+    "group": "radio-world",
+    "sources": ["https://fm939.wnyc.org/wnycfm-web"]
+  },
+  {
+    "id": "radio-cbc-one",
+    "name": "CBC Radio One",
+    "short": "CBC",
+    "group": "radio-world",
+    "sources": ["https://cbcradiolive.akamaized.net/hls/live/2041036/ES_R1ETR/master.m3u8"]
+  },
+  {
+    "id": "radio-abc-newsradio",
+    "name": "ABC NewsRadio",
+    "short": "ABC",
+    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/ABC_NewsRadio_Australia_logo.png",
+    "group": "radio-world",
+    "sources": ["https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/master.m3u8"]
+  },
+  {
+    "id": "radio-franceinfo",
+    "name": "franceinfo",
+    "short": "FI",
+    "language": "fr",
+    "group": "radio-world",
+    "sources": ["https://icecast.radiofrance.fr/franceinfo-midfi.mp3"]
+  },
+  {
+    "id": "radio-rfi",
+    "name": "RFI",
+    "short": "RFI",
+    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/RFI_logo_2013.svg",
+    "language": "fr",
+    "group": "radio-world",
+    "sources": ["https://rfimonde64k.ice.infomaniak.ch/rfimonde-64.mp3"]
+  },
+  {
+    "id": "radio-dlf",
+    "name": "Deutschlandfunk",
+    "short": "DLF",
+    "language": "de",
+    "group": "radio-world",
+    "sources": ["https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3"]
+  },
+  {
+    "id": "radio-rne",
+    "name": "RNE Radio Nacional",
+    "short": "RNE",
+    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/RNE_2026.svg",
+    "language": "es",
+    "group": "radio-world",
+    "sources": ["https://rtvelivestream.rtve.es/rtvesec/rne/rne_r1_main.m3u8"]
   }
 ]
