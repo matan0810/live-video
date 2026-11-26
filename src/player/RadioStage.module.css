@@ -84,6 +84,22 @@
   }
 }
 
+/* While the station connects: a small ring in place of the meter. */
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgb(255 255 255 / 20%);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: turn 0.8s linear infinite;
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .stage[data-playing='true'] .meter span {
     animation: none;

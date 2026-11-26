@@ -58,6 +58,8 @@
 .overlay {
   position: absolute;
   inset: 0;
+  /* Above a radio station's card, so its errors and retry button show too. */
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;

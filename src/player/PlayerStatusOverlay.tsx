@@ -11,6 +11,8 @@ interface PlayerStatusOverlayProps {
   isUnsupportedFormat: boolean;
   errorDetail: string | null;
   onRetry: () => void;
+  /** False for radio, whose card says it is connecting by itself. */
+  showsLoading: boolean;
 }
 
 /** What the player says over the video while loading or when a channel cannot play. */
@@ -21,12 +23,13 @@ export function PlayerStatusOverlay({
   isUnsupportedFormat,
   errorDetail,
   onRetry,
+  showsLoading,
 }: PlayerStatusOverlayProps) {
   const { t } = useI18n();
   const retry = onRetry;
   return (
     <>
-      {status === 'loading' && (
+      {status === 'loading' && showsLoading && (
         <div className={styles.overlay} data-passive="true" role="status">
           <span className={styles.spinner} aria-hidden="true" />
           <span>{t.loading(name)}</span>

@@ -178,7 +178,9 @@ their auto-hiding, gestures and translated labels.
   the browser plays by itself: a link not ending in `.m3u8` is audio
   (`shared/channels/sources.ts`, `isHlsSource`).
 - **The view**: in place of a picture, the station's tile large, its name, and a small red
-  level meter that moves while it plays and rests when paused.
+  level meter that moves while it plays and rests when paused; while it connects, a small
+  spinner and "Connecting…". Errors and their retry button show above the card. There is
+  no big play button in the middle, which would cover the card; the bar has its own.
 - **The bar** is the TV one without picture in picture, quality or multi-view, which need a
   picture; the sleep timer is there, and rewind only when an HLS stream keeps a window. A
   plain audio stream never offers rewind, however the browser reports its range (Android

@@ -109,7 +109,7 @@ export function Player({
             onPointerMove={handlePointerMove}
           >
             <Video ref={videoRef} className={styles.video} playsInline />
-            {radio && <RadioStage channel={channel} name={name} isPlaying={status === 'playing'} />}
+            {radio && <RadioStage channel={channel} name={name} status={status} />}
             <SkipIndicator videoRef={videoRef} />
 
             <PlayerStatusOverlay
@@ -119,6 +119,7 @@ export function Player({
               isUnsupportedFormat={isUnsupportedFormat}
               errorDetail={errorDetail}
               onRetry={retry}
+              showsLoading={!radio}
             />
 
             {isOverlayShown && (

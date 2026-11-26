@@ -226,7 +226,20 @@ async function main() {
   assert.equal(await desktop.locator('aside').getByRole('button', { name: 'כאן 11' }).count(), 0);
   await desktop.locator('aside').getByRole('button', { name: 'רדיו 103FM', exact: true }).click();
   await desktop.getByRole('heading', { name: 'רדיו 103FM' }).waitFor();
-  await desktop.getByText('בשידור').waitFor();
+  // Offline here, so the station fails: its message must sit above the card, not under it.
+  await desktop.getByRole('alert').getByText('רדיו 103FM לא זמין כרגע').waitFor();
+  // The card lets clicks through, so compare the layers themselves.
+  const layers = await desktop.evaluate(() => {
+    const z = (element) => Number(element ? getComputedStyle(element).zIndex : NaN);
+    return {
+      message: z(document.querySelector('[role=alert]')),
+      card: z(document.querySelector('[data-playing]')),
+    };
+  });
+  assert.ok(
+    layers.message > layers.card,
+    `a radio station's error shows above its card: ${JSON.stringify(layers)}`,
+  );
   assert.equal(await desktop.getByRole('button', { name: 'צפייה מרובה' }).count(), 0);
   await desktop.keyboard.press('ArrowDown');
   await desktop.getByRole('heading', { name: 'גלי ישראל' }).waitFor();

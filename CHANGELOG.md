@@ -7,6 +7,12 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- A radio station that cannot play now says so, with a retry button; the message was hidden behind the station's card.
+
+### Changed
+- A radio station shows "Connecting…" while it starts, and no longer has the big play button over its card.
+
 ## [2.14.0] - 2026-11-26
 
 ### Changed

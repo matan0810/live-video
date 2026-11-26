@@ -70,8 +70,9 @@ export function PlayerControls({
       {/* Left to right like nearly every video player, so the skip buttons agree with the
           timeline's direction; labels stay in the site's language. */}
       <Controls.Content className={styles.controls} dir="ltr">
-        {/* YouTube style: on a phone one tap brings the controls, and this pauses or resumes. */}
-        {isPlayable && (
+        {/* YouTube style: on a phone one tap brings the controls, and this pauses or resumes.
+            Not on radio, where it would cover the station's card; the bar has its own. */}
+        {isPlayable && hasPicture && (
           <PlayButton
             className={styles.center}
             render={(props, state) => (
