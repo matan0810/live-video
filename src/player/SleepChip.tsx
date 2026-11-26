@@ -13,7 +13,9 @@ export function SleepChip({ minutesLeft }: { minutesLeft: number }) {
       title={t.sleepChip(minutesLeft)}
     >
       <MoonIcon />
-      <bdi>{t.sleepShort(minutesLeft)}</bdi>
+      {/* A narrow phone's bar has no room for the unit: the moon and the number say it. */}
+      <bdi className={styles.sleepWide}>{t.sleepShort(minutesLeft)}</bdi>
+      <bdi className={styles.sleepNarrow}>{minutesLeft}</bdi>
     </span>
   );
 }

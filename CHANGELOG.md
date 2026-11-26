@@ -16,6 +16,7 @@ breaking changes are major.
 - Adding your own channel: a link alone is enough (it is named after its site), and Ctrl+Enter adds it as well as Enter.
 
 ### Fixed
+- On a narrow phone with the sleep timer running, "Live" in the player's bar is no longer cut: the timer shows the moon and the minutes only.
 - TV mode has the TV / Radio tabs above its channel bar, and shows the bar before a channel is chosen, so every channel and station can be reached; long names take two lines.
 - Muted stays muted when switching between TV and radio.
 - Bloomberg plays in every browser again: its links are now Bloomberg's own, in a format all browsers play (the old ones were HEVC only).
