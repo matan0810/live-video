@@ -1,7 +1,21 @@
-export const CHANNEL_GROUPS = ['israel', 'world', 'arabic', 'languages', 'radio'] as const;
+export const CHANNEL_GROUPS = [
+  'israel',
+  'world',
+  'arabic',
+  'languages',
+  'radio-national',
+  'radio-regional',
+  'radio-languages',
+  'radio-world',
+] as const;
 
-/** Radio stations are channels in this group; the site shows them in a tab of their own. */
-export const RADIO_GROUP = 'radio';
+/** Radio stations are channels in these groups; the site shows them in a tab of their own. */
+export const RADIO_GROUPS = [
+  'radio-national',
+  'radio-regional',
+  'radio-languages',
+  'radio-world',
+] as const satisfies readonly (typeof CHANNEL_GROUPS)[number][];
 
 /** Broadcast languages, as ISO 639-1 codes. */
 export const CHANNEL_LANGUAGES = ['he', 'en', 'ar', 'fr', 'es', 'de', 'it', 'ru'] as const;
@@ -42,5 +56,8 @@ export const GROUP_LANGUAGES: Record<ChannelGroup, ChannelLanguage | null> = {
   world: 'en',
   arabic: 'ar',
   languages: null,
-  radio: 'he',
+  'radio-national': 'he',
+  'radio-regional': 'he',
+  'radio-languages': null,
+  'radio-world': 'en',
 };

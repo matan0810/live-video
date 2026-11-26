@@ -1,5 +1,6 @@
 import { CHANNEL_LANGUAGES, type ChannelLanguage } from '../../shared/channels/types';
 import { CHANNEL_GROUPS, type ChannelGroup } from '../channels';
+import { RADIO_GROUPS } from '../../shared/channels/types';
 import { STRINGS } from '../i18n/strings';
 import { CheckBadge } from './CheckBadge';
 import { LANGUAGE_NAMES } from './languageNames';
@@ -74,7 +75,10 @@ export function ChannelEditorRow({
           >
             {CHANNEL_GROUPS.map((group) => (
               <option key={group} value={group}>
-                {STRINGS.he.groups[group]}
+                {/* Radio's sections share names with nothing in TV, but say "radio" here. */}
+                {RADIO_GROUPS.some((radio) => radio === group)
+                  ? `רדיו · ${STRINGS.he.groups[group]}`
+                  : STRINGS.he.groups[group]}
               </option>
             ))}
           </select>

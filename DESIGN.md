@@ -163,9 +163,12 @@ their auto-hiding, gestures and translated labels.
 
 ### Radio
 
-- **Stations** are channels in the `radio` group (`src/channels/channels.json`), shown only
-  in the Radio tab: Kan's stations, Galei Tzahal and Galgalatz, the national and regional
-  stations, a few in Arabic and Russian (tagged), and BBC World Service and NPR. They came
+- **Stations** are channels in four radio groups (`src/channels/channels.json`), shown only
+  in the Radio tab as its sections: **National** (Galgalatz, Kan Bet, Galei Tzahal, Kan
+  Gimel, then Kan's smaller stations), **Regional**, **Other languages** (Arabic, Russian;
+  tagged) and **From abroad** (BBC World Service, NPR). Within National and Regional,
+  stations are ordered by weekday listening in the TGI survey (July 2025 to June 2026);
+  stations it does not report follow, the North's and the South's together. They came
   from a public catalog of Israeli stations (issue #12). Every station has a logo, stored with the
   site like the TV channels': the station's own site icon, its logo from Wikipedia, or from
   the OnlineRadioBox and myTuner directories. A logo that fails to load gives way to the

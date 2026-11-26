@@ -222,13 +222,14 @@ async function main() {
   // Radio has a tab of its own: stations never mix with TV channels.
   await desktop.getByRole('tab', { name: 'רדיו' }).click();
   await desktop.getByRole('searchbox', { name: 'חיפוש תחנה' }).waitFor();
+  assert.deepEqual(await sectionTitles(desktop), ['ארציות', 'אזוריות', 'בשפות אחרות', 'מחו״ל']);
   assert.equal(await desktop.locator('aside').getByRole('button', { name: 'כאן 11' }).count(), 0);
   await desktop.locator('aside').getByRole('button', { name: 'רדיו 103FM', exact: true }).click();
   await desktop.getByRole('heading', { name: 'רדיו 103FM' }).waitFor();
   await desktop.getByText('בשידור').waitFor();
   assert.equal(await desktop.getByRole('button', { name: 'צפייה מרובה' }).count(), 0);
   await desktop.keyboard.press('ArrowDown');
-  await desktop.getByRole('heading', { name: 'כאן גימל' }).waitFor();
+  await desktop.getByRole('heading', { name: 'גלי ישראל' }).waitFor();
   await desktop.getByRole('tab', { name: 'טלוויזיה' }).click();
   await desktop
     .locator('aside')

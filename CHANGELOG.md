@@ -7,14 +7,15 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Changed
+- Radio stations are in four sections, National, Regional, Other languages and From abroad, ordered by how many listen to them (TGI survey).
+- The sleep timer shows its minutes left in the player's bar while it runs, and says so when it pauses the player.
+
 ### Fixed
 - On some phones, a radio station showed a rewind timeline and "−Infinity:NaN:NaN" instead of "Live".
 
 ### Added
 - Leaving the site while a channel plays opens it in picture in picture, as on YouTube (in Chrome, after allowing it once).
-
-### Changed
-- The sleep timer shows its minutes left in the player's bar while it runs, and says so when it pauses the player.
 
 ## [2.13.0] - 2026-11-25
 

@@ -14,7 +14,7 @@ const radio = (id: string): CatalogChannel => ({
   name: id,
   short: id,
   sources: [],
-  group: 'radio',
+  group: 'radio-national',
 });
 const own: Channel = { id: 'custom-1', name: 'x', short: 'x', sources: [] };
 
