@@ -1,7 +1,8 @@
 import { isHttpsUrl } from './channels/url';
 
 /** Where a stream link was found, from the cheapest method to the last resort. */
-export type LinkSource = 'page' | 'frame' | 'browser' | 'directory' | 'bookmark';
+export const LINK_SOURCES = ['page', 'frame', 'browser', 'directory', 'bookmark'] as const;
+export type LinkSource = (typeof LINK_SOURCES)[number];
 
 export interface FoundLink {
   url: string;

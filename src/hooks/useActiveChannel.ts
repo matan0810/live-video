@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { readChannelParam, withChannelParam } from '../channels/channelLink';
+import { storedString } from './storedValues';
 import { useLocalStorage } from './useLocalStorage';
 
 const STORAGE_KEY = 'live-video:active-channel';
@@ -9,7 +10,7 @@ const STORAGE_KEY = 'live-video:active-channel';
  * watched channel is restored. Selecting a channel updates both the URL and storage.
  */
 export function useActiveChannel() {
-  const [storedId, setStoredId] = useLocalStorage<string | null>(STORAGE_KEY, null);
+  const [storedId, setStoredId] = useLocalStorage<string | null>(STORAGE_KEY, null, storedString);
   const [activeId, setActiveId] = useState(
     () => readChannelParam(window.location.search) ?? storedId,
   );

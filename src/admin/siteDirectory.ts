@@ -1,4 +1,5 @@
 import { fetchDirectory, type DirectoryStream } from './streamDirectory';
+import { isRecord } from '../../shared/isRecord';
 
 /** A channel in the iptv-org directory, with the website it belongs to. */
 export interface DirectoryChannel {
@@ -13,8 +14,8 @@ const CHANNELS_URL = 'https://iptv-org.github.io/api/channels.json';
 export function parseDirectoryChannels(data: unknown): DirectoryChannel[] {
   if (!Array.isArray(data)) return [];
   return data.flatMap((entry: unknown) => {
-    if (typeof entry !== 'object' || entry === null) return [];
-    const { id, name, website } = entry as Record<string, unknown>;
+    if (!isRecord(entry)) return [];
+    const { id, name, website } = entry;
     if (typeof id !== 'string' || typeof website !== 'string' || !website) return [];
     return [{ id, name: typeof name === 'string' ? name : id, website }];
   });

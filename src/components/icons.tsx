@@ -63,23 +63,6 @@ export function CheckIcon() {
   );
 }
 
-export function PictureInPictureIcon() {
-  return (
-    <Icon>
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <rect x="12" y="12" width="6" height="4" rx="1" fill="currentColor" />
-    </Icon>
-  );
-}
-
-export function FullscreenIcon() {
-  return (
-    <Icon>
-      <path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4" />
-    </Icon>
-  );
-}
-
 export function TheaterIcon() {
   return (
     <Icon>

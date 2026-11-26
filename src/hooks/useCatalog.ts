@@ -12,7 +12,7 @@ const CACHE_KEY = 'live-video:remote-channels';
  * locally) and refreshes in the background; any failure leaves the current list in place.
  */
 export function useCatalog(): readonly CatalogChannel[] {
-  const [cached, setCached] = useLocalStorage<unknown>(CACHE_KEY, null);
+  const [cached, setCached] = useLocalStorage<unknown>(CACHE_KEY, null, (stored) => stored);
   const cachedJson = JSON.stringify(cached);
 
   useEffect(() => {

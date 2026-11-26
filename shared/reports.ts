@@ -1,4 +1,5 @@
 import { isHttpsUrl } from './channels/url';
+import { isRecord } from './isRecord';
 
 export const REPORT_REASONS = ['not-working', 'new-link', 'wrong-content', 'other'] as const;
 
@@ -41,8 +42,8 @@ function isReportReason(value: unknown): value is ReportReason {
 
 /** Validates untrusted report data. Returns null when anything is missing or malformed. */
 export function parseReportInput(data: unknown): ReportInput | null {
-  if (typeof data !== 'object' || data === null) return null;
-  const { channelId, channelName, reason, note, suggestedUrl } = data as Record<string, unknown>;
+  if (!isRecord(data)) return null;
+  const { channelId, channelName, reason, note, suggestedUrl } = data;
 
   const cleanId = cleanText(channelId, REPORT_LIMITS.channelId);
   const cleanName = cleanText(channelName, REPORT_LIMITS.channelName);
@@ -62,4 +63,14 @@ export function parseReportInput(data: unknown): ReportInput | null {
     report.suggestedUrl = suggestedUrl;
   }
   return report;
+}
+
+/** A stored report as the admin API returns it, checked like a viewer's; null if malformed. */
+export function parseReport(data: unknown): Report | null {
+  if (!isRecord(data)) return null;
+  const input = parseReportInput(data);
+  const { id, createdAt } = data;
+  if (!input || typeof id !== 'string' || typeof createdAt !== 'string') return null;
+  if (Number.isNaN(Date.parse(createdAt))) return null;
+  return { ...input, id, createdAt };
 }

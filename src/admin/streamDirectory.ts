@@ -1,3 +1,4 @@
+import { isRecord } from '../../shared/isRecord';
 /** A stream listed by the community-maintained iptv-org directory. */
 export interface DirectoryStream {
   channel: string;
@@ -17,8 +18,8 @@ function text(value: unknown) {
 export function parseDirectory(data: unknown): DirectoryStream[] {
   if (!Array.isArray(data)) return [];
   return data.flatMap((entry: unknown) => {
-    if (typeof entry !== 'object' || entry === null) return [];
-    const { channel, title, quality, url } = entry as Record<string, unknown>;
+    if (!isRecord(entry)) return [];
+    const { channel, title, quality, url } = entry;
     if (typeof url !== 'string' || !url.startsWith('https://')) return [];
     return [{ channel: text(channel), title: text(title), quality: text(quality), url }];
   });

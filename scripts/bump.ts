@@ -9,8 +9,8 @@ import { applyRelease, nextVersion, type Bump } from './changelog.ts';
 
 const BUMPS: readonly Bump[] = ['patch', 'minor', 'major'];
 const root = new URL('../', import.meta.url);
-const bump = process.argv[2];
-if (!BUMPS.some((option) => option === bump)) {
+const bump = BUMPS.find((option) => option === process.argv[2]);
+if (!bump) {
   throw new Error(`Usage: npm run bump -- ${BUMPS.join('|')}`);
 }
 
@@ -19,7 +19,7 @@ const writeJson = (file: string, data: unknown) =>
   writeFile(new URL(file, root), `${JSON.stringify(data, null, 2)}\n`);
 
 const pkg = await readJson('package.json');
-const version = nextVersion(pkg.version, bump as Bump);
+const version = nextVersion(pkg.version, bump);
 const today = new Date().toISOString().slice(0, 10);
 
 const changelogUrl = new URL('CHANGELOG.md', root);

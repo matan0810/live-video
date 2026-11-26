@@ -1,4 +1,5 @@
 import { isStreamRequest, MAX_STREAM_LINKS } from '../../shared/streamLinks';
+import { isRecord } from '../../shared/isRecord';
 
 /** What the bookmark sends to the admin page from a channel's page. */
 export interface BookmarkletPayload {
@@ -38,8 +39,8 @@ export function readBookmarkletPayload(hash: string): BookmarkletPayload | null 
   if (!raw) return null;
   try {
     const data: unknown = JSON.parse(raw);
-    if (typeof data !== 'object' || data === null) return null;
-    const { links, title, page } = data as Record<string, unknown>;
+    if (!isRecord(data)) return null;
+    const { links, title, page } = data;
     if (!Array.isArray(links)) return null;
     const valid = [
       ...new Set(

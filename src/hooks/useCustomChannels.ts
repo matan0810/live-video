@@ -7,7 +7,7 @@ const STORAGE_KEY = 'live-video:custom-channels';
 
 /** Channels the user added themselves. They live only in this browser. */
 export function useCustomChannels() {
-  const [stored, setStored] = useLocalStorage<unknown>(STORAGE_KEY, []);
+  const [stored, setStored] = useLocalStorage<unknown>(STORAGE_KEY, [], (stored) => stored);
   const customChannels = useMemo(() => sanitizeCustomChannels(stored), [stored]);
 
   const addCustomChannel = useCallback(

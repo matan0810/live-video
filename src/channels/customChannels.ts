@@ -1,5 +1,6 @@
 import type { Channel } from '../../shared/channels/types';
 import { isHttpsUrl } from '../../shared/channels/url';
+import { isRecord } from '../../shared/isRecord';
 
 export const CUSTOM_ID_PREFIX = 'custom-';
 const SHORT_LABEL_LENGTH = 3;
@@ -32,8 +33,8 @@ export function createCustomChannel(name: string, url: string): CustomChannelRes
 }
 
 function isCustomChannel(value: unknown): value is Channel {
-  if (typeof value !== 'object' || value === null) return false;
-  const { id, name, short, sources } = value as Record<string, unknown>;
+  if (!isRecord(value)) return false;
+  const { id, name, short, sources } = value;
   return (
     typeof id === 'string' &&
     isCustomChannelId(id) &&

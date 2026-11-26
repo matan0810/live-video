@@ -1,4 +1,5 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
+import { storedStrings } from './storedValues';
 import { useLocalStorage } from './useLocalStorage';
 
 const STORAGE_KEY = 'live-video:favorites';
@@ -6,10 +7,10 @@ const NO_FAVORITES: readonly string[] = [];
 
 /** Favourite channel ids, kept in the order they were added. */
 export function useFavorites() {
-  const [stored, setStored] = useLocalStorage<readonly string[]>(STORAGE_KEY, NO_FAVORITES);
-  const favoriteIds = useMemo(
-    () => (Array.isArray(stored) ? stored.filter((id) => typeof id === 'string') : NO_FAVORITES),
-    [stored],
+  const [favoriteIds, setStored] = useLocalStorage<readonly string[]>(
+    STORAGE_KEY,
+    NO_FAVORITES,
+    storedStrings,
   );
 
   const toggleFavorite = useCallback(

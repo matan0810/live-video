@@ -1,6 +1,5 @@
-import { CHANNEL_LANGUAGES, type ChannelLanguage } from '../../shared/channels/types';
-import { CHANNEL_GROUPS, type ChannelGroup } from '../channels';
-import { RADIO_GROUPS } from '../../shared/channels/types';
+import { CHANNEL_LANGUAGES, RADIO_GROUPS } from '../../shared/channels/types';
+import { CHANNEL_GROUPS } from '../channels';
 import { STRINGS } from '../i18n/strings';
 import { CheckBadge } from './CheckBadge';
 import { LANGUAGE_NAMES } from './languageNames';
@@ -71,7 +70,10 @@ export function ChannelEditorRow({
           <select
             className={styles.input}
             value={draft.group}
-            onChange={(event) => update({ group: event.target.value as ChannelGroup })}
+            onChange={(event) => {
+              const group = CHANNEL_GROUPS.find((known) => known === event.target.value);
+              if (group) update({ group });
+            }}
           >
             {CHANNEL_GROUPS.map((group) => (
               <option key={group} value={group}>
@@ -88,7 +90,11 @@ export function ChannelEditorRow({
           <select
             className={styles.input}
             value={draft.language}
-            onChange={(event) => update({ language: event.target.value as ChannelLanguage | '' })}
+            onChange={(event) => {
+              const { value } = event.target;
+              const language = CHANNEL_LANGUAGES.find((known) => known === value);
+              if (language || value === '') update({ language: language ?? '' });
+            }}
           >
             <option value="">לפי הקבוצה</option>
             {CHANNEL_LANGUAGES.map((language) => (

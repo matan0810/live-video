@@ -1,7 +1,11 @@
 import type { CatalogChannel } from '../../shared/channels/types';
 import { parseLinkStatus } from '../../shared/linkStatus';
-import type { Report, ReportInput } from '../../shared/reports';
-import type { FoundLink } from '../../shared/streamLinks';
+import { isRecord } from '../../shared/isRecord';
+import type { ReportInput } from '../../shared/reports';
+import { parseExtractedLinks, parseRemoteChannels, parseReports, parseToken } from './responses';
+
+import type { RemoteChannels } from './responses';
+export type { BrowserOutcome, ExtractedLinks, RemoteChannels } from './responses';
 
 const configuredUrl: string | undefined = import.meta.env.VITE_API_URL;
 
@@ -27,10 +31,7 @@ interface RequestOptions {
   cache?: RequestCache;
 }
 
-async function request<T>(
-  path: string,
-  { method = 'GET', body, token, cache }: RequestOptions = {},
-) {
+async function request(path: string, { method = 'GET', body, token, cache }: RequestOptions = {}) {
   if (!API_URL) throw new ApiError(0, 'The API is not configured');
 
   const headers: Record<string, string> = {};
@@ -53,17 +54,17 @@ async function request<T>(
   }
   const data: unknown = await response.json().catch(() => null);
   if (!response.ok) {
-    const message =
-      typeof data === 'object' && data !== null && 'error' in data ? String(data.error) : '';
+    const message = isRecord(data) && typeof data.error === 'string' ? data.error : '';
     throw new ApiError(response.status, message || `HTTP ${response.status}`);
   }
-  return data as T;
+  return data;
 }
 
-/** The list saved in the admin area (unvalidated; null when none) and the site version it was saved on. */
-export interface RemoteChannels {
-  channels: unknown;
-  appVersion: unknown;
+/** An answer of the expected shape, or an error: the shape is checked, never assumed. */
+function expect<T>(data: unknown, parse: (data: unknown) => T | null): T {
+  const parsed = parse(data);
+  if (parsed === null) throw new ApiError(0, 'malformed answer');
+  return parsed;
 }
 
 /**
@@ -72,8 +73,7 @@ export interface RemoteChannels {
  */
 export async function fetchRemoteChannels({ fresh = false } = {}): Promise<RemoteChannels> {
   const options: RequestOptions = fresh ? { cache: 'no-cache' } : {};
-  const { channels, appVersion } = await request<RemoteChannels>('/channels', options);
-  return { channels, appVersion };
+  return expect(await request('/channels', options), parseRemoteChannels);
 }
 
 export async function submitReport(report: ReportInput) {
@@ -81,8 +81,7 @@ export async function submitReport(report: ReportInput) {
 }
 
 export async function login(password: string) {
-  return (await request<{ token: string }>('/admin/login', { method: 'POST', body: { password } }))
-    .token;
+  return expect(await request('/admin/login', { method: 'POST', body: { password } }), parseToken);
 }
 
 export async function saveChannels(token: string, channels: readonly CatalogChannel[]) {
@@ -91,30 +90,24 @@ export async function saveChannels(token: string, channels: readonly CatalogChan
 }
 
 export async function fetchReports(token: string) {
-  return (await request<{ reports: Report[] }>('/admin/reports', { token })).reports;
+  return expect(await request('/admin/reports', { token }), parseReports);
 }
 
 export async function deleteReport(token: string, reportId: string) {
   const path = `/admin/reports/${encodeURIComponent(reportId)}`;
-  return (await request<{ reports: Report[] }>(path, { method: 'DELETE', token })).reports;
-}
-
-/** How the Worker's real-browser stage went, when the page itself held no link. */
-export type BrowserOutcome = 'not-needed' | 'used' | 'unavailable' | 'limit-reached' | 'failed';
-
-export interface ExtractedLinks {
-  links: FoundLink[];
-  pagesScanned: number;
-  browser: BrowserOutcome;
+  return expect(await request(path, { method: 'DELETE', token }), parseReports);
 }
 
 /** Asks the Worker to find stream links on a web page (and the players it embeds). */
 export async function extractStreamLinks(token: string, url: string) {
-  return request<ExtractedLinks>('/admin/extract', { method: 'POST', body: { url }, token });
+  return expect(
+    await request('/admin/extract', { method: 'POST', body: { url }, token }),
+    parseExtractedLinks,
+  );
 }
 
 /** The latest daily link check, validated; null before the first run or if malformed. */
 export async function fetchLinkStatus(token: string) {
-  const data = await request<{ status: unknown }>('/admin/link-status', { token });
-  return parseLinkStatus(data.status);
+  const data = await request('/admin/link-status', { token });
+  return isRecord(data) ? parseLinkStatus(data.status) : null;
 }

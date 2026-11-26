@@ -3,6 +3,7 @@
  * writes it, the Worker keeps the latest run, and the admin area shows it.
  */
 import type { StreamProblem } from './streamProblems.ts';
+import { isRecord } from './isRecord.ts';
 
 /** limited: watchable, but not everywhere (an HEVC-only stream plays on most devices, not all). */
 export type SourceState = 'ok' | 'limited' | 'problems' | 'down' | 'abroad';
@@ -70,14 +71,10 @@ export interface LinkStatus {
   channels: ChannelResult[];
 }
 
-/** A run is small (dozens of channels); anything larger is not ours. */
-export const MAX_LINK_STATUS_BYTES = 256 * 1024;
 const MAX_TEXT = 500;
 const SOURCE_STATES: readonly SourceState[] = ['ok', 'limited', 'problems', 'down', 'abroad'];
 const PROBLEMS = Object.keys(PROBLEM_TEXT);
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
 const isText = (value: unknown): value is string =>
   typeof value === 'string' && value.length <= MAX_TEXT;
 const isSourceState = (value: unknown): value is SourceState =>

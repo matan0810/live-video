@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { storedStrings } from './storedValues';
 import { useLocalStorage } from './useLocalStorage';
 
 const STORAGE_KEY = 'live-video:collapsed-sections';
@@ -6,11 +7,8 @@ const NONE: readonly string[] = [];
 
 /** Which channel-list sections the viewer folded away, remembered across visits. */
 export function useCollapsedSections() {
-  const [stored, setStored] = useLocalStorage<readonly string[]>(STORAGE_KEY, NONE);
-  const collapsed = useMemo(
-    () => new Set(Array.isArray(stored) ? stored.filter((id) => typeof id === 'string') : []),
-    [stored],
-  );
+  const [stored, setStored] = useLocalStorage<readonly string[]>(STORAGE_KEY, NONE, storedStrings);
+  const collapsed = useMemo<ReadonlySet<string>>(() => new Set(stored), [stored]);
 
   const toggle = useCallback(
     (sectionId: string) => {
@@ -22,5 +20,5 @@ export function useCollapsedSections() {
     [collapsed, setStored],
   );
 
-  return { collapsed: collapsed as ReadonlySet<string>, toggle };
+  return { collapsed, toggle };
 }

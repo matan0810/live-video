@@ -6,8 +6,10 @@ import { defaultLanguage, isLanguage, STRINGS, type Language } from './strings';
 const STORAGE_KEY = 'live-video:language';
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [stored, setLanguage] = useLocalStorage<Language | null>(STORAGE_KEY, null);
-  const language = isLanguage(stored) ? stored : defaultLanguage(navigator.languages);
+  const [stored, setLanguage] = useLocalStorage<Language | null>(STORAGE_KEY, null, (value) =>
+    isLanguage(value) ? value : null,
+  );
+  const language = stored ?? defaultLanguage(navigator.languages);
   const t = STRINGS[language];
 
   useEffect(() => {
