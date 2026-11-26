@@ -145,7 +145,8 @@ their auto-hiding, gestures and translated labels.
 - **Gestures**: a click pauses, a double click is full screen; on touch, a double tap on
   the left or right half skips 10 seconds.
 - **Keyboard**: Space play/pause, M mute, F full screen, P picture in picture, ← / → 10
-  seconds (on rewindable channels only), ↑ / ↓ previous / next channel, 1–9 the first nine channels, T theatre mode.
+  seconds (on rewindable channels only), ↑ / ↓ previous / next channel, 1–9 the first nine channels of the open tab, T theatre mode,
+  R TV or radio, / search.
 - **Full screen** is the player's frame, so the site's overlays stay. With a mouse, a
   channel bar shows over the top; on touch screens it does not (too easy to tap by
   mistake). It opens only when the pointer comes to the top 30% of the video (moving over

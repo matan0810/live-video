@@ -1,4 +1,4 @@
-import { Controls, MuteButton, PlayButton, VolumeSlider } from '@videojs/react';
+import { Controls, PlayButton } from '@videojs/react';
 import {
   ChevronIcon,
   FullscreenEnterIcon,
@@ -6,18 +6,17 @@ import {
   PauseIcon,
   PipEnterIcon,
   PlayIcon,
-  VolumeHighIcon,
-  VolumeLowIcon,
-  VolumeOffIcon,
 } from '@videojs/react/icons';
-import type { ReactNode } from 'react';
-import { MoonIcon, TheaterIcon } from '../components/icons';
+import { TheaterIcon } from '../components/icons';
 import { useI18n } from '../i18n/context';
 import { DvrSlider } from './DvrSlider';
-import { formatDuration } from './formatDuration';
+import { ControlButton } from './ControlButton';
+import { LiveButton } from './LiveButton';
 import { MoreMenu } from './MoreMenu';
 import type { MenuSetting } from './menuSettings';
+import { SleepChip } from './SleepChip';
 import type { useDvr } from './useDvr';
+import { VolumeControl } from './VolumeControl';
 import styles from './PlayerControls.module.css';
 
 const CAN_PICTURE_IN_PICTURE = document.pictureInPictureEnabled;
@@ -44,33 +43,6 @@ interface PlayerControlsProps {
   sleepMinutesLeft: number | null;
   /** The rows of the "⋮" menu (menuSettings.ts). */
   menu: readonly MenuSetting[];
-}
-
-function ControlButton({
-  label,
-  onClick,
-  children,
-  disabled,
-  className,
-}: {
-  label: string;
-  onClick: () => void;
-  children: ReactNode;
-  disabled?: boolean;
-  className?: string;
-}) {
-  return (
-    <button
-      type="button"
-      className={[styles.button, className].filter(Boolean).join(' ')}
-      aria-label={label}
-      title={label}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {children}
-    </button>
-  );
 }
 
 /**
@@ -124,50 +96,12 @@ export function PlayerControls({
                     <button {...props}>{state.paused ? <PlayIcon /> : <PauseIcon />}</button>
                   )}
                 />
-                <div className={styles.volume}>
-                  <MuteButton
-                    className={styles.button}
-                    render={(props, state) => (
-                      <button {...props}>
-                        {state.volumeLevel === 'off' ? (
-                          <VolumeOffIcon />
-                        ) : state.volumeLevel === 'high' ? (
-                          <VolumeHighIcon />
-                        ) : (
-                          <VolumeLowIcon />
-                        )}
-                      </button>
-                    )}
-                  />
-                  <VolumeSlider.Root className={styles.volumeSlider}>
-                    <VolumeSlider.Track className={styles.volumeTrack}>
-                      <VolumeSlider.Fill className={styles.volumeFill} />
-                    </VolumeSlider.Track>
-                    <VolumeSlider.Thumb className={styles.volumeThumb} />
-                  </VolumeSlider.Root>
-                </div>
-
-                <button
-                  type="button"
-                  className={styles.live}
-                  data-live={dvr.isLive}
-                  onClick={dvr.goLive}
-                  // Enabled whenever behind, even on a channel without a timeline: there must
-                  // always be a way back to live.
-                  disabled={dvr.isLive}
-                  title={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
-                  aria-label={dvr.isLive ? t.watchingLive : t.backToLiveTitle}
-                >
-                  <span className={styles.dot} aria-hidden="true" />
-                  {dvr.isLive ? (
-                    t.live
-                  ) : (
-                    <>
-                      <span className={styles.liveText}>{t.backToLive} </span>
-                      <bdi>−{formatDuration(dvr.secondsBehindLive)}</bdi>
-                    </>
-                  )}
-                </button>
+                <VolumeControl />
+                <LiveButton
+                  isLive={dvr.isLive}
+                  secondsBehindLive={dvr.secondsBehindLive}
+                  onGoLive={dvr.goLive}
+                />
               </>
             )}
 
@@ -202,16 +136,7 @@ export function PlayerControls({
               </ControlButton>
             </>
             {isPlayable && sleepMinutesLeft !== null && (
-              // While the sleep timer runs it is shown in the bar, so it is never a surprise.
-              <span
-                className={styles.sleep}
-                role="timer"
-                aria-label={t.sleepChip(sleepMinutesLeft)}
-                title={t.sleepChip(sleepMinutesLeft)}
-              >
-                <MoonIcon />
-                <bdi>{t.sleepShort(sleepMinutesLeft)}</bdi>
-              </span>
+              <SleepChip minutesLeft={sleepMinutesLeft} />
             )}
             {isPlayable && (
               <MoreMenu

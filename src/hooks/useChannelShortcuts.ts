@@ -9,15 +9,21 @@ interface ChannelShortcuts {
   onChoose: (channelId: string) => void;
   onStep: (offset: 1 | -1) => void;
   onToggleTheater: () => void;
+  /** Between the TV and radio tabs. */
+  onToggleTab: () => void;
   searchRef: RefObject<HTMLInputElement | null>;
 }
 
-/** The site's keys (the player has its own): 1–9, ↑ / ↓, T theatre mode, / search. */
+/**
+ * The site's keys (the player has its own): 1–9, ↑ / ↓, T theatre mode, R TV or radio,
+ * / search.
+ */
 export function useChannelShortcuts({
   channels,
   onChoose,
   onStep,
   onToggleTheater,
+  onToggleTab,
   searchRef,
 }: ChannelShortcuts) {
   const shortcuts = useMemo<KeyboardShortcuts>(() => {
@@ -31,8 +37,9 @@ export function useChannelShortcuts({
       ArrowDown: () => onStep(1),
       ArrowUp: () => onStep(-1),
       KeyT: onToggleTheater,
+      KeyR: onToggleTab,
       Slash: () => searchRef.current?.focus(),
     };
-  }, [channels, onChoose, onStep, onToggleTheater, searchRef]);
+  }, [channels, onChoose, onStep, onToggleTheater, onToggleTab, searchRef]);
   useKeyboardShortcuts(shortcuts);
 }

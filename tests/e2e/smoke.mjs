@@ -230,6 +230,11 @@ async function main() {
   assert.equal(await desktop.getByRole('button', { name: 'צפייה מרובה' }).count(), 0);
   await desktop.keyboard.press('ArrowDown');
   await desktop.getByRole('heading', { name: 'גלי ישראל' }).waitFor();
+  // R switches between the tabs.
+  await desktop.keyboard.press('KeyR');
+  await desktop.getByRole('tab', { name: 'טלוויזיה', selected: true }).waitFor();
+  await desktop.keyboard.press('KeyR');
+  await desktop.getByRole('tab', { name: 'רדיו', selected: true }).waitFor();
   await desktop.getByRole('tab', { name: 'טלוויזיה' }).click();
   await desktop
     .locator('aside')

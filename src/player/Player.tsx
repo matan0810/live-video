@@ -1,11 +1,9 @@
 import { Container, createPlayer } from '@videojs/react';
 import { I18nProvider } from '@videojs/react/i18n';
 import { Video, videoFeatures } from '@videojs/react/video';
-import { useEffect, useMemo, useRef, type PointerEvent, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import type { Channel, ChannelGroup } from '../channels';
 import { isRadio } from '../channels/isRadio';
-import { useAutoHide } from '../hooks/useAutoHide';
-import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { displayName } from '../channels/displayName';
 import { useI18n } from '../i18n/context';
@@ -23,15 +21,13 @@ import { usePlayerMenu } from './usePlayerMenu';
 import { useMediaSession } from './useMediaSession';
 import { useResumePosition } from './useResumePosition';
 import { usePlayerControls } from './usePlayerControls';
+import { usePlayerKeys } from './usePlayerKeys';
+import { useStripReveal } from './useStripReveal';
 import styles from './Player.module.css';
 
 const AUTO_RETRY_DELAY_MS = 15_000;
-const KEYBOARD_SEEK_SECONDS = 10;
 /** Video.js supplies the controls' state, auto-hiding, gestures and labels; playback stays ours. */
 const { Player: MediaPlayer } = createPlayer({ features: videoFeatures });
-const OVERLAY_HIDE_DELAY_MS = 2000;
-/** The channel bar opens only when the pointer comes near the top of the video. */
-const STRIP_ZONE_SHARE = 0.3;
 /** The channel bar is for mouse users; on touch screens it is too easy to tap by accident. */
 const MOUSE_QUERY = '(hover: hover) and (pointer: fine)';
 
@@ -70,51 +66,21 @@ export function Player({
   const menu = usePlayerMenu(videoRef, hlsRef, channel.id, dvr);
   useAutoPictureInPicture(videoRef, !radio && status === 'playing');
 
-  const { seekBy, canRewind } = dvr;
   const frameRef = useRef<HTMLDivElement>(null);
   const controls = usePlayerControls(videoRef);
   const fullscreen = useFullscreen(frameRef, videoRef);
-  const overlayVisibility = useAutoHide(OVERLAY_HIDE_DELAY_MS);
-  const { reveal } = overlayVisibility;
+  const { visibility: overlayVisibility, handlePointerMove } = useStripReveal(channel.id);
   const hasMouse = useMediaQuery(MOUSE_QUERY);
   const isOverlayShown =
     hasMouse && Boolean(overlay) && (fullscreen.isFullscreen || isOverlayEnabled);
-  const lastPointer = useRef({ x: -1, y: -1 });
 
-  // Browsers also fire pointer moves when the page changes under a resting cursor, which
-  // would keep the channel bar up forever. Only a real movement reveals it.
-  const handlePointerMove = (event: PointerEvent) => {
-    const { clientX: x, clientY: y } = event;
-    if (x === lastPointer.current.x && y === lastPointer.current.y) return;
-    lastPointer.current = { x, y };
-    // Moving over the picture should not cover it: only the top of the video, where the
-    // bar opens, brings it.
-    const frame = event.currentTarget.getBoundingClientRect();
-    if (y - frame.top <= frame.height * STRIP_ZONE_SHARE) reveal();
-  };
-
-  useKeyboardShortcuts(
-    useMemo(
-      () => ({
-        KeyF: fullscreen.toggle,
-        KeyM: controls.toggleMute,
-        KeyP: controls.togglePictureInPicture,
-        Space: controls.togglePlay,
-        // Only where rewind is offered: elsewhere the keys would leave the viewer behind
-        // live on a channel with no timeline.
-        ...(canRewind && {
-          ArrowLeft: () => seekBy(-KEYBOARD_SEEK_SECONDS),
-          ArrowRight: () => seekBy(KEYBOARD_SEEK_SECONDS),
-        }),
-      }),
-      [controls, fullscreen.toggle, seekBy, canRewind],
-    ),
-  );
-
-  // Switching channel briefly shows the channel bar, like a TV does.
-  useEffect(() => {
-    reveal();
-  }, [channel.id, reveal]);
+  usePlayerKeys({
+    toggleFullscreen: fullscreen.toggle,
+    toggleMute: controls.toggleMute,
+    togglePlay: controls.togglePlay,
+    togglePictureInPicture: radio ? null : controls.togglePictureInPicture,
+    seekBy: dvr.canRewind ? dvr.seekBy : null,
+  });
 
   useEffect(() => {
     onStatusChange?.(channel.id, status);
