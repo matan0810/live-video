@@ -850,7 +850,7 @@
     "id": "radio-lbc",
     "name": "LBC",
     "short": "LBC",
-    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/Leading_Britain%27s_Conversation_logo.svg",
+    "logo": "logos/radio-lbc.svg",
     "group": "radio-world",
     "sources": ["https://media-ssl.musicradio.com/LBCUK"]
   },
@@ -858,7 +858,7 @@
     "id": "radio-lbc-news",
     "name": "LBC News",
     "short": "LBC",
-    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/LBC_News_station_logo.png",
+    "logo": "logos/radio-lbc-news.png",
     "group": "radio-world",
     "sources": ["https://media-ssl.musicradio.com/LBCNewsUK"]
   },
@@ -881,7 +881,7 @@
     "id": "radio-wnyc",
     "name": "WNYC",
     "short": "NYC",
-    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/WNYC-Logo.svg",
+    "logo": "logos/radio-wnyc.svg",
     "group": "radio-world",
     "sources": ["https://fm939.wnyc.org/wnycfm-web"]
   },
@@ -896,7 +896,7 @@
     "id": "radio-abc-newsradio",
     "name": "ABC NewsRadio",
     "short": "ABC",
-    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/ABC_NewsRadio_Australia_logo.png",
+    "logo": "logos/radio-abc-newsradio.png",
     "group": "radio-world",
     "sources": ["https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/master.m3u8"]
   },
@@ -904,6 +904,7 @@
     "id": "radio-franceinfo",
     "name": "franceinfo",
     "short": "FI",
+    "logo": "logos/radio-franceinfo.svg",
     "language": "fr",
     "group": "radio-world",
     "sources": ["https://icecast.radiofrance.fr/franceinfo-midfi.mp3"]
@@ -912,7 +913,7 @@
     "id": "radio-rfi",
     "name": "RFI",
     "short": "RFI",
-    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/RFI_logo_2013.svg",
+    "logo": "logos/radio-rfi.svg",
     "language": "fr",
     "group": "radio-world",
     "sources": ["https://rfimonde64k.ice.infomaniak.ch/rfimonde-64.mp3"]
@@ -921,6 +922,7 @@
     "id": "radio-dlf",
     "name": "Deutschlandfunk",
     "short": "DLF",
+    "logo": "logos/radio-dlf.svg",
     "language": "de",
     "group": "radio-world",
     "sources": ["https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3"]
