@@ -76,7 +76,7 @@ Quiet and made for watching: the video is the brightest thing on the page.
   (⌘+Enter) adds it. It is kept on the device.
 - **Works only in part.** Better a preview without sound than nothing, as long as it says
   so. A channel may carry tags from a closed list (`limits` in the channel list, set in the
-  admin area): preview only, no sound, low quality, not in every browser. The list shows
+  admin area): preview only, no sound, low quality, HEVC only. HEVC is said ("not supported in this browser") only in a browser that cannot play it (`canPlayHevc` in `src/device.ts`): where it plays, a tag would be noise. The list shows
   the first, which says the most, beside an amber dot (`--color-warning`), in place of
   "playing now"; under the player, beside the name, all of them. Never over the picture:
   it would hide the broadcast and collide with the channel bar. "Unavailable" wins over

@@ -90,6 +90,16 @@ async function main() {
   await desktop.getByRole('button', { name: 'Fox News תצוגה מקדימה בלבד' }).click();
   await desktop.getByText('תצוגה מקדימה בלבד · ללא קול · איכות נמוכה').waitFor();
   await desktop.getByRole('button', { name: 'כאן 11 לא זמין כרגע' }).click();
+  // HEVC only (ABC News) is said only where this browser cannot play it.
+  const playsHevc = await desktop.evaluate(() =>
+    MediaSource.isTypeSupported('video/mp4; codecs="hvc1.1.6.L120.90"'),
+  );
+  const abc = desktop.locator('aside').getByRole('button', { name: /^ABC News/ });
+  assert.equal(
+    (await abc.innerText()).includes('לא נתמך בדפדפן הזה'),
+    !playsHevc,
+    `the HEVC tag follows this browser (plays HEVC: ${playsHevc})`,
+  );
   step('desktop: a channel that works in part is tagged in the list and under the player');
 
   await desktop.keyboard.press('ArrowDown');

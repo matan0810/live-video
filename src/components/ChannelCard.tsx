@@ -1,6 +1,8 @@
 import type { Channel } from '../channels';
 import { displayName } from '../channels/displayName';
 import { languageBadge } from '../channels/languageBadge';
+import { shownLimits } from '../channels/shownLimits';
+import { canPlayHevc } from '../device';
 import { useI18n } from '../i18n/context';
 import { ChannelLimits } from './ChannelLimits';
 import { ChannelTile } from './ChannelTile';
@@ -30,6 +32,8 @@ export function ChannelCard({
 }: ChannelCardProps) {
   const { t, language } = useI18n();
   const name = displayName(channel, language);
+  // Only what concerns this viewer; otherwise the card reads as usual ("playing now").
+  const limits = shownLimits(channel.limits ?? [], { canPlayHevc: canPlayHevc() });
   return (
     <div className={styles.card} data-active={isActive} data-unavailable={isUnavailable}>
       <button
@@ -45,8 +49,8 @@ export function ChannelCard({
           </span>
           {isUnavailable ? (
             <span className={styles.state}>{t.unavailable}</span>
-          ) : channel.limits ? (
-            <ChannelLimits limits={channel.limits} />
+          ) : limits.length > 0 ? (
+            <ChannelLimits limits={limits} />
           ) : (
             isActive && <span className={styles.state}>{t.playingNow}</span>
           )}

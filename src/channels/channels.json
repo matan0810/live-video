@@ -236,7 +236,7 @@
     "logo": "logos/abc-news.png",
     "language": "en",
     "group": "world",
-    "limits": ["some-browsers"],
+    "limits": ["hevc"],
     "sources": ["https://pb-0n3n2ej0w8pl9.akamaized.net/ABCNewsLive_Disney.m3u8"]
   },
   {
