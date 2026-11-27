@@ -90,6 +90,13 @@ export function ChannelEditor({
       {shown.length === 0 && <p className={styles.muted}>לא נמצא ערוץ.</p>}
 
       <ul className={layout.list}>
+        <li className={layout.head} aria-hidden="true">
+          <span>ערוץ</span>
+          <span>קבוצה</span>
+          <span>מצב</span>
+          <span>קישורים</span>
+          <span />
+        </li>
         {shown.map((draft) => (
           <ChannelEditorRow
             key={draft.key}
@@ -97,6 +104,7 @@ export function ChannelEditor({
             health={healthByKey.get(draft.key) ?? { tone: 'unknown', text: 'לא נבדק' }}
             isOpen={openKey === draft.key}
             checks={results}
+            linkStatus={linkStatus}
             canReorder={!isFiltered}
             onToggle={() => setOpenKey(openKey === draft.key ? null : draft.key)}
             onChange={replace}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { LinkStatus, SourceResult } from '../../shared/linkStatus';
-import { healthOf, isProblem } from './channelHealth';
+import { healthOf, isProblem, linkStates } from './channelHealth';
 import { toDraft } from './drafts';
 import type { StreamCheckState } from './useStreamChecks';
 import type { ChannelLimit } from '../../shared/channels/types';
@@ -127,5 +127,25 @@ describe('isProblem', () => {
     expect(isProblem({ tone: 'warn', text: '' })).toBe(true);
     expect(isProblem({ tone: 'good', text: '' })).toBe(false);
     expect(isProblem({ tone: 'unknown', text: '' })).toBe(false);
+  });
+});
+
+describe('linkStates', () => {
+  it('gives each link its own state, in the order of the channel', () => {
+    const states = linkStates(draft([A, B]), daily(source(A, 'ok'), source(B, 'down')), none);
+    expect(states.map((state) => [state.url, state.tone, state.text])).toEqual([
+      [A, 'good', 'תקין'],
+      [B, 'bad', 'לא עובד'],
+    ]);
+  });
+
+  it('says which links are broken, so they can be removed', () => {
+    const states = linkStates(draft([A, B]), daily(source(A, 'ok'), source(B, 'down')), none);
+    expect(states.map((state) => state.isBroken)).toEqual([false, true]);
+  });
+
+  it('does not call a limited or unchecked link broken', () => {
+    const states = linkStates(draft([A, B]), daily(source(A, 'limited', ['hevc-only'])), none);
+    expect(states.map((state) => state.isBroken)).toEqual([false, false]);
   });
 });

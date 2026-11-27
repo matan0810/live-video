@@ -60,6 +60,68 @@ function linkState(live: StreamCheckState | undefined, daily: SourceResult | und
 
 const isUsable = (state: LinkState) => state.kind === 'ok' || state.kind === 'limited';
 
+/** One link, with how it is doing in words, and whether it is worth removing. */
+export interface LinkHealth extends Health {
+  url: string;
+  /** Not working: a check says so (not merely "unknown", "limited" or "only here"). */
+  isBroken: boolean;
+}
+
+function describeLink(state: LinkState): Health & { isBroken: boolean } {
+  switch (state.kind) {
+    case 'ok':
+      return { tone: 'good', text: 'תקין', isBroken: false };
+    case 'limited':
+      return { tone: 'warn', text: `עובד עם הגבלות: ${state.limits}`, isBroken: false };
+    case 'down':
+      return {
+        tone: state.isHereOnly ? 'warn' : 'bad',
+        text: state.text,
+        isBroken: !state.isHereOnly,
+      };
+    case 'checking':
+      return { tone: 'unknown', text: 'בודק…', isBroken: false };
+    case 'unknown':
+      return { ...UNKNOWN, isBroken: false };
+  }
+}
+
+function statesOf(
+  draft: DraftChannel,
+  daily: LinkStatus | null | undefined | 'unavailable',
+  checks: ReadonlyMap<string, StreamCheckState>,
+): { url: string; state: LinkState }[] {
+  const urls = draftSources(draft);
+  const result =
+    daily && daily !== 'unavailable' ? daily.channels.find((c) => c.id === draft.id) : undefined;
+  const checkedUrls = new Set(result?.sources.map((source) => source.url));
+  // After an edit the daily check saw other links than these: it says nothing about them.
+  const isDailyCurrent =
+    result !== undefined &&
+    urls.length === checkedUrls.size &&
+    urls.every((url) => checkedUrls.has(url));
+  return urls.map((url) => ({
+    url,
+    state: linkState(
+      checks.get(url),
+      isDailyCurrent
+        ? result.sources
+            .map((source) => acknowledgeLimits(source, draft.limits))
+            .find((source) => source.url === url)
+        : undefined,
+    ),
+  }));
+}
+
+/** Each link of the channel, in order, with what is known of it. */
+export function linkStates(
+  draft: DraftChannel,
+  daily: LinkStatus | null | undefined | 'unavailable',
+  checks: ReadonlyMap<string, StreamCheckState>,
+): LinkHealth[] {
+  return statesOf(draft, daily, checks).map(({ url, state }) => ({ url, ...describeLink(state) }));
+}
+
 /**
  * The channel's state as best known: what a check just run from this browser found, else
  * the daily check, if it saw these very links (after an edit it saw something else), with
@@ -70,27 +132,9 @@ export function healthOf(
   daily: LinkStatus | null | undefined | 'unavailable',
   checks: ReadonlyMap<string, StreamCheckState>,
 ): Health {
-  const urls = draftSources(draft);
-  if (urls.length === 0) return { tone: 'bad', text: 'בלי קישור' };
+  if (draftSources(draft).length === 0) return { tone: 'bad', text: 'בלי קישור' };
 
-  const result =
-    daily && daily !== 'unavailable' ? daily.channels.find((c) => c.id === draft.id) : undefined;
-  const checkedUrls = new Set(result?.sources.map((source) => source.url));
-  // After an edit the daily check saw other links than these: it says nothing about them.
-  const isDailyCurrent =
-    result !== undefined &&
-    urls.length === checkedUrls.size &&
-    urls.every((url) => checkedUrls.has(url));
-  const states = urls.map((url) =>
-    linkState(
-      checks.get(url),
-      isDailyCurrent
-        ? result.sources
-            .map((source) => acknowledgeLimits(source, draft.limits))
-            .find((source) => source.url === url)
-        : undefined,
-    ),
-  );
+  const states = statesOf(draft, daily, checks).map(({ state }) => state);
 
   if (states.some((state) => state.kind === 'checking')) return { tone: 'unknown', text: 'בודק…' };
   if (states.every((state) => state.kind === 'unknown')) return UNKNOWN;

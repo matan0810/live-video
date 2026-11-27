@@ -85,6 +85,20 @@
   height: 40px;
 }
 
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* The table's columns exist on wide screens only; below, the one line under the name says it. */
+.cell,
+.head {
+  display: none;
+}
+
 .summaryText {
   flex: 1;
   display: flex;
@@ -179,4 +193,64 @@
   margin: 0;
   color: var(--color-accent);
   font-size: 0.875rem;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+
+.linkText {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (min-width: 960px) {
+  /* A table: channel, group, state, links, and the way to open it. */
+  .summary,
+  .head {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.6fr) minmax(120px, 1fr) minmax(220px, 1.8fr) 90px 32px;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .head {
+    padding: 10px 14px;
+    border-block-end: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .summaryMeta {
+    display: none;
+  }
+
+  .cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-size: 0.875rem;
+  }
+
+  .form {
+    max-width: 760px;
+    padding-inline-start: 74px;
+  }
 }

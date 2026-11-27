@@ -268,7 +268,10 @@ At `#/admin`, a separate chunk viewers never download. One password, a Cloudflar
   dot from the check just run here, else the daily check if it saw these very links), with
   search and type chips (all, TV, radio, problems). Pressing a line opens it, one at a time,
   to name, group and links (one per line, first is primary, each checked from the owner's own
-  browser; a radio station's audio is checked by starting to play it, silently). The rest (English
+  browser; a radio station's audio is checked by starting to play it, silently), each link
+  with how it is doing and, when broken, a "remove link" button (never for one that only
+  fails here, or is limited). On a wide screen the list is a table (channel, group, state,
+  links); on a phone each is one line. The rest (English
   name, short label, id, language, logo and its preview, tags, moving) is under "עוד
   פרטים"; moving is offered only while the whole list shows. Delete asks twice. The save
   bar stays at the bottom while there is something to say.

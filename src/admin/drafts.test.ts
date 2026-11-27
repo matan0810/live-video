@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { countChanges, draftsToChannels, moveDraft, toDraft, withPrimarySource } from './drafts';
+import {
+  countChanges,
+  draftsToChannels,
+  moveDraft,
+  toDraft,
+  withoutSource,
+  withPrimarySource,
+} from './drafts';
 
 const channel = (id: string, sources = [`https://a.example/${id}.m3u8`]) => ({
   id,
@@ -76,6 +83,24 @@ describe('drafts', () => {
     it('is zero again once an edit is put back', () => {
       const edited = { ...first, name: 'Other' };
       expect(countChanges(saved, [{ ...edited, name: first.name }, ...rest])).toBe(0);
+    });
+  });
+
+  describe('withoutSource', () => {
+    const draft = toDraft(channel('one', ['https://a.example/1', 'https://b.example/2']));
+
+    it('drops that link and keeps the others in their order', () => {
+      expect(withoutSource(draft, 'https://a.example/1').sourcesText).toBe('https://b.example/2');
+      expect(withoutSource(draft, 'https://b.example/2').sourcesText).toBe('https://a.example/1');
+    });
+
+    it('changes nothing for a link the channel does not have', () => {
+      expect(withoutSource(draft, 'https://c.example/3')).toEqual(draft);
+    });
+
+    it('can take the last link, leaving the channel with none', () => {
+      const only = toDraft(channel('two', ['https://a.example/1']));
+      expect(withoutSource(only, 'https://a.example/1').sourcesText).toBe('');
     });
   });
 });

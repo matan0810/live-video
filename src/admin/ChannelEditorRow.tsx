@@ -1,12 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { CHANNEL_GROUPS } from '../channels';
-import { CheckBadge } from './CheckBadge';
 import { ChannelMoreDetails } from './ChannelMoreDetails';
 import { ChannelSummary } from './ChannelSummary';
 import { ConfirmButton } from './ConfirmButton';
-import type { Health } from './channelHealth';
-import { draftSources, type DraftChannel } from './drafts';
+import { linkStates, type Health } from './channelHealth';
+import { draftSources, withoutSource, type DraftChannel } from './drafts';
 import { groupLabel } from './groupLabel';
+import type { LinkStatus } from '../../shared/linkStatus';
+import { StatusDot } from './StatusDot';
 import type { StreamCheckState } from './useStreamChecks';
 import styles from './Admin.module.css';
 import layout from './ChannelEditor.module.css';
@@ -16,6 +17,8 @@ interface ChannelEditorRowProps {
   health: Health;
   isOpen: boolean;
   checks: ReadonlyMap<string, StreamCheckState>;
+  /** The daily check, for what each link last did. */
+  linkStatus: LinkStatus | null | undefined | 'unavailable';
   canReorder: boolean;
   onToggle: () => void;
   onChange: (draft: DraftChannel) => void;
@@ -30,6 +33,7 @@ export function ChannelEditorRow({
   health,
   isOpen,
   checks,
+  linkStatus,
   canReorder,
   onToggle,
   onChange,
@@ -87,11 +91,25 @@ export function ChannelEditorRow({
             />
           </label>
 
-          {sources.some((url) => checks.has(url)) && (
-            <ul className={styles.checks}>
-              {sources.map((url, index) => (
-                <li key={url}>
-                  קישור {index + 1}: <CheckBadge state={checks.get(url)} />
+          {sources.length > 0 && (
+            <ul className={layout.links}>
+              {linkStates(draft, linkStatus, checks).map((link, index) => (
+                <li key={link.url} className={layout.link}>
+                  <span className={layout.linkText}>
+                    <StatusDot tone={link.tone} />
+                    {index === 0 ? 'ראשי' : `גיבוי ${index}`}: {link.text}
+                  </span>
+                  {link.isBroken && (
+                    <button
+                      type="button"
+                      className={styles.secondary}
+                      onClick={() =>
+                        update({ sourcesText: withoutSource(draft, link.url).sourcesText })
+                      }
+                    >
+                      הסרת הקישור
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>

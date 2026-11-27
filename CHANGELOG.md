@@ -10,9 +10,9 @@ breaking changes are major.
 ### Changed
 - Player bar: time and channel are told apart. Skipping is a circular arrow with the seconds inside (← → on the keyboard); previous / next channel are up and down arrows (↑ ↓), after a divider.
 - A place in a live stream is remembered for two hours instead of twelve, and it is a setting: off, an hour, two hours or half a day.
-
-### Changed
 - Admin area, link status: the daily check no longer calls a channel "answers but cannot be watched" for what its own tags say (Fox's preview has no sound) or for a poor picture; those are "works, with limits". The channel list and the status board share four colours, with a legend: green works, amber works with something to know, red does not work or has no link, grey not checked. A link that fails in this browser but passed the daily check, or an HEVC stream this browser cannot play, shows amber, not red; and a broken backup is named as such.
+
+- Admin area: on a wide screen the channel list is a table (channel, group, state, links); each link shows how it is doing, and a broken one can be removed with one tap.
 
 ### Added
 - Adding your own channel: choose TV or radio. It begins as the tab you are on, and the list goes to the kind you choose; stations of your own are listed under "My stations" in the Radio tab.

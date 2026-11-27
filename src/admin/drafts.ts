@@ -122,3 +122,14 @@ export function countChanges(saved: readonly DraftChannel[], current: readonly D
   if (keptOrder(saved).join() !== keptOrder(current).join()) changes += 1;
   return changes;
 }
+
+/** The draft without one of its links, the others kept in order. */
+export function withoutSource(draft: DraftChannel, url: string): DraftChannel {
+  if (!draftSources(draft).includes(url)) return draft;
+  return {
+    ...draft,
+    sourcesText: draftSources(draft)
+      .filter((source) => source !== url)
+      .join('\n'),
+  };
+}
