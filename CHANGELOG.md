@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Changed
+- Admin area, link status: the daily check no longer calls a channel "answers but cannot be watched" for what its own tags say (Fox's preview has no sound) or for a poor picture; those are "works, with limits". The channel list and the status board share four colours, with a legend: green works, amber works with something to know, red does not work or has no link, grey not checked. A link that fails in this browser but passed the daily check, or an HEVC stream this browser cannot play, shows amber, not red; and a broken backup is named as such.
+
 ### Fixed
 - "Sound is muted · tap to unmute" no longer stays on the screen after switching channels when the sound is actually playing.
 - Adding your own channel while on the Radio tab takes you to the TV tab, where it is listed.

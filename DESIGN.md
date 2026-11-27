@@ -279,6 +279,13 @@ At `#/admin`, a separate chunk viewers never download. One password, a Cloudflar
   was found, worst first. What the owner can act on (not working, not watchable, a broken
   link) is open; the other groups open from their counts. A run older than 36 hours is
   flagged, since the check should run daily.
+- **Status colours**, the same in the status board and the channel list, with a legend:
+  green works, amber works with something to know (a backup broken, no sound, a poor picture,
+  HEVC only), red does not work or has no link, grey not checked. A channel's own tags
+  count: no sound, if tagged, is a limit, not a failure; a poor picture is a limit always.
+  A check run in this browser wins over the daily one, except that a failure here with a
+  pass in the daily check is amber ("fails here, fine in the daily check"), and an HEVC
+  stream this browser cannot play is not called broken.
 - **Reports** from viewers, newest first, each with a suggested link when one was given.
 
 ## 7. Checks that run on their own

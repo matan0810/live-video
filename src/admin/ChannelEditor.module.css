@@ -108,26 +108,6 @@
   font-size: 0.75rem;
 }
 
-.dot {
-  flex: none;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-text-muted);
-}
-
-.dot[data-tone='good'] {
-  background: var(--color-success);
-}
-
-.dot[data-tone='warn'] {
-  background: var(--color-warning);
-}
-
-.dot[data-tone='bad'] {
-  background: var(--color-accent);
-}
-
 .caret {
   display: grid;
   color: var(--color-text-muted);

@@ -49,7 +49,7 @@ export function formatReport(channels: readonly ChannelResult[], from: string) {
     ['לא עובדים', down, true],
     ['עונים, אבל אי אפשר לצפות', problems, true],
     ['עובדים, עם קישור שבור', partial, true],
-    ['עובדים, אבל לא בכל דפדפן', limited, true],
+    ['עובדים, עם הגבלות', limited, true],
     ['לא ניתן לבדוק מחוץ לישראל', abroad, false],
     ['בלי קישור (מוצגים לצופים כלא זמינים)', noLink, false],
   ];

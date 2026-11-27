@@ -2,14 +2,41 @@
  * What the daily link check found, per channel and link. The check (scripts/check-links.ts)
  * writes it, the Worker keeps the latest run, and the admin area shows it.
  */
+import type { ChannelLimit } from './channels/types.ts';
 import type { StreamProblem } from './streamProblems.ts';
 import { isRecord } from './isRecord.ts';
 
 /** limited: watchable, but not everywhere (an HEVC-only stream plays on most devices, not all). */
 export type SourceState = 'ok' | 'limited' | 'problems' | 'down' | 'abroad';
 
-/** Problems that leave a stream watchable on most devices. */
-export const LIMITATIONS: readonly StreamProblem[] = ['hevc-only'];
+/**
+ * Problems that leave a stream watchable, if not at its best: a picture below 360p is poor,
+ * not useless; an HEVC-only one plays on most devices. (A silent stream is not among them:
+ * it is useless, unless the channel is tagged "no sound".)
+ */
+export const LIMITATIONS: readonly StreamProblem[] = ['hevc-only', 'low-quality'];
+
+/** The channel tag that says, in a viewer's words, what a problem the check finds means. */
+const ACKNOWLEDGED_BY: Partial<Record<StreamProblem, ChannelLimit>> = {
+  'no-audio': 'no-sound',
+};
+
+/**
+ * A stream whose only problems are limitations, or ones the channel's own tags already say
+ * (Fox's preview has no sound, and is tagged so), is watchable with limits, not unwatchable.
+ * The problems stay on the result, so the owner still sees what they are.
+ */
+export function acknowledgeLimits(
+  source: SourceResult,
+  limits: readonly ChannelLimit[] = [],
+): SourceResult {
+  if (source.state !== 'problems') return source;
+  const isForgiven = (problem: StreamProblem) => {
+    const tag = ACKNOWLEDGED_BY[problem];
+    return LIMITATIONS.includes(problem) || (tag !== undefined && limits.includes(tag));
+  };
+  return source.problems.every(isForgiven) ? { ...source, state: 'limited' } : source;
+}
 
 export interface SourceResult {
   url: string;

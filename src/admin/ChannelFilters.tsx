@@ -1,4 +1,5 @@
 import type { ChannelFilter, KindFilter } from './channelFilter';
+import { StatusLegend } from './StatusDot';
 import styles from './ChannelEditor.module.css';
 
 interface ChannelFiltersProps {
@@ -40,6 +41,7 @@ export function ChannelFilters({ filter, problems, onChange }: ChannelFiltersPro
           </button>
         ))}
       </div>
+      <StatusLegend />
     </div>
   );
 }

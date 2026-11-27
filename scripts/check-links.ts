@@ -17,6 +17,7 @@ import type { CatalogChannel } from '../shared/channels/types.ts';
 import type { LinkStatus } from '../shared/linkStatus.ts';
 import { findStreamProblems, isAudioContentType } from '../shared/streamProblems.ts';
 import { formatReport, LIMITATIONS, needsAttention, type SourceResult } from './linkReport.ts';
+import { acknowledgeLimits } from '../shared/linkStatus.ts';
 
 const CHANNELS_FILE = new URL('../src/channels/channels.json', import.meta.url);
 const PACKAGE_FILE = new URL('../package.json', import.meta.url);
@@ -108,7 +109,9 @@ const results = await Promise.all(
   channels.map(async (channel) => ({
     name: channel.name,
     id: channel.id,
-    sources: await Promise.all(channel.sources.map(checkSource)),
+    sources: (await Promise.all(channel.sources.map(checkSource))).map((source) =>
+      acknowledgeLimits(source, channel.limits),
+    ),
   })),
 );
 

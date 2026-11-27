@@ -1,0 +1,38 @@
+/* The one set of status colours: the same dot in the list, the board and the legend. */
+.dot {
+  flex: none;
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+}
+
+.dot[data-tone='good'] {
+  background: var(--color-success);
+}
+
+.dot[data-tone='warn'] {
+  background: var(--color-warning);
+}
+
+.dot[data-tone='bad'] {
+  background: var(--color-accent);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}

@@ -1,4 +1,10 @@
-import { channelVerdict, type ChannelResult, type ChannelVerdict } from '../../shared/linkStatus';
+import {
+  channelVerdict,
+  type ChannelResult,
+  type ChannelVerdict,
+  type SourceState,
+} from '../../shared/linkStatus';
+import type { Tone } from './channelHealth';
 
 /** Worst first, so what needs the owner is at the top. */
 const ORDER: readonly ChannelVerdict[] = [
@@ -15,10 +21,30 @@ export const VERDICT_TEXT: Record<ChannelVerdict, string> = {
   down: 'לא עובדים',
   problems: 'עונים, אבל אי אפשר לצפות',
   partial: 'עובדים, עם קישור שבור',
-  limited: 'עובדים, אבל לא בכל דפדפן',
+  limited: 'עובדים, עם הגבלות',
   abroad: 'לא נבדקו (חסומים מחוץ לישראל)',
   'no-link': 'בלי קישור',
   ok: 'תקינים',
+};
+
+/** The dot colour of each verdict: the same four colours as the channel list. */
+export const VERDICT_TONE: Record<ChannelVerdict, Tone> = {
+  ok: 'good',
+  partial: 'warn',
+  limited: 'warn',
+  problems: 'bad',
+  down: 'bad',
+  'no-link': 'bad',
+  abroad: 'unknown',
+};
+
+/** The same colours for one link. */
+export const SOURCE_TONE: Record<SourceState, Tone> = {
+  ok: 'good',
+  limited: 'warn',
+  problems: 'bad',
+  down: 'bad',
+  abroad: 'unknown',
 };
 
 /** Verdicts the owner can act on: a channel viewers cannot watch, or a broken link to replace. */

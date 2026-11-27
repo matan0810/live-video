@@ -3,6 +3,7 @@ import { CaretIcon } from '../components/icons';
 import type { Health } from './channelHealth';
 import type { DraftChannel } from './drafts';
 import { groupLabel } from './groupLabel';
+import { StatusDot } from './StatusDot';
 import styles from './ChannelEditor.module.css';
 
 interface ChannelSummaryProps {
@@ -31,7 +32,7 @@ export function ChannelSummary({ draft, health, isOpen, onToggle }: ChannelSumma
           <bdi>{draft.name.trim() || 'ערוץ חדש'}</bdi>
         </span>
         <span className={styles.summaryMeta}>
-          <i className={styles.dot} data-tone={health.tone} aria-hidden="true" />
+          <StatusDot tone={health.tone} />
           {groupLabel(draft.group)} · {health.text}
         </span>
       </span>

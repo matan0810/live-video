@@ -31,41 +31,27 @@
 }
 
 .chip {
-  --tone: var(--color-text-muted);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 34px;
-  padding: 0 12px;
-  border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--tone) 12%, transparent);
+  background: none;
   color: var(--color-text);
+  font: inherit;
   font-size: 0.8125rem;
 }
 
+/* The chip that is open is the one outlined: colour belongs to the dot alone. */
 .chip[aria-pressed='true'] {
-  background: color-mix(in srgb, var(--tone) 30%, transparent);
+  border-color: var(--color-text);
 }
 
 .count {
-  color: var(--tone);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-}
-
-[data-verdict='down'],
-[data-verdict='problems'] {
-  --tone: var(--color-accent);
-}
-
-[data-verdict='partial'],
-[data-verdict='limited'] {
-  --tone: #f0a43a;
-}
-
-[data-verdict='ok'] {
-  --tone: #4cc38a;
 }
 
 .group {
@@ -76,7 +62,9 @@
 
 .groupTitle {
   margin: 0;
-  color: var(--tone, var(--color-text));
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 0.9375rem;
   font-weight: 600;
 }
@@ -109,17 +97,10 @@
   color: var(--color-text-muted);
 }
 
-.state[data-state='down'],
-.state[data-state='problems'] {
-  color: var(--color-accent);
-}
-
-.state[data-state='limited'] {
-  color: #f0a43a;
-}
-
-.state[data-state='ok'] {
-  color: #4cc38a;
+.state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .url {

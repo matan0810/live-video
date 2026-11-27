@@ -4,7 +4,15 @@ import {
   type ChannelVerdict,
   type LinkStatus,
 } from '../../shared/linkStatus';
-import { groupByVerdict, isStale, NEEDS_OWNER, VERDICT_TEXT } from './statusBoard';
+import { StatusDot, StatusLegend } from './StatusDot';
+import {
+  groupByVerdict,
+  isStale,
+  NEEDS_OWNER,
+  SOURCE_TONE,
+  VERDICT_TEXT,
+  VERDICT_TONE,
+} from './statusBoard';
 import styles from './StatusBoard.module.css';
 
 interface StatusBoardProps {
@@ -73,16 +81,19 @@ export function StatusBoard({ status }: StatusBoardProps) {
               aria-pressed={openVerdicts.has(verdict)}
               onClick={() => toggle(verdict)}
             >
+              <StatusDot tone={VERDICT_TONE[verdict]} />
               <span className={styles.count}>{channels.length}</span> {VERDICT_TEXT[verdict]}
             </button>
           ))}
         </div>
+        <StatusLegend />
         {groups
           // What needs the owner starts open; every group opens and closes from its chip.
           .filter(({ verdict }) => openVerdicts.has(verdict))
           .map(({ verdict, channels }) => (
             <div key={verdict} className={styles.group}>
-              <h3 className={styles.groupTitle} data-verdict={verdict}>
+              <h3 className={styles.groupTitle}>
+                <StatusDot tone={VERDICT_TONE[verdict]} />
                 {VERDICT_TEXT[verdict]}
               </h3>
               <ul className={styles.channels}>
@@ -99,7 +110,8 @@ export function StatusBoard({ status }: StatusBoardProps) {
                             <span className={styles.sourceLabel}>
                               {index === 0 ? 'ראשי' : `גיבוי ${index}`}:
                             </span>{' '}
-                            <span data-state={source.state} className={styles.state}>
+                            <span className={styles.state}>
+                              <StatusDot tone={SOURCE_TONE[source.state]} />
                               {describeSourceProblem(source)}
                             </span>
                             <div className={styles.url} dir="ltr">
