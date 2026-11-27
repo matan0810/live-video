@@ -46,8 +46,41 @@ function securityMeta(): Plugin {
   };
 }
 
+/** Where the site lives, and how a link to it introduces it. */
+const SITE_URL = 'https://matan0810.github.io/live-video/';
+const DESCRIPTION = 'ערוצי חדשות ותחנות רדיו בשידור חי, במקום אחד';
+
+/**
+ * The page's description and its share card: what WhatsApp, Telegram and the like show for a
+ * link to the site (public/og-image.png). Their crawlers need an absolute address.
+ */
+function shareMeta(): Plugin {
+  const meta = (key: 'name' | 'property', name: string, content: string) => ({
+    tag: 'meta',
+    attrs: { [key]: name, content },
+    injectTo: 'head' as const,
+  });
+  return {
+    name: 'share-meta',
+    transformIndexHtml: () => [
+      meta('name', 'description', DESCRIPTION),
+      meta('property', 'og:type', 'website'),
+      meta('property', 'og:site_name', 'OnAir'),
+      meta('property', 'og:title', 'OnAir'),
+      meta('property', 'og:description', DESCRIPTION),
+      meta('property', 'og:url', SITE_URL),
+      meta('property', 'og:locale', 'he_IL'),
+      meta('property', 'og:image', `${SITE_URL}og-image.png`),
+      meta('property', 'og:image:width', '1200'),
+      meta('property', 'og:image:height', '630'),
+      meta('property', 'og:image:alt', `OnAir: ${DESCRIPTION}`),
+      meta('name', 'twitter:card', 'summary_large_image'),
+    ],
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), securityMeta()],
+  plugins: [react(), securityMeta(), shareMeta()],
   define: {
     __APP_VERSION__: JSON.stringify(version),
   },

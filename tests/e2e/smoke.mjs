@@ -72,6 +72,18 @@ async function main() {
   assert.match(policy ?? '', /require-trusted-types-for 'script'/, 'with Trusted Types');
   step('desktop: channel list, empty state, version and the CSP');
 
+  // A link to the site shows a card in chats: its tags, and the image they point at.
+  const shareImage = await desktop.locator('meta[property="og:image"]').getAttribute('content');
+  assert.equal(shareImage, 'https://matan0810.github.io/live-video/og-image.png');
+  const card = await desktop.request.get(`${url}og-image.png`);
+  assert.equal(card.status(), 200);
+  assert.equal(card.headers()['content-type'], 'image/png');
+  assert.match(
+    (await desktop.locator('meta[name="description"]').getAttribute('content')) ?? '',
+    /רדיו/,
+  );
+  step('desktop: a share card for links to the site');
+
   await desktop.getByRole('button', { name: 'כאן 11', exact: true }).click();
   await desktop.getByRole('alert').getByText('כאן 11 לא זמין כרגע').waitFor();
   assert.match(desktop.url(), /[?&]ch=kan11/);

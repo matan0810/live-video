@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- A link to the site shows a card in WhatsApp, Telegram and the like: the icon, OnAir, and "news channels and radio stations, live, in one place".
+
 ### Changed
 - Fox News is marked simply "no sound"; the "preview only" and "low quality" marks are gone, as they said nothing useful.
 
