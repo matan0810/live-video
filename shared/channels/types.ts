@@ -25,11 +25,11 @@ export type ChannelLanguage = (typeof CHANNEL_LANGUAGES)[number];
 export type ChannelGroup = (typeof CHANNEL_GROUPS)[number];
 
 /**
- * Ways a channel works only in part, which the viewer is told about: better a preview
+ * Ways a channel works only in part, which the viewer is told about: better a picture
  * without sound than nothing, as long as it says so. In the order they are shown.
  * `hevc`: its video is HEVC only, which some browsers cannot play; said only in those.
  */
-export const CHANNEL_LIMITS = ['preview', 'no-sound', 'low-quality', 'hevc'] as const;
+export const CHANNEL_LIMITS = ['no-sound', 'low-quality', 'hevc'] as const;
 
 export type ChannelLimit = (typeof CHANNEL_LIMITS)[number];
 

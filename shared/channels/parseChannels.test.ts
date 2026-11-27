@@ -25,15 +25,15 @@ describe('parseChannels', () => {
   });
 
   it('keeps the tags of a channel that works only in part', () => {
-    const limited = { ...valid, limits: ['preview', 'no-sound'] };
+    const limited = { ...valid, limits: ['no-sound', 'low-quality'] };
     expect(parseChannels([limited])).toEqual([limited]);
   });
 
   it.each([
-    ['an unknown tag', ['preview', 'broken']],
+    ['an unknown tag', ['no-sound', 'broken']],
     ['a repeated tag', ['no-sound', 'no-sound']],
     ['an empty list', []],
-    ['a single string', 'preview'],
+    ['a single string', 'no-sound'],
   ])('refuses %s', (_, limits) => {
     expect(() => parseChannels([{ ...valid, limits }])).toThrow(/limits/);
   });

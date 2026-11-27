@@ -3,8 +3,8 @@ import { shownLimits } from './shownLimits';
 
 describe('shownLimits', () => {
   it('keeps the order of importance, whatever the order given', () => {
-    expect(shownLimits(['low-quality', 'preview'], { canPlayHevc: true })).toEqual([
-      'preview',
+    expect(shownLimits(['low-quality', 'no-sound'], { canPlayHevc: true })).toEqual([
+      'no-sound',
       'low-quality',
     ]);
   });

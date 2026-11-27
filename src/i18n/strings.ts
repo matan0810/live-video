@@ -41,7 +41,6 @@ const he = {
   playingNow: 'מנגן עכשיו',
   unavailable: 'לא זמין כרגע',
   limits: {
-    preview: 'תצוגה מקדימה בלבד',
     'no-sound': 'ללא קול',
     'low-quality': 'איכות נמוכה',
     hevc: 'לא נתמך בדפדפן הזה',
@@ -206,7 +205,6 @@ const en: Strings = {
   playingNow: 'Playing now',
   unavailable: 'Unavailable right now',
   limits: {
-    preview: 'Preview only',
     'no-sound': 'No sound',
     'low-quality': 'Low quality',
     hevc: 'Not supported in this browser',

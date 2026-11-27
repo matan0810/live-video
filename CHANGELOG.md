@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Changed
+- Fox News is marked simply "no sound"; the "preview only" and "low quality" marks are gone, as they said nothing useful.
+
 ## [2.16.0] - 2026-11-27
 
 ### Added

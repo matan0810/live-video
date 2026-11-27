@@ -257,7 +257,7 @@
     "logo": "logos/fox-news.svg",
     "language": "en",
     "group": "world",
-    "limits": ["preview", "no-sound", "low-quality"],
+    "limits": ["no-sound"],
     "sources": ["https://247preview.foxnews.com/hls/live/2020027/fncv3preview/index.m3u8"]
   },
   {
@@ -889,6 +889,7 @@
     "id": "radio-cbc-one",
     "name": "CBC Radio One",
     "short": "CBC",
+    "logo": "logos/radio-cbc-one.svg",
     "group": "radio-world",
     "sources": ["https://cbcradiolive.akamaized.net/hls/live/2041036/ES_R1ETR/master.m3u8"]
   },
@@ -931,7 +932,7 @@
     "id": "radio-rne",
     "name": "RNE Radio Nacional",
     "short": "RNE",
-    "logo": "https://en.wikipedia.org/wiki/Special:FilePath/RNE_2026.svg",
+    "logo": "logos/radio-rne.svg",
     "language": "es",
     "group": "radio-world",
     "sources": ["https://rtvelivestream.rtve.es/rtvesec/rne/rne_r1_main.m3u8"]

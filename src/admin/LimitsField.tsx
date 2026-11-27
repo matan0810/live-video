@@ -9,7 +9,6 @@ interface LimitsFieldProps {
 
 /** In the admin's words: what each tag means, not what a viewer is told. */
 const ADMIN_LABELS: Record<ChannelLimit, string> = {
-  preview: STRINGS.he.limits.preview,
   'no-sound': STRINGS.he.limits['no-sound'],
   'low-quality': STRINGS.he.limits['low-quality'],
   hevc: 'HEVC בלבד (מוצג רק בדפדפן שלא מנגן אותו)',

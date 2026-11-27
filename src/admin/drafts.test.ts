@@ -18,7 +18,7 @@ describe('drafts', () => {
         nameEn: 'Two',
         logo: 'https://a.example/two.svg',
         language: 'ar' as const,
-        limits: ['preview' as const, 'no-sound' as const],
+        limits: ['no-sound' as const, 'low-quality' as const],
       },
     ];
     expect(draftsToChannels(channels.map(toDraft))).toEqual(channels);

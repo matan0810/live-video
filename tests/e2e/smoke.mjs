@@ -87,8 +87,8 @@ async function main() {
   step('desktop: a channel with no link is shown as unavailable, without retries');
 
   // A channel that works only in part says so: briefly in the list, in full under the player.
-  await desktop.getByRole('button', { name: 'Fox News תצוגה מקדימה בלבד' }).click();
-  await desktop.getByText('תצוגה מקדימה בלבד · ללא קול · איכות נמוכה').waitFor();
+  await desktop.getByRole('button', { name: 'Fox News ללא קול' }).click();
+  await desktop.locator('main h2 + span', { hasText: 'ללא קול' }).waitFor();
   await desktop.getByRole('button', { name: 'כאן 11 לא זמין כרגע' }).click();
   // HEVC only (ABC News) is said only where this browser cannot play it.
   const playsHevc = await desktop.evaluate(() =>
