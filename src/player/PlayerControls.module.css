@@ -20,6 +20,12 @@
   gap: 4px;
   padding: 28px 12px 10px;
   background: linear-gradient(to top, rgb(0 0 0 / 78%), rgb(0 0 0 / 40%) 60%, transparent);
+  /* The shade is only a shade: a tap on it goes through to what lies beneath (a message and
+     its button), while the timeline and the row of buttons stay tappable. */
+  pointer-events: none;
+}
+
+.bottom > * {
   pointer-events: auto;
 }
 

@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- "Try again now" on a failed channel: on a phone the controls bar no longer sits over it and swallows taps, it shows "Trying…" for a moment when pressed, and it gives a little when tapped.
+
 ## [2.16.1] - 2026-11-27
 
 ### Added

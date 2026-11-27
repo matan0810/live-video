@@ -52,6 +52,7 @@ const he = {
   channelUnavailable: (name: string) => `${name} לא זמין כרגע`,
   retryingSoon: 'מנסה שוב אוטומטית בעוד כמה שניות',
   retryNow: 'נסה שוב עכשיו',
+  retrying: (name: string) => `מנסה שוב את ${name}…`,
   noLinkTitle: (name: string) => `${name} – אין כרגע קישור לשידור`,
   noLinkHint: 'הערוץ יחזור ברגע שיימצא לו קישור עובד',
   unsupportedFormat: 'הדפדפן הזה לא מנגן את פורמט השידור של הערוץ. נסו דפדפן או מכשיר אחר.',
@@ -216,6 +217,7 @@ const en: Strings = {
   channelUnavailable: (name) => `${name} is unavailable right now`,
   retryingSoon: 'Trying again automatically in a few seconds',
   retryNow: 'Try again now',
+  retrying: (name) => `Trying ${name} again…`,
   noLinkTitle: (name) => `${name} – no stream link right now`,
   noLinkHint: 'It will be back as soon as a working link is found',
   unsupportedFormat:

@@ -25,6 +25,7 @@ import { useMediaSession } from './useMediaSession';
 import { useResumePosition } from './useResumePosition';
 import { usePlayerControls } from './usePlayerControls';
 import { usePlayerKeys } from './usePlayerKeys';
+import { useRetryFeedback } from './useRetryFeedback';
 import { useStripReveal } from './useStripReveal';
 import styles from './Player.module.css';
 
@@ -69,6 +70,7 @@ export function Player({
     getLiveWindow,
     isHlsJs,
   } = useHlsPlayer(channel.sources, { keepsSound: true });
+  const { isRetrying, retryWithFeedback } = useRetryFeedback(retry);
   const dvr = useDvr(videoRef, getLiveWindow);
   useResumePosition(channel.id, status, dvr);
   const { t, language } = useI18n();
@@ -141,7 +143,8 @@ export function Player({
               hasNoLink={hasNoLink}
               isUnsupportedFormat={isUnsupportedFormat}
               errorDetail={errorDetail}
-              onRetry={retry}
+              onRetry={retryWithFeedback}
+              isRetrying={isRetrying}
               showsLoading={!radio}
             />
 

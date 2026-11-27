@@ -11,6 +11,8 @@ interface PlayerStatusOverlayProps {
   isUnsupportedFormat: boolean;
   errorDetail: string | null;
   onRetry: () => void;
+  /** Just pressed "try again": say so for a moment, even if it fails again at once. */
+  isRetrying: boolean;
   /** False for radio, whose card says it is connecting by itself. */
   showsLoading: boolean;
 }
@@ -23,27 +25,35 @@ export function PlayerStatusOverlay({
   isUnsupportedFormat,
   errorDetail,
   onRetry,
+  isRetrying,
   showsLoading,
 }: PlayerStatusOverlayProps) {
   const { t } = useI18n();
   const retry = onRetry;
   return (
     <>
-      {status === 'loading' && showsLoading && (
+      {isRetrying && (
+        <div className={styles.overlay} data-passive="true" role="status">
+          <span className={styles.spinner} aria-hidden="true" />
+          <span>{t.retrying(name)}</span>
+        </div>
+      )}
+
+      {!isRetrying && status === 'loading' && showsLoading && (
         <div className={styles.overlay} data-passive="true" role="status">
           <span className={styles.spinner} aria-hidden="true" />
           <span>{t.loading(name)}</span>
         </div>
       )}
 
-      {status === 'error' && hasNoLink && (
+      {!isRetrying && status === 'error' && hasNoLink && (
         <div className={styles.overlay} role="alert">
           <strong className={styles.errorTitle}>{t.noLinkTitle(name)}</strong>
           <span className={styles.errorHint}>{t.noLinkHint}</span>
         </div>
       )}
 
-      {status === 'error' && !hasNoLink && (
+      {!isRetrying && status === 'error' && !hasNoLink && (
         <div className={styles.overlay} role="alert">
           <strong className={styles.errorTitle}>{t.channelUnavailable(name)}</strong>
           <span className={styles.errorHint}>

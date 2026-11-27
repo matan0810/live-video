@@ -65,7 +65,9 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 16px;
+  /* Clear of the controls bar below, which sits over this layer and would dim and
+     swallow taps on a button near the bottom of a short phone picture. */
+  padding: 8px 16px 60px;
   background: rgb(0 0 0 / 72%);
   text-align: center;
   color: var(--color-text);
@@ -109,6 +111,7 @@
 }
 
 .primaryButton {
+  flex: none;
   margin-top: 4px;
   height: 40px;
   padding: 0 20px;
@@ -122,6 +125,10 @@
 
 .primaryButton:hover {
   filter: brightness(1.1);
+}
+
+.primaryButton:active {
+  transform: scale(0.96);
 }
 
 .unmute {
@@ -166,6 +173,13 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+}
+
+@media (max-width: 480px) {
+  /* A short picture: tighter, so the message and the button fit above the controls. */
+  .overlay {
+    gap: 8px;
+  }
 }
 
 @media (max-width: 959px) {

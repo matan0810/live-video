@@ -447,6 +447,22 @@ async function main() {
   assert.deepEqual(smallTargets, [], 'every button is a comfortable tap target');
   step('phone: fits the width, comfortable buttons');
 
+  // A failed channel: the retry button is tappable (nothing over it) and answers at once,
+  // even though the retry fails again in an instant.
+  await phone.getByRole('alert').getByRole('button', { name: 'נסה שוב עכשיו' }).waitFor();
+  const retry = phone.getByRole('button', { name: 'נסה שוב עכשיו' });
+  const box = await retry.boundingBox();
+  assert.ok(box, 'the retry button is on the page');
+  const topmost = await phone.evaluate(
+    ({ x, y }) => document.elementFromPoint(x, y)?.textContent ?? '',
+    { x: box.x + box.width / 2, y: box.y + box.height - 3 },
+  );
+  assert.equal(topmost, 'נסה שוב עכשיו', 'nothing covers the retry button, even its lower edge');
+  await retry.tap();
+  await phone.getByRole('status').getByText('מנסה שוב').waitFor({ timeout: 3000 });
+  await phone.getByRole('button', { name: 'נסה שוב עכשיו' }).waitFor();
+  step('phone: the retry button is tappable and shows that it is trying');
+
   await phone.evaluate(() => document.querySelector('video').parentElement.requestFullscreen());
   await phone.waitForFunction(() => document.fullscreenElement !== null);
   await phone.locator('video').tap({ force: true });
