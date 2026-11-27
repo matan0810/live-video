@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Changed
+- Admin area, much calmer on a phone: the channels are a list with a line each (logo, name, group and whether it works), with search and TV / radio / problems chips. A line opens into name, group and links; the rest is under "more details". Only one is open at a time, deleting asks twice, and a bar at the bottom shows the changes waiting, with cancel and save.
+
 ### Added
 - Admin area: the save button says how many changes are waiting, "cancel changes" goes back to the saved list (it asks twice, so a stray tap loses nothing), and leaving the page with unsaved changes asks first.
 

@@ -115,6 +115,7 @@ textarea.input {
 
 .primary,
 .secondary,
+.dangerPlain,
 .danger {
   display: inline-flex;
   align-items: center;
@@ -147,6 +148,11 @@ textarea.input {
 
 .danger {
   margin-inline-start: auto;
+  color: var(--color-accent);
+}
+
+/* The same red, without pushing itself to the end of the row. */
+.dangerPlain {
   color: var(--color-accent);
 }
 

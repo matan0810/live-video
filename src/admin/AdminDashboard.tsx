@@ -169,6 +169,7 @@ export function AdminDashboard({
             saveState={saveState}
             error={error}
             changes={countChanges(saved ?? drafts, drafts)}
+            linkStatus={linkStatus}
             onChange={handleChange}
             onSave={() => void handleSave()}
             onDiscard={handleDiscard}

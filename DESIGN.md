@@ -258,10 +258,14 @@ their auto-hiding, gestures and translated labels.
 
 At `#/admin`, a separate chunk viewers never download. One password, a Cloudflare secret.
 
-- **Editor**: every field of a channel, links one per line (first is primary), a logo
-  preview showing the tile as viewers will see it, and a check of each link from the
-  owner's own browser (a radio station's audio stream is checked by starting to play it,
-  silently).
+- **Editor**: a list with a line per channel (tile, name, group and how it is doing: a
+  dot from the check just run here, else the daily check if it saw these very links), with
+  search and type chips (all, TV, radio, problems). Pressing a line opens it, one at a time,
+  to name, group and links (one per line, first is primary, each checked from the owner's own
+  browser; a radio station's audio is checked by starting to play it, silently). The rest (English
+  name, short label, id, language, logo and its preview, tags, moving) is under "עוד
+  פרטים"; moving is offered only while the whole list shows. Delete asks twice. The save
+  bar stays at the bottom while there is something to say.
 - **Unsaved changes.** The save button counts them ("שמירת 3 שינויים"; an edit put back
   counts for nothing). "ביטול שינויים" goes back to the list as last loaded or saved, and
   asks twice (the second press within five seconds) so one stray tap loses nothing.

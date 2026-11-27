@@ -13,6 +13,7 @@
   --color-accent-soft: rgb(255 70 84 / 14%);
   /* Works only in part (a channel's limits): amber, never the accent's red. */
   --color-warning: #f0a43a;
+  --color-success: #4cc38a;
   --shadow-stage: 0 20px 50px rgb(0 0 0 / 45%);
 
   color-scheme: dark;
@@ -32,6 +33,7 @@
   --color-accent: #e0313f;
   --color-accent-soft: rgb(224 49 63 / 12%);
   --color-warning: #a86200;
+  --color-success: #1d8a5b;
   --shadow-stage: 0 16px 40px rgb(16 24 40 / 18%);
 
   color-scheme: light;
@@ -50,6 +52,7 @@
     --color-accent: #e0313f;
     --color-accent-soft: rgb(224 49 63 / 12%);
     --color-warning: #a86200;
+    --color-success: #1d8a5b;
     --shadow-stage: 0 16px 40px rgb(16 24 40 / 18%);
 
     color-scheme: light;

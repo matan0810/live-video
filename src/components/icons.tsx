@@ -160,3 +160,12 @@ export function GearIcon() {
     </Icon>
   );
 }
+
+/** Points down; the caller turns it for an open row. */
+export function CaretIcon() {
+  return (
+    <Icon>
+      <path d="m6 9 6 6 6-6" />
+    </Icon>
+  );
+}
