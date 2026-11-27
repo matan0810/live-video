@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.17.0] - 2026-11-27
+
 ### Changed
 - Admin area, much calmer on a phone: the channels are a list with a line each (logo, name, group and whether it works), with search and TV / radio / problems chips. A line opens into name, group and links; the rest is under "more details". Only one is open at a time, deleting asks twice, and a bar at the bottom shows the changes waiting, with cancel and save.
 
