@@ -1,5 +1,6 @@
 import {
   channelVerdict,
+  describeSourceProblem,
   type ChannelResult,
   type ChannelVerdict,
   type SourceState,
@@ -47,8 +48,27 @@ export const SOURCE_TONE: Record<SourceState, Tone> = {
   abroad: 'unknown',
 };
 
-/** Verdicts the owner can act on: a channel viewers cannot watch, or a broken link to replace. */
-export const NEEDS_OWNER: readonly ChannelVerdict[] = ['down', 'problems', 'partial'];
+/**
+ * The groups that start open: what the owner can act on (a channel viewers cannot watch, a
+ * broken link to replace, a channel with no link) and what works with limits. The fine
+ * channels, and those that cannot be checked from abroad, stay a count until asked for.
+ */
+export const OPEN_AT_FIRST: readonly ChannelVerdict[] = [
+  'down',
+  'problems',
+  'partial',
+  'limited',
+  'no-link',
+];
+
+/** What is wrong with a channel in a few words: the first link that is not fine, and where. */
+export function summaryLine(channel: ChannelResult): string {
+  if (channel.sources.length === 0) return 'בלי קישור';
+  const index = channel.sources.findIndex((source) => source.state !== 'ok');
+  const source = channel.sources[index];
+  if (!source) return 'תקין';
+  return `${index === 0 ? 'ראשי' : `גיבוי ${index}`}: ${describeSourceProblem(source)}`;
+}
 
 export interface VerdictGroup {
   verdict: ChannelVerdict;

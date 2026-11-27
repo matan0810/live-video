@@ -284,10 +284,13 @@ At `#/admin`, a separate chunk viewers never download. One password, a Cloudflar
   up to 15 times a day), then the iptv-org directory for the same website.
 - **Bookmark**: run on a channel's own site while it plays, it sends the stream links that
   page loaded to the admin area (`#/admin?add=…`), for sites that hide them from the cloud.
-- **Channel status**, at the top: the latest daily link check, channels grouped by what
-  was found, worst first. What the owner can act on (not working, not watchable, a broken
-  link) is open; the other groups open from their counts. A run older than 36 hours is
-  flagged, since the check should run daily.
+- **Channel status**, at the top: the latest daily link check. How many channels stand where
+  is plain words, not buttons ("3 בלי קישור · 2 עובדים, עם הגבלות · 86 תקינים"); pressing one
+  shows or hides its channels. What needs a look starts open (not working, not watchable, a
+  broken link, no link, works with limits), each channel a row with its logo, its name and one
+  line on what is wrong, opening to its links; the fine channels, and those that cannot be
+  checked from abroad, stay a count. A run older than 36 hours is flagged, since the check
+  should run daily.
 - **Status colours**, the same in the status board and the channel list, with a legend:
   green works, amber works with something to know (a backup broken, no sound, a poor picture,
   HEVC only), red does not work or has no link, grey not checked. A channel's own tags

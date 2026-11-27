@@ -1,23 +1,17 @@
 import { useState } from 'react';
-import {
-  describeSourceProblem,
-  type ChannelVerdict,
-  type LinkStatus,
-} from '../../shared/linkStatus';
+import type { ChannelVerdict, LinkStatus } from '../../shared/linkStatus';
+import type { DraftChannel } from './drafts';
+import { StatusChannel } from './StatusChannel';
+import { StatusCounts } from './StatusCounts';
 import { StatusDot, StatusLegend } from './StatusDot';
-import {
-  groupByVerdict,
-  isStale,
-  NEEDS_OWNER,
-  SOURCE_TONE,
-  VERDICT_TEXT,
-  VERDICT_TONE,
-} from './statusBoard';
+import { groupByVerdict, isStale, OPEN_AT_FIRST, VERDICT_TEXT, VERDICT_TONE } from './statusBoard';
 import styles from './StatusBoard.module.css';
 
 interface StatusBoardProps {
   /** undefined while loading; 'unavailable' when the Worker could not answer. */
   status: LinkStatus | null | undefined | 'unavailable';
+  /** The channels as the admin has them, for their logos. */
+  drafts: readonly DraftChannel[];
 }
 
 const relativeTime = new Intl.RelativeTimeFormat('he', { numeric: 'auto' });
@@ -30,12 +24,12 @@ function ago(checkedAt: string, now: number) {
 }
 
 /**
- * What the daily link check found, per channel, worst first: the owner sees at a glance
- * which channels need a new link, without opening GitHub.
+ * What the daily link check found: how many channels stand where, as plain words, and
+ * under them the channels that need a look, each with its logo and one line.
  */
-export function StatusBoard({ status }: StatusBoardProps) {
+export function StatusBoard({ status, drafts }: StatusBoardProps) {
   const [openVerdicts, setOpenVerdicts] = useState<ReadonlySet<ChannelVerdict>>(
-    () => new Set(NEEDS_OWNER),
+    () => new Set(OPEN_AT_FIRST),
   );
   const toggle = (verdict: ChannelVerdict) =>
     setOpenVerdicts((current) => {
@@ -71,61 +65,28 @@ export function StatusBoard({ status }: StatusBoardProps) {
             </strong>
           )}
         </p>
-        <div className={styles.chips}>
-          {groups.map(({ verdict, channels }) => (
-            <button
-              key={verdict}
-              type="button"
-              className={styles.chip}
-              data-verdict={verdict}
-              aria-pressed={openVerdicts.has(verdict)}
-              onClick={() => toggle(verdict)}
-            >
-              <StatusDot tone={VERDICT_TONE[verdict]} />
-              <span className={styles.count}>{channels.length}</span> {VERDICT_TEXT[verdict]}
-            </button>
-          ))}
-        </div>
-        <StatusLegend />
+        <StatusCounts groups={groups} open={openVerdicts} onToggle={toggle} />
         {groups
-          // What needs the owner starts open; every group opens and closes from its chip.
           .filter(({ verdict }) => openVerdicts.has(verdict))
           .map(({ verdict, channels }) => (
             <div key={verdict} className={styles.group}>
               <h3 className={styles.groupTitle}>
                 <StatusDot tone={VERDICT_TONE[verdict]} />
-                {VERDICT_TEXT[verdict]}
+                {VERDICT_TEXT[verdict]} ({channels.length})
               </h3>
-              <ul className={styles.channels}>
+              <div className={styles.channels}>
                 {channels.map((channel) => (
-                  <li key={channel.id} className={styles.channel}>
-                    <strong>{channel.name}</strong>
-                    {channel.sources.length === 0 && (
-                      <span className={styles.sourceLabel}>אין קישור; מוצג לצופים כלא זמין.</span>
-                    )}
-                    {channel.sources.length > 0 && (
-                      <ul className={styles.sources}>
-                        {channel.sources.map((source, index) => (
-                          <li key={source.url}>
-                            <span className={styles.sourceLabel}>
-                              {index === 0 ? 'ראשי' : `גיבוי ${index}`}:
-                            </span>{' '}
-                            <span className={styles.state}>
-                              <StatusDot tone={SOURCE_TONE[source.state]} />
-                              {describeSourceProblem(source)}
-                            </span>
-                            <div className={styles.url} dir="ltr">
-                              {source.url}
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
+                  <StatusChannel
+                    key={channel.id}
+                    result={channel}
+                    verdict={verdict}
+                    draft={drafts.find((draft) => draft.id === channel.id)}
+                  />
                 ))}
-              </ul>
+              </div>
             </div>
           ))}
+        <StatusLegend />
       </>
     );
   })();

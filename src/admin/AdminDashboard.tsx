@@ -72,7 +72,7 @@ export function AdminDashboard({
               }}
             />
           )}
-          <StatusBoard status={linkStatus} />
+          <StatusBoard status={linkStatus} drafts={drafts} />
           <ReportsPanel
             reports={reports}
             hasChannel={(channelId) => drafts.some((draft) => draft.id === channelId)}

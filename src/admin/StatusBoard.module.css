@@ -24,34 +24,33 @@
   color: var(--color-accent);
 }
 
-.chips {
+.counts {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px 20px;
 }
 
-.chip {
+/* A count is a word, not a button: no frame, underlined while its channels are shown. */
+.count {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 36px;
-  padding: 0 14px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
+  min-height: 32px;
+  padding: 0;
+  border: none;
   background: none;
   color: var(--color-text);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
+  text-underline-offset: 4px;
 }
 
-/* The chip that is open is the one outlined: colour belongs to the dot alone. */
-.chip[aria-pressed='true'] {
-  border-color: var(--color-text);
+.count[aria-pressed='true'] {
+  text-decoration: underline;
 }
 
-.count {
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
+.count[data-quiet='true'] {
+  color: var(--color-text-muted);
 }
 
 .group {
@@ -61,35 +60,69 @@
 }
 
 .groupTitle {
-  margin: 0;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.9375rem;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
   font-weight: 600;
 }
 
-.channels,
-.sources {
+.channels {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
 .channel {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--color-bg);
 }
 
-.sources {
+.channelSummary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 10px 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.channelSummary::-webkit-details-marker {
+  display: none;
+}
+
+.tile {
+  width: 36px;
+  height: 36px;
+  /* A light logo on the row's own grey would vanish: outline the tile. */
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
+.channelText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.channelLine {
+  display: flex;
+  align-items: center;
   gap: 6px;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.sources {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0 14px 12px;
+  list-style: none;
   font-size: 0.8125rem;
 }
 
