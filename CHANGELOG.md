@@ -7,11 +7,12 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.18.0] - 2026-11-27
+
 ### Changed
 - Player bar: time and channel are told apart. Skipping is a circular arrow with the seconds inside (← → on the keyboard); previous / next channel are up and down arrows (↑ ↓), after a divider.
 - A place in a live stream is remembered for two hours instead of twelve, and it is a setting: off, an hour, two hours or half a day.
 - Admin area, link status: the daily check no longer calls a channel "answers but cannot be watched" for what its own tags say (Fox's preview has no sound) or for a poor picture; those are "works, with limits". The channel list and the status board share four colours, with a legend: green works, amber works with something to know, red does not work or has no link, grey not checked. A link that fails in this browser but passed the daily check, or an HEVC stream this browser cannot play, shows amber, not red; and a broken backup is named as such.
-
 - Admin area, status board: calmer. The counts are plain words ("3 without a link · 2 work with limits · 86 fine"), no frames or tinted pills, and under them only the channels that need a look, each a row with its logo and one line, opening to its links.
 - Admin area: on a wide screen the channel list is a table (channel, group, state, links); each link shows how it is doing, and a broken one can be removed with one tap.
 
