@@ -1,20 +1,31 @@
 import { useId, useState, type FormEvent } from 'react';
 import type { Channel } from '../channels';
+import type { ChannelKind } from '../channels/channelKinds';
 import { createCustomChannel, type CustomChannelError } from '../channels/customChannels';
 import { useI18n } from '../i18n/context';
 import { PlusIcon } from './icons';
 import styles from './AddChannelForm.module.css';
 
 interface AddChannelFormProps {
-  onAdd: (channel: Channel) => void;
+  /** The tab the viewer is on: a new channel is of that kind unless they choose otherwise. */
+  defaultKind: ChannelKind;
+  onAdd: (channel: Channel, kind: ChannelKind) => void;
 }
 
-export function AddChannelForm({ onAdd }: AddChannelFormProps) {
+const KINDS = [
+  { id: 'tv', label: 'tabTv' },
+  { id: 'radio', label: 'tabRadio' },
+] as const;
+
+export function AddChannelForm({ defaultKind, onAdd }: AddChannelFormProps) {
   const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
   const [url, setUrl] = useState('');
   const [error, setError] = useState<CustomChannelError | null>(null);
+  // Follows the open tab until the viewer picks a kind for this channel.
+  const [chosenKind, setChosenKind] = useState<ChannelKind | null>(null);
+  const kind = chosenKind ?? defaultKind;
   const nameId = useId();
   const urlId = useId();
   const errorId = useId();
@@ -24,16 +35,17 @@ export function AddChannelForm({ onAdd }: AddChannelFormProps) {
     setName('');
     setUrl('');
     setError(null);
+    setChosenKind(null);
   };
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    const result = createCustomChannel(name, url);
+    const result = createCustomChannel(name, url, kind);
     if (!result.ok) {
       setError(result.error);
       return;
     }
-    onAdd(result.channel);
+    onAdd(result.channel, kind);
     close();
   };
 
@@ -59,6 +71,21 @@ export function AddChannelForm({ onAdd }: AddChannelFormProps) {
       }}
       noValidate
     >
+      <div className={styles.kinds} role="radiogroup" aria-label={t.channelKind}>
+        {KINDS.map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            role="radio"
+            aria-checked={kind === id}
+            className={styles.kind}
+            onClick={() => setChosenKind(id)}
+          >
+            {t[label]}
+          </button>
+        ))}
+      </div>
+
       <label className={styles.label} htmlFor={nameId}>
         {t.channelName}
       </label>

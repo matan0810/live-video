@@ -1,8 +1,12 @@
 import type { ChannelSection } from '../components/ChannelList';
 import type { Strings } from '../i18n/strings';
 import { CHANNEL_GROUPS, type CatalogChannel, type Channel } from './index';
+import { isRadio } from './isRadio';
 
-/** Groups channels for display: favourites first, then the user's own, then the catalog. */
+/**
+ * Groups channels for display: favourites first, then the user's own (channels, then
+ * stations: each shows in its own tab), then the catalog.
+ */
 export function buildSections(
   catalogChannels: readonly CatalogChannel[],
   customChannels: readonly Channel[],
@@ -20,7 +24,12 @@ export function buildSections(
     {
       id: 'custom',
       title: t.myChannels,
-      channels: customChannels.filter((channel) => !isFavorite(channel)),
+      channels: customChannels.filter((channel) => !isFavorite(channel) && !isRadio(channel)),
+    },
+    {
+      id: 'custom-radio',
+      title: t.myStations,
+      channels: customChannels.filter((channel) => !isFavorite(channel) && isRadio(channel)),
     },
     ...CHANNEL_GROUPS.map((group) => ({
       id: group,

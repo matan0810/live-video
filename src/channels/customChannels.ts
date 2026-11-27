@@ -1,8 +1,10 @@
 import type { Channel } from '../../shared/channels/types';
+import type { ChannelKind } from './channelKinds';
 import { isHttpsUrl } from '../../shared/channels/url';
 import { isRecord } from '../../shared/isRecord';
 
 export const CUSTOM_ID_PREFIX = 'custom-';
+const OWN_STATION_GROUP = 'radio-world';
 const SHORT_LABEL_LENGTH = 3;
 
 export type CustomChannelError = 'invalid-url';
@@ -18,7 +20,11 @@ export function isCustomChannelId(id: string) {
  * Builds a user-added channel from form input, or reports why the input is invalid. The
  * name is optional: a pasted link alone is enough, and the channel is named after its site.
  */
-export function createCustomChannel(name: string, url: string): CustomChannelResult {
+export function createCustomChannel(
+  name: string,
+  url: string,
+  kind: ChannelKind = 'tv',
+): CustomChannelResult {
   const trimmedUrl = url.trim();
   if (!isHttpsUrl(trimmedUrl)) return { ok: false, error: 'invalid-url' };
   const trimmedName = name.trim() || new URL(trimmedUrl).hostname.replace(/^www\./, '');
@@ -34,14 +40,17 @@ export function createCustomChannel(name: string, url: string): CustomChannelRes
         .slice(0, SHORT_LABEL_LENGTH)
         .join(''),
       sources: [trimmedUrl],
+      // A station of one's own is in a radio group, which is what plays and lists it as radio.
+      ...(kind === 'radio' ? { group: OWN_STATION_GROUP } : {}),
     },
   };
 }
 
 function isCustomChannel(value: unknown): value is Channel {
   if (!isRecord(value)) return false;
-  const { id, name, short, sources } = value;
+  const { id, name, short, sources, group } = value;
   return (
+    (group === undefined || group === OWN_STATION_GROUP) &&
     typeof id === 'string' &&
     isCustomChannelId(id) &&
     typeof name === 'string' &&

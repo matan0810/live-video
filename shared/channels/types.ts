@@ -50,6 +50,11 @@ export interface Channel {
   /** How it works only in part, if it does; absent when it works fully. */
   limits?: ChannelLimit[];
   /**
+   * Where it is listed. Built-in channels always have one (see CatalogChannel); an own
+   * channel has none (TV) or a radio group (a station of the viewer's own).
+   */
+  group?: ChannelGroup;
+  /**
    * Stream URLs in priority order: the first is the primary, the rest are fallbacks. HLS
    * playlists (`.m3u8`), or for radio also plain audio streams (MP3 or AAC, as Icecast serves).
    */

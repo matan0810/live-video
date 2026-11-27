@@ -21,4 +21,18 @@ describe('buildSections', () => {
     expect(ids.filter((id) => id === 'dw')).toHaveLength(1);
     expect(sections.some((section) => section.id === 'custom')).toBe(false);
   });
+
+  it('lists the viewer own stations apart, as "my stations", before the built-in ones', () => {
+    const station = { ...own, id: 'custom-2', name: 'תחנה', group: 'radio-world' as const };
+    const sections = buildSections(bundledChannels, [own, station], [], t);
+    const mine = sections.filter((section) => section.id.startsWith('custom'));
+    expect(mine.map((section) => [section.id, section.title])).toEqual([
+      ['custom', t.myChannels],
+      ['custom-radio', t.myStations],
+    ]);
+    expect(mine.map((section) => section.channels.map(({ id }) => id))).toEqual([
+      ['custom-1'],
+      ['custom-2'],
+    ]);
+  });
 });

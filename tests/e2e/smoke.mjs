@@ -292,14 +292,24 @@ async function main() {
   step('desktop: radio in its own tab, a station shows its card, stepping stays in radio');
 
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
-  // Added from the Radio tab: own channels are TV, so the list goes back to the TV tab.
+  // The form follows the open tab: from Radio, a link alone becomes a station of one's own.
   await desktop.getByRole('tab', { name: 'רדיו' }).click();
+  await desktop.getByRole('radio', { name: 'רדיו', checked: true }).waitFor();
   // A link alone is enough: Enter adds it, named after its site.
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('https://www.only-link.example/x.m3u8');
   await desktop.getByLabel('קישור לשידור (m3u8)').press('Enter');
   await desktop.getByRole('heading', { name: 'only-link.example' }).waitFor();
-  await desktop.getByRole('tab', { name: 'טלוויזיה', selected: true }).waitFor({ timeout: 3000 });
+  await desktop.getByRole('tab', { name: 'רדיו', selected: true }).waitFor();
+  assert.ok((await sectionTitles(desktop)).includes('התחנות שלי'), 'listed as my stations');
+  await desktop.locator('[data-playing]').waitFor();
   await desktop.getByRole('button', { name: 'מחיקת only-link.example' }).click();
+  // Choosing the other kind moves the list there, from Radio to TV.
+  await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
+  await desktop.getByRole('radio', { name: 'טלוויזיה' }).click();
+  await desktop.getByLabel('קישור לשידור (m3u8)').fill('https://www.chosen-tv.example/x.m3u8');
+  await desktop.getByLabel('קישור לשידור (m3u8)').press('Enter');
+  await desktop.getByRole('tab', { name: 'טלוויזיה', selected: true }).waitFor();
+  await desktop.getByRole('button', { name: 'מחיקת chosen-tv.example' }).click();
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
   await desktop.getByLabel('שם הערוץ (לא חובה)').fill('בדיקה');
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('http://insecure.example/a.m3u8');

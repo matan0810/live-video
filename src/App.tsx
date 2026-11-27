@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import { isRadio } from './channels/isRadio';
 import { isCustomChannelId } from './channels/customChannels';
 import type { Channel } from './channels';
+import type { ChannelKind } from './channels/channelKinds';
 import { AddChannelForm } from './components/AddChannelForm';
 import { AppHeader } from './components/AppHeader';
 import { BigScreenBar } from './components/BigScreenBar';
@@ -50,10 +51,10 @@ export function App() {
   const { unavailableChannelIds, handleStatusChange } = useUnavailableChannels(orderedChannels);
   const tabChannels = lists.tabSections.flatMap((section) => section.channels);
 
-  const handleAddChannel = (channel: Channel) => {
+  const handleAddChannel = (channel: Channel, kind: ChannelKind) => {
     addCustomChannel(channel);
-    // Own channels are listed under TV: from the Radio tab, go where the new one is.
-    lists.changeTab('tv');
+    // The list goes to the kind the viewer chose for it, where the new one is listed.
+    lists.changeTab(kind);
     chooseChannel(channel.id);
   };
 
@@ -167,7 +168,7 @@ export function App() {
             onToggleFavorite={toggleFavorite}
             onRemove={handleRemoveChannel}
           />
-          <AddChannelForm onAdd={handleAddChannel} />
+          <AddChannelForm defaultKind={tab} onAdd={handleAddChannel} />
         </aside>
       </main>
     </div>

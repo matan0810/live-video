@@ -76,9 +76,11 @@ Quiet and made for watching: the video is the brightest thing on the page.
 - **Unavailable.** A channel is marked "unavailable" when it failed to play in this visit,
   and from the start when it has no link at all.
 - **The viewer's own channel**, from "Add your own channel" under the list: an https link
-  (http is refused, since the browser would block it on an https page) and an optional
-  name; without one, the channel is named after the link's site. Enter or Ctrl+Enter
-  (⌘+Enter) adds it. It is kept on the device.
+  (http is refused, since the browser would block it on an https page), an optional
+  name (without one, the channel is named after the link's site) and a kind, TV or radio,
+  which begins as the open tab and moves the list to the kind chosen. Own channels list
+  under "My channels" in the TV tab, own stations under "My stations" in the Radio tab, and
+  a station plays as radio. Enter or Ctrl+Enter (⌘+Enter) adds it. It is kept on the device.
 - **Works only in part.** Better a picture without sound than nothing, as long as it says
   so. A channel may carry tags from a closed list (`limits` in the channel list, set in the
   admin area): no sound, low quality, HEVC only. HEVC is said ("not supported in this browser") only in a browser that cannot play it (`canPlayHevc` in `src/device.ts`): where it plays, a tag would be noise. The list shows
