@@ -7,6 +7,10 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Fixed
+- "Sound is muted · tap to unmute" no longer stays on the screen after switching channels when the sound is actually playing.
+- Adding your own channel while on the Radio tab takes you to the TV tab, where it is listed.
+
 ## [2.17.0] - 2026-11-27
 
 ### Changed

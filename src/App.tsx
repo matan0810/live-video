@@ -49,6 +49,8 @@ export function App() {
 
   const handleAddChannel = (channel: Channel) => {
     addCustomChannel(channel);
+    // Own channels are listed under TV: from the Radio tab, go where the new one is.
+    lists.changeTab('tv');
     chooseChannel(channel.id);
   };
 

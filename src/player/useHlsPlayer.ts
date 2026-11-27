@@ -65,6 +65,8 @@ export function useHlsPlayer(sources: readonly string[], { keepsSound = false } 
     setActiveSources(sources);
     setStatus('loading');
     setErrorDetail(null);
+    // The new channel starts with the viewer's own sound; muting for autoplay is decided anew.
+    setIsAutoMuted(false);
   }
 
   useEffect(() => {
@@ -280,6 +282,7 @@ export function useHlsPlayer(sources: readonly string[], { keepsSound = false } 
 
   const retry = useCallback(() => {
     setStatus('loading');
+    setIsAutoMuted(false);
     setAttempt((current) => current + 1);
   }, []);
 

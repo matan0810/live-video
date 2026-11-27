@@ -292,10 +292,13 @@ async function main() {
   step('desktop: radio in its own tab, a station shows its card, stepping stays in radio');
 
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
+  // Added from the Radio tab: own channels are TV, so the list goes back to the TV tab.
+  await desktop.getByRole('tab', { name: 'רדיו' }).click();
   // A link alone is enough: Enter adds it, named after its site.
   await desktop.getByLabel('קישור לשידור (m3u8)').fill('https://www.only-link.example/x.m3u8');
   await desktop.getByLabel('קישור לשידור (m3u8)').press('Enter');
   await desktop.getByRole('heading', { name: 'only-link.example' }).waitFor();
+  await desktop.getByRole('tab', { name: 'טלוויזיה', selected: true }).waitFor({ timeout: 3000 });
   await desktop.getByRole('button', { name: 'מחיקת only-link.example' }).click();
   await desktop.getByRole('button', { name: 'הוספת ערוץ משלך' }).click();
   await desktop.getByLabel('שם הערוץ (לא חובה)').fill('בדיקה');
