@@ -866,7 +866,7 @@
     "id": "radio-times",
     "name": "Times Radio",
     "short": "TMS",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/89/Times_Radio.svg",
+    "logo": "logos/radio-times.png",
     "group": "radio-world",
     "sources": ["https://timesradio.wireless.radio/stream"]
   },
