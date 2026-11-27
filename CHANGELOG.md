@@ -7,6 +7,8 @@ breaking changes are major.
 
 ## [Unreleased]
 
+## [2.16.0] - 2026-11-27
+
 ### Added
 - Eleven world radio stations: LBC, LBC News, Times Radio, Bloomberg Radio, WNYC, CBC Radio One, ABC NewsRadio, franceinfo, RFI, Deutschlandfunk and RNE Radio Nacional.
 - A channel that works only in part says so, with an amber dot: in the list, and in full under the player. Fox News is back as its official preview (no sound, low quality), and ABC News says it is not supported only in a browser that cannot play it (HEVC).
