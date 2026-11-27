@@ -386,6 +386,23 @@ async function main() {
   await settings.getByRole('button', { name: 'סגירה' }).click();
   step('desktop: a light look, chosen and remembered, with a dark player');
 
+  // How long a place in a live stream is kept: two hours until changed, then remembered.
+  const resumeKey = () => desktop.evaluate(() => localStorage.getItem('live-video:resume'));
+  assert.equal(await resumeKey(), null, 'nothing stored until the setting is changed');
+  await desktop.getByRole('button', { name: 'הגדרות' }).click();
+  await settings.getByRole('radio', { name: 'שעתיים', checked: true }).waitFor();
+  await settings.getByRole('radio', { name: 'שעה', exact: true }).click();
+  assert.equal(await resumeKey(), '"1h"');
+  await settings.getByRole('button', { name: 'סגירה' }).click();
+  await desktop.reload();
+  await desktop.getByRole('button', { name: 'הגדרות' }).click();
+  await settings.getByRole('radio', { name: 'שעה', exact: true, checked: true }).waitFor();
+  await settings.getByRole('radio', { name: 'שעתיים' }).click();
+  await settings.getByRole('button', { name: 'סגירה' }).click();
+  step(
+    'desktop: the live-stream memory is a setting: two hours by default, changeable, remembered',
+  );
+
   // TV mode: B, or the setting. The list goes, tabs and a large channel bar come under the player.
   await desktop.keyboard.press('b');
   const bigBar = desktop.locator('nav[data-size="large"]');
@@ -401,7 +418,10 @@ async function main() {
   await desktop.getByRole('tab', { name: 'טלוויזיה' }).click();
   await bigBar.getByRole('button', { name: 'רשת 13' }).waitFor();
   await desktop.getByRole('button', { name: 'הגדרות' }).click();
-  await settings.getByRole('radio', { name: 'כבוי' }).click();
+  await settings
+    .getByRole('radiogroup', { name: 'מצב טלוויזיה' })
+    .getByRole('radio', { name: 'כבוי' })
+    .click();
   await settings.getByRole('button', { name: 'סגירה' }).click();
   await bigBar.waitFor({ state: 'detached' });
   await desktop.locator('aside').waitFor();

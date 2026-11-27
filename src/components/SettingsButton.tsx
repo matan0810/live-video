@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useI18n } from '../i18n/context';
 import { LANGUAGES } from '../i18n/strings';
+import { RESUME_CHOICES, type ResumeChoice } from '../player/resumeSetting';
 import { THEMES, type Theme } from '../theme';
 import { IconButton } from './IconButton';
 import { GearIcon } from './icons';
@@ -12,12 +13,21 @@ interface SettingsButtonProps {
   onTheme: (theme: Theme) => void;
   isBigScreen: boolean;
   onBigScreen: (isBigScreen: boolean) => void;
+  resume: ResumeChoice;
+  onResume: (resume: ResumeChoice) => void;
 }
 
 const LANGUAGE_NAMES = { he: 'עברית', en: 'English' } as const;
 
 /** A gear in the header opening the site's few settings: language, look, big screen. */
-export function SettingsButton({ theme, onTheme, isBigScreen, onBigScreen }: SettingsButtonProps) {
+export function SettingsButton({
+  theme,
+  onTheme,
+  isBigScreen,
+  onBigScreen,
+  resume,
+  onResume,
+}: SettingsButtonProps) {
   const { t, language, setLanguage } = useI18n();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const close = () => dialogRef.current?.close();
@@ -62,6 +72,13 @@ export function SettingsButton({ theme, onTheme, isBigScreen, onBigScreen }: Set
               { id: 'on', label: t.on },
             ]}
             onChange={(id) => onBigScreen(id === 'on')}
+          />
+          <SettingChoice
+            label={t.settingsResume}
+            hint={t.resumeHint}
+            value={resume}
+            options={RESUME_CHOICES.map((id) => ({ id, label: t.resumeChoices[id] }))}
+            onChange={onResume}
           />
           <div className={styles.footer}>
             <span />

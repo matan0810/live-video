@@ -1,13 +1,12 @@
 import { Controls, PlayButton } from '@videojs/react';
 import {
-  ChevronIcon,
   FullscreenEnterIcon,
   FullscreenExitIcon,
   PauseIcon,
   PipEnterIcon,
   PlayIcon,
 } from '@videojs/react/icons';
-import { TheaterIcon } from '../components/icons';
+import { CaretIcon, SeekIcon, TheaterIcon } from '../components/icons';
 import { useI18n } from '../i18n/context';
 import { DvrSlider } from './DvrSlider';
 import { ControlButton } from './ControlButton';
@@ -116,7 +115,7 @@ export function PlayerControls({
                   onClick={() => dvr.seekBy(-SEEK_STEP_SECONDS)}
                   disabled={dvr.secondsBehindLive >= dvr.windowSeconds}
                 >
-                  <bdi className={styles.stepText}>−{SEEK_STEP_SECONDS}</bdi>
+                  <SeekIcon direction="back" seconds={SEEK_STEP_SECONDS} />
                 </ControlButton>
                 <ControlButton
                   className={styles.skip}
@@ -124,16 +123,17 @@ export function PlayerControls({
                   onClick={() => dvr.seekBy(SEEK_STEP_SECONDS)}
                   disabled={dvr.isLive}
                 >
-                  <bdi className={styles.stepText}>+{SEEK_STEP_SECONDS}</bdi>
+                  <SeekIcon direction="forward" seconds={SEEK_STEP_SECONDS} />
                 </ControlButton>
+                <span className={`${styles.divider} ${styles.skip}`} aria-hidden="true" />
               </>
             )}
             <>
               <ControlButton label={t.previousChannel} onClick={() => onStep(-1)}>
-                <ChevronIcon className={styles.chevronUp} />
+                <CaretIcon className={styles.caretUp} />
               </ControlButton>
               <ControlButton label={t.nextChannel} onClick={() => onStep(1)}>
-                <ChevronIcon className={styles.chevronDown} />
+                <CaretIcon />
               </ControlButton>
             </>
             {isPlayable && sleepMinutesLeft !== null && (

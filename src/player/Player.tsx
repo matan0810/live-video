@@ -47,6 +47,8 @@ interface PlayerProps {
   onStep: (offset: 1 | -1) => void;
   isTheaterMode: boolean;
   onToggleTheater: () => void;
+  /** How old a kept place in a live stream may be (the viewer's setting); zero: none is kept. */
+  resumeMaxAgeMs: number;
 }
 
 export function Player({
@@ -58,6 +60,7 @@ export function Player({
   onStep,
   isTheaterMode,
   onToggleTheater,
+  resumeMaxAgeMs,
 }: PlayerProps) {
   const {
     videoRef,
@@ -72,7 +75,7 @@ export function Player({
   } = useHlsPlayer(channel.sources, { keepsSound: true });
   const { isRetrying, retryWithFeedback } = useRetryFeedback(retry);
   const dvr = useDvr(videoRef, getLiveWindow);
-  useResumePosition(channel.id, status, dvr);
+  useResumePosition(channel.id, status, dvr, resumeMaxAgeMs);
   const { t, language } = useI18n();
   const name = displayName(channel, language);
   const radio = isRadio(channel);

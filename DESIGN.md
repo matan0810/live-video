@@ -136,8 +136,10 @@ their auto-hiding, gestures and translated labels.
   on any screen. 76 px, answering to a ring of 24 px around it, since a near miss would hide
   the controls instead.
 - **Bottom bar**, left to right: play/pause, mute (with a volume slider on hover), the live
-  button, skip −10 / +10 (on rewindable channels), previous / next channel, picture in
+  button, skip back / forward 10 seconds (circular arrows with the number; on rewindable
+  channels), a divider, then previous / next channel (up and down arrows), picture in
   picture, theatre mode (wide screens, where the list sits beside the player), full screen.
+  Time moves sideways and channels move up and down, as the keys do: ← → and ↑ ↓.
   Under the video only the channel's name, share and report remain.
 - **A channel that fails** says so over the picture, with "try again now". Pressing it shows
   "Trying…" for 1.2 seconds, so a retry that fails at once still looks answered. The message
@@ -179,7 +181,9 @@ their auto-hiding, gestures and translated labels.
 - **Resume.** Watching behind live on a rewindable channel remembers the broadcast moment
   (every 5 seconds, on leaving the channel and on leaving the page). A refresh or a return
   to the channel seeks back to that moment if the stream still keeps it (10 seconds inside
-  its window); otherwise, within 15 seconds of live, or after 12 hours, it starts at live.
+  its window); otherwise, within 15 seconds of live, or after the kept time, it starts at
+  live. The kept time is the viewer's setting (off, an hour, two hours, half a day; two
+  hours until changed), in the settings window (`src/player/resumeSetting.ts`).
 - **Skips show on the video**, YouTube style: arrows and the seconds on that side, rounded
   to five, adding up when repeated within 1.2 seconds. Jumps under 3 or over 65 seconds
   (the timeline, back to live) are not skips.

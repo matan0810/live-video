@@ -1,4 +1,5 @@
 import { useI18n } from '../i18n/context';
+import type { ResumeChoice } from '../player/resumeSetting';
 import type { Theme } from '../theme';
 import { AboutButton } from './AboutButton';
 import { SettingsButton } from './SettingsButton';
@@ -9,6 +10,8 @@ interface AppHeaderProps {
   onTheme: (theme: Theme) => void;
   isBigScreen: boolean;
   onBigScreen: (isBigScreen: boolean) => void;
+  resume: ResumeChoice;
+  onResume: (resume: ResumeChoice) => void;
 }
 
 /** The site's name, its version, the about window and the settings. */

@@ -16,7 +16,9 @@ import { useChannelChoice } from './hooks/useChannelChoice';
 import { useChannelLists } from './hooks/useChannelLists';
 import { useBigScreen } from './hooks/useBigScreen';
 import { useChannelShortcuts } from './hooks/useChannelShortcuts';
+import { useResumeSetting } from './hooks/useResumeSetting';
 import { useTheme } from './hooks/useTheme';
+import { resumeMaxAgeMs } from './player/resumeSetting';
 import { useCustomChannels } from './hooks/useCustomChannels';
 import { useFavorites } from './hooks/useFavorites';
 import { useMediaQuery } from './hooks/useMediaQuery';
@@ -37,6 +39,7 @@ export function App() {
   const [isTheaterMode, setIsTheaterMode] = useState(false);
   const [theme, setTheme] = useTheme();
   const [isBigScreen, setBigScreen] = useBigScreen();
+  const [resume, setResume] = useResumeSetting();
   const searchRef = useRef<HTMLInputElement>(null);
   const lists = useChannelLists(catalogChannels, customChannels, favoriteIds, activeChannelId, t);
   const { orderedChannels, shownSections, tab } = lists;
@@ -78,6 +81,8 @@ export function App() {
         onTheme={setTheme}
         isBigScreen={isBigScreen}
         onBigScreen={setBigScreen}
+        resume={resume}
+        onResume={setResume}
       />
 
       <main className={styles.main} data-theater={isTheaterMode}>
@@ -107,6 +112,7 @@ export function App() {
               onStep={selectByOffset}
               isTheaterMode={isTheaterMode}
               onToggleTheater={toggleTheater}
+              resumeMaxAgeMs={resumeMaxAgeMs(resume)}
               overlay={
                 <ChannelStrip
                   channels={stepChannels}

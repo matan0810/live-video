@@ -19,9 +19,9 @@ interface DvrView {
   seekBehind: (seconds: number) => void;
 }
 
-function load(now: number): ResumePositions {
+function load(now: number, maxAgeMs: number): ResumePositions {
   try {
-    return parsePositions(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}'), now);
+    return parsePositions(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}'), now, maxAgeMs);
   } catch {
     return {};
   }
@@ -40,7 +40,13 @@ function save(positions: ResumePositions) {
  * a refresh or a return to the channel (see resumePositions.ts), and keeps that moment up
  * to date while they watch behind live.
  */
-export function useResumePosition(channelId: string, status: PlayerStatus, dvr: DvrView) {
+export function useResumePosition(
+  channelId: string,
+  status: PlayerStatus,
+  dvr: DvrView,
+  /** How old a kept place may be (the viewer's setting); zero turns remembering off. */
+  maxAgeMs: number,
+) {
   const latest = useRef(dvr);
   useEffect(() => {
     latest.current = dvr;
@@ -53,23 +59,24 @@ export function useResumePosition(channelId: string, status: PlayerStatus, dvr: 
   // seems outside the window is waited for a little: the window may still be the previous
   // channel's, or not loaded yet.
   useEffect(() => {
-    if (status !== 'playing' || !dvr.canRewind || restoredFor.current === channelId) return;
+    if (maxAgeMs <= 0 || status !== 'playing' || !dvr.canRewind) return;
+    if (restoredFor.current === channelId) return;
     const now = Date.now();
     if (playingSince.current?.channelId !== channelId)
       playingSince.current = { channelId, at: now };
-    const plan = resumePlan(load(now)[channelId], now, dvr.windowSeconds);
+    const plan = resumePlan(load(now, maxAgeMs)[channelId], now, dvr.windowSeconds);
     if (plan.kind === 'outside' && now - playingSince.current.at < WINDOW_WAIT_MS) return;
     restoredFor.current = channelId;
     if (plan.kind === 'seek') dvr.seekBehind(plan.seconds);
-  }, [channelId, status, dvr]);
+  }, [channelId, status, dvr, maxAgeMs]);
 
   // Keep the moment current while playing, and on leaving the channel or the page.
   useEffect(() => {
     const record = () => {
       const view = latest.current;
-      if (restoredFor.current !== channelId || !view.canRewind) return;
+      if (maxAgeMs <= 0 || restoredFor.current !== channelId || !view.canRewind) return;
       const now = Date.now();
-      save(rememberPosition(load(now), channelId, view.secondsBehindLive, now));
+      save(rememberPosition(load(now, maxAgeMs), channelId, view.secondsBehindLive, now));
     };
     const timer = setInterval(record, SAVE_EVERY_MS);
     window.addEventListener('pagehide', record);
@@ -81,5 +88,5 @@ export function useResumePosition(channelId: string, status: PlayerStatus, dvr: 
       clearInterval(timer);
       window.removeEventListener('pagehide', record);
     };
-  }, [channelId]);
+  }, [channelId, maxAgeMs]);
 }

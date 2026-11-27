@@ -1,6 +1,7 @@
 import type { ChannelGroup, ChannelLimit } from '../../shared/channels/types';
 import type { CustomChannelError } from '../channels/customChannels';
 import type { ReportReason } from '../../shared/reports';
+import type { ResumeChoice } from '../player/resumeSetting';
 import type { Theme } from '../theme';
 
 export const LANGUAGES = ['he', 'en'] as const;
@@ -126,6 +127,14 @@ const he = {
   settingsLanguage: 'שפה',
   settingsTheme: 'מראה',
   themes: { auto: 'לפי המכשיר', light: 'בהיר', dark: 'כהה' } satisfies Record<Theme, string>,
+  settingsResume: 'זכירת המקום בשידור',
+  resumeHint: 'חוזרים לערוץ שאפשר לגלול בו אחורה, וממשיכים מהמקום שעצרתם בו, אם עבר לכל היותר:',
+  resumeChoices: {
+    off: 'כבוי',
+    '1h': 'שעה',
+    '2h': 'שעתיים',
+    '12h': 'חצי יום',
+  } satisfies Record<ResumeChoice, string>,
   settingsBigScreen: 'מצב טלוויזיה',
   bigScreenHint: 'נגן רחב, ערוצים גדולים מתחתיו וכיתוב גדול. גם במקש B.',
   on: 'פועל',
@@ -293,6 +302,10 @@ const en: Strings = {
   settingsLanguage: 'Language',
   settingsTheme: 'Look',
   themes: { auto: 'Like the device', light: 'Light', dark: 'Dark' },
+  settingsResume: 'Remember my place in a broadcast',
+  resumeHint:
+    'Coming back to a channel you can rewind, pick up where you stopped, if no more than this has passed:',
+  resumeChoices: { off: 'Off', '1h': 'An hour', '2h': 'Two hours', '12h': 'Half a day' },
   settingsBigScreen: 'TV mode',
   bigScreenHint: 'A wide player, big channels under it and larger text. Also with B.',
   on: 'On',

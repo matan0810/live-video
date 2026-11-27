@@ -2,11 +2,13 @@ import type { ReactNode } from 'react';
 
 interface IconProps {
   isFilled?: boolean;
+  className?: string;
 }
 
-function Icon({ children, isFilled = false }: IconProps & { children: ReactNode }) {
+function Icon({ children, isFilled = false, className }: IconProps & { children: ReactNode }) {
   return (
     <svg
+      className={className}
       width="18"
       height="18"
       viewBox="0 0 24 24"
@@ -162,10 +164,51 @@ export function GearIcon() {
 }
 
 /** Points down; the caller turns it for an open row. */
-export function CaretIcon() {
+export function CaretIcon({ className }: { className?: string }) {
   return (
-    <Icon>
+    <Icon className={className}>
       <path d="m6 9 6 6 6-6" />
     </Icon>
+  );
+}
+
+/**
+ * Skip back or forward by some seconds: a circular arrow with the number inside. Time moves
+ * sideways (as the ← → keys do); the channel buttons move up and down (↑ ↓).
+ */
+export function SeekIcon({
+  direction,
+  seconds,
+}: {
+  direction: 'back' | 'forward';
+  seconds: number;
+}) {
+  const isBack = direction === 'back';
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={isBack ? 'M3 12a9 9 0 1 0 3-6.7' : 'M21 12a9 9 0 1 1-3-6.7'} />
+      <path d={isBack ? 'M3 4v5h5' : 'M21 4v5h-5'} />
+      <text
+        x="12"
+        y="15.6"
+        textAnchor="middle"
+        fill="currentColor"
+        stroke="none"
+        fontSize="8"
+        fontWeight="700"
+      >
+        {seconds}
+      </text>
+    </svg>
   );
 }

@@ -12,8 +12,6 @@ export interface ResumeEntry {
 
 export type ResumePositions = Readonly<Record<string, ResumeEntry>>;
 
-/** Entries older than this are dropped: nobody expects yesterday's place. */
-export const RESUME_MAX_AGE_MS = 12 * 60 * 60 * 1000;
 /** Closer to live than this resumes at live, as watching live does. */
 export const RESUME_MIN_BEHIND_SECONDS = 15;
 /** Stay this far inside the rewind window, which moves on while the page loads. */
@@ -31,12 +29,16 @@ function isEntry(value: unknown): value is ResumeEntry {
   );
 }
 
-/** Reads stored positions, keeping only well-formed, recent entries. */
-export function parsePositions(raw: unknown, now: number): ResumePositions {
+/**
+ * Reads stored positions, keeping only well-formed entries no older than `maxAgeMs` (the
+ * viewer's setting, see resumeSetting.ts): nobody expects yesterday's place. Zero keeps none.
+ */
+export function parsePositions(raw: unknown, now: number, maxAgeMs: number): ResumePositions {
+  if (maxAgeMs <= 0) return {};
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return {};
   const kept: Record<string, ResumeEntry> = {};
   for (const [channelId, entry] of Object.entries(raw)) {
-    if (isEntry(entry) && now - entry.savedAt < RESUME_MAX_AGE_MS) kept[channelId] = entry;
+    if (isEntry(entry) && now - entry.savedAt < maxAgeMs) kept[channelId] = entry;
   }
   return kept;
 }
