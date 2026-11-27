@@ -1,4 +1,6 @@
 import { ChannelEditorRow } from './ChannelEditorRow';
+import { changesText } from './changesText';
+import { DiscardButton } from './DiscardButton';
 import { createEmptyDraft, draftSources, moveDraft, type DraftChannel } from './drafts';
 import { useStreamChecks } from './useStreamChecks';
 import styles from './Admin.module.css';
@@ -9,8 +11,12 @@ interface ChannelEditorProps {
   drafts: readonly DraftChannel[];
   saveState: SaveState;
   error: string | null;
+  /** How many things differ from the saved list. */
+  changes: number;
   onChange: (drafts: DraftChannel[]) => void;
   onSave: () => void;
+  /** Back to the saved list. */
+  onDiscard: () => void;
 }
 
 const SAVE_LABELS: Record<SaveState, string> = {
@@ -20,7 +26,15 @@ const SAVE_LABELS: Record<SaveState, string> = {
   saved: 'נשמר',
 };
 
-export function ChannelEditor({ drafts, saveState, error, onChange, onSave }: ChannelEditorProps) {
+export function ChannelEditor({
+  drafts,
+  saveState,
+  error,
+  changes,
+  onChange,
+  onSave,
+  onDiscard,
+}: ChannelEditorProps) {
   const { results, check } = useStreamChecks();
 
   const replace = (updated: DraftChannel) =>
@@ -45,13 +59,18 @@ export function ChannelEditor({ drafts, saveState, error, onChange, onSave }: Ch
           >
             הוספת ערוץ
           </button>
+          {saveState === 'dirty' && changes > 0 && (
+            <DiscardButton changes={changes} onDiscard={onDiscard} />
+          )}
           <button
             type="button"
             className={styles.primary}
             disabled={saveState !== 'dirty'}
             onClick={onSave}
           >
-            {SAVE_LABELS[saveState]}
+            {saveState === 'dirty' && changes > 0
+              ? `שמירת ${changesText(changes)}`
+              : SAVE_LABELS[saveState]}
           </button>
         </div>
       </div>

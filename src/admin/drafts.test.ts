@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { draftsToChannels, moveDraft, toDraft, withPrimarySource } from './drafts';
+import { countChanges, draftsToChannels, moveDraft, toDraft, withPrimarySource } from './drafts';
 
 const channel = (id: string, sources = [`https://a.example/${id}.m3u8`]) => ({
   id,
@@ -47,5 +47,35 @@ describe('drafts', () => {
     expect(ids(moveDraft(drafts, first?.key ?? '', 1))).toEqual(['b', 'a', 'c']);
     expect(ids(moveDraft(drafts, first?.key ?? '', -1))).toEqual(['a', 'b', 'c']);
     expect(ids(moveDraft(drafts, last?.key ?? '', 1))).toEqual(['a', 'b', 'c']);
+  });
+
+  describe('countChanges', () => {
+    const saved = ['a', 'b', 'c'].map((id) => toDraft(channel(id)));
+    const [first, ...rest] = saved;
+    if (!first) throw new Error('the sample list is empty');
+
+    it('is zero for the list as saved', () => {
+      expect(countChanges(saved, [...saved])).toBe(0);
+    });
+
+    it('counts an edited channel once, however many fields changed', () => {
+      const edited = { ...first, name: 'Other', short: 'x', sourcesText: 'https://a.example/x' };
+      expect(countChanges(saved, [edited, ...rest])).toBe(1);
+    });
+
+    it('counts a channel added and one removed', () => {
+      const added = toDraft(channel('d'));
+      expect(countChanges(saved, [...saved, added])).toBe(1);
+      expect(countChanges(saved, saved.slice(1))).toBe(1);
+    });
+
+    it('counts a changed order as one change', () => {
+      expect(countChanges(saved, moveDraft(saved, first.key, 1))).toBe(1);
+    });
+
+    it('is zero again once an edit is put back', () => {
+      const edited = { ...first, name: 'Other' };
+      expect(countChanges(saved, [{ ...edited, name: first.name }, ...rest])).toBe(0);
+    });
   });
 });

@@ -11,6 +11,7 @@ import { bundledChannels } from '../channels';
 import { effectiveChannels } from '../channels/effectiveChannels';
 import { ChannelEditor, type SaveState } from './ChannelEditor';
 import {
+  countChanges,
   createEmptyDraft,
   draftsToChannels,
   toDraft,
@@ -48,6 +49,8 @@ export function AdminDashboard({
   onDismissIncoming,
 }: AdminDashboardProps) {
   const [drafts, setDrafts] = useState<DraftChannel[] | null>(null);
+  /** The list as last loaded or saved: what "cancel changes" goes back to. */
+  const [saved, setSaved] = useState<DraftChannel[] | null>(null);
   const [reports, setReports] = useState<Report[]>([]);
   const [saveState, setSaveState] = useState<SaveState>('clean');
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +67,9 @@ export function AdminDashboard({
     Promise.all([loadChannels(), fetchReports(token)])
       .then(([channels, loadedReports]) => {
         if (isCancelled) return;
-        setDrafts(channels.map(toDraft));
+        const loaded = channels.map(toDraft);
+        setDrafts(loaded);
+        setSaved(loaded);
         setReports(loadedReports);
       })
       .catch((caught: unknown) => {
@@ -95,12 +100,28 @@ export function AdminDashboard({
     setSaveState('saving');
     try {
       await saveChannels(token, channels);
+      setSaved(drafts);
       setSaveState('saved');
     } catch (caught) {
       setSaveState('dirty');
       handleFailure(caught);
     }
   };
+
+  const handleDiscard = () => {
+    if (!saved) return;
+    setDrafts(saved);
+    setSaveState('clean');
+    setError(null);
+  };
+
+  // Leaving with unsaved changes (a refresh, the back button) asks first.
+  useEffect(() => {
+    if (saveState !== 'dirty') return;
+    const warn = (event: BeforeUnloadEvent) => event.preventDefault();
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [saveState]);
 
   const handleDismiss = (reportId: string) => {
     deleteReport(token, reportId).then(setReports).catch(handleFailure);
@@ -147,8 +168,10 @@ export function AdminDashboard({
             drafts={drafts}
             saveState={saveState}
             error={error}
+            changes={countChanges(saved ?? drafts, drafts)}
             onChange={handleChange}
             onSave={() => void handleSave()}
+            onDiscard={handleDiscard}
           />
           <LinkFinder
             token={token}

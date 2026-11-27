@@ -7,6 +7,9 @@ breaking changes are major.
 
 ## [Unreleased]
 
+### Added
+- Admin area: the save button says how many changes are waiting, "cancel changes" goes back to the saved list (it asks twice, so a stray tap loses nothing), and leaving the page with unsaved changes asks first.
+
 ### Fixed
 - "Try again now" on a failed channel: on a phone the controls bar no longer sits over it and swallows taps, it shows "Trying…" for a moment when pressed, and it gives a little when tapped.
 

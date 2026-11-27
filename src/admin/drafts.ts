@@ -102,3 +102,23 @@ export function moveDraft(drafts: readonly DraftChannel[], key: string, offset: 
   next.splice(target, 0, moved);
   return next;
 }
+
+/**
+ * How many things differ from the saved list: each channel edited, added or removed, and one
+ * more if the order changed. An edit put back counts for nothing.
+ */
+export function countChanges(saved: readonly DraftChannel[], current: readonly DraftChannel[]) {
+  const before = new Map(saved.map((draft) => [draft.key, draft]));
+  const after = new Set(current.map((draft) => draft.key));
+  let changes = 0;
+  for (const draft of current) {
+    const old = before.get(draft.key);
+    if (!old || JSON.stringify(old) !== JSON.stringify(draft)) changes += 1;
+  }
+  for (const draft of saved) if (!after.has(draft.key)) changes += 1;
+
+  const keptOrder = (list: readonly DraftChannel[]) =>
+    list.filter((draft) => before.has(draft.key) && after.has(draft.key)).map(({ key }) => key);
+  if (keptOrder(saved).join() !== keptOrder(current).join()) changes += 1;
+  return changes;
+}

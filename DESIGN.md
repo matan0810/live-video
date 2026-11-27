@@ -262,6 +262,10 @@ At `#/admin`, a separate chunk viewers never download. One password, a Cloudflar
   preview showing the tile as viewers will see it, and a check of each link from the
   owner's own browser (a radio station's audio stream is checked by starting to play it,
   silently).
+- **Unsaved changes.** The save button counts them ("שמירת 3 שינויים"; an edit put back
+  counts for nothing). "ביטול שינויים" goes back to the list as last loaded or saved, and
+  asks twice (the second press within five seconds) so one stray tap loses nothing.
+  Leaving the page with unsaved changes asks first.
 - **Link finder**, in stages, stopping at the first that finds something: the page's
   source, the players it embeds, a real browser in the cloud (Cloudflare Browser Run,
   up to 15 times a day), then the iptv-org directory for the same website.
