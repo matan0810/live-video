@@ -9,7 +9,8 @@ export const RESUME_CHOICES = ['off', '1h', '2h', '12h'] as const;
 export type ResumeChoice = (typeof RESUME_CHOICES)[number];
 
 export const DEFAULT_RESUME: ResumeChoice = '2h';
-export const RESUME_KEY = 'live-video:resume';
+/** Not `live-video:resume`: that one holds the kept places themselves. */
+export const RESUME_KEY = 'live-video:resume-age';
 
 const HOUR_MS = 60 * 60 * 1000;
 const AGES: Record<ResumeChoice, number> = {

@@ -387,7 +387,7 @@ async function main() {
   step('desktop: a light look, chosen and remembered, with a dark player');
 
   // How long a place in a live stream is kept: two hours until changed, then remembered.
-  const resumeKey = () => desktop.evaluate(() => localStorage.getItem('live-video:resume'));
+  const resumeKey = () => desktop.evaluate(() => localStorage.getItem('live-video:resume-age'));
   assert.equal(await resumeKey(), null, 'nothing stored until the setting is changed');
   await desktop.getByRole('button', { name: 'הגדרות' }).click();
   await settings.getByRole('radio', { name: 'שעתיים', checked: true }).waitFor();

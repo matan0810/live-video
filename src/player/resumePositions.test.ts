@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { parsePositions, rememberPosition, resumePlan } from './resumePositions';
-import { DEFAULT_RESUME, parseResumeChoice, RESUME_CHOICES, resumeMaxAgeMs } from './resumeSetting';
+import {
+  DEFAULT_RESUME,
+  parseResumeChoice,
+  RESUME_CHOICES,
+  RESUME_KEY,
+  resumeMaxAgeMs,
+} from './resumeSetting';
 
 const NOW = 1_800_000_000_000;
 const HOUR = 3_600_000;
@@ -53,6 +59,10 @@ describe('the resume setting', () => {
     expect(RESUME_CHOICES).toEqual(['off', '1h', '2h', '12h']);
     expect(DEFAULT_RESUME).toBe('2h');
     expect(RESUME_CHOICES.map(resumeMaxAgeMs)).toEqual([0, HOUR, 2 * HOUR, 12 * HOUR]);
+  });
+
+  it('is kept under a key of its own, apart from the kept places', () => {
+    expect(RESUME_KEY).not.toBe('live-video:resume');
   });
 
   it('refuses anything else stored', () => {
